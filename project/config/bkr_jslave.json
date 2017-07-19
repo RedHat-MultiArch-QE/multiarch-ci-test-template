@@ -1,0 +1,20 @@
+{
+    "resources": [
+        {
+            "recipesets": [
+                {
+                    "distro": "RHEL-7.2",
+                    "arch": "X86_64",
+                    "variant": "Server",
+                    "keyvalue": ["DISKSPACE>=20000"],
+                    "hostrequire": ["arch=X86_64", "memory>=2000"],
+                    "bkr_data": {
+                        "role": "Server",
+                        "name": "AppServer"
+                    }
+                }
+            ],
+            "bkr_jslave": "True"
+        }
+   ]
+}
