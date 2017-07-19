@@ -3,6 +3,7 @@ node('master') {
     timestamps {
       deleteDir()
       stage('Provision Slave') {
+        git(url: 'https://github.com/detiber/multiarch-openshift-ci', branch: 'master')
         dir('ci-ops-central') {
           git(url: 'https://code.engineering.redhat.com/gerrit/ci-ops-central', branch: 'master')
         }
