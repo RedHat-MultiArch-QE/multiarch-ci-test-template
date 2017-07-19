@@ -24,15 +24,15 @@ node('master') {
   }
 }
 
-node('multiarch-test-slave') {
-  ansiColor('xterm') {
-    timestamps {
-      deleteDir()
-      stage('Checkout Repos') {
-        dir('origin') {
-          git(url: 'https://github.com/openshift/origin.git', branch: 'master')
-        }
-      }
-    }
-  }
-}
+// node('multiarch-test-slave') {
+//   ansiColor('xterm') {
+//     timestamps {
+//       deleteDir()
+//       stage('Checkout Repos') {
+//         dir('origin') {
+//           git(url: 'https://github.com/openshift/origin.git', branch: 'master')
+//         }
+//       }
+//     }
+//   }
+// }
