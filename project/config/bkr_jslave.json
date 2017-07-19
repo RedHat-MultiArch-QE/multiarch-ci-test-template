@@ -14,7 +14,7 @@
                     }
                 }
             ],
-	    "job_group": "everybody-except-kernel-mtr-members"
+	    "job_group": "everybody-except-kernel-mtr-members",
             "bkr_jslave": "True"
         }
    ]
