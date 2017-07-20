@@ -9,7 +9,9 @@
                     "keyvalue": ["DISKSPACE>=20000"],
                     "hostrequire": ["arch=X86_64", "memory>=2000", "system_type=Resource"],
 		    "ks_append": [
-			"echo hi"
+			"{%post}",
+			"echo hi",
+			"{%end}"
 		    ]
                 }
             ],
