@@ -7,7 +7,7 @@
                     "arch": "X86_64",
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
-                    "hostrequire": ["arch=X86_64", "memory>=8000", "system_type=Resource"]
+                    "hostrequire": ["arch=X86_64", "memory>=2000", "system_type=Resource"]
                 }
             ],
 	    "job_group": "ci-ops-multiarch-qe-aos",
