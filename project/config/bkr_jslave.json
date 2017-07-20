@@ -4,10 +4,10 @@
             "recipesets": [
                 {
                     "distro": "RHEL-7.3",
-                    "arch": "X86_64",
+                    "arch": "aarch64",
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
-                    "hostrequire": ["arch=X86_64", "memory>=2000", "system_type=Resource"],
+                    "hostrequire": ["arch=aarch64", "memory>=4000"],
 		    "ks_append": [
 			"echo hi"
 		    ]
