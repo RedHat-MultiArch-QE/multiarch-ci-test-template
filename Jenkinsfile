@@ -13,10 +13,11 @@ node('master') {
         withEnv(['JSLAVENAME=multiarch-test-slave']) {
           sh '''#!/bin/bash -xeu
 	    ls
+	    rpm -qa | grep rng-utils
 	    which ssh-keygen
 	    cat /proc/sys/kernel/random/entropy_avail
 	    set +e
-	    ssh-keygen -vvv -N "" -f ssh_${JSLAVENAME}
+	    ssh-keygen -vvv -N "test" -f ssh_${JSLAVENAME}
 	    ret_code=$?
 	    if [[ $ret_code != 0 ]]; then
 	      echo $ret_code
