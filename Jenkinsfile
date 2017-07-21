@@ -15,7 +15,15 @@ node('master') {
 	    ls
 	    which ssh-keygen
 	    cat /proc/sys/kernel/random/entropy_avail
-	    ssh-keygen -vvv -N "" -f ssh_${JSLAVENAME} || true
+	    set +x
+	    (ssh-keygen -vvv -N "" -f ssh_${JSLAVENAME}
+	    ret_code=$?
+	    if [[ $ret_code != 0 ]]; then
+	      echo $ret_code
+	      exit 1
+	    fi
+
+	    set -x
 	    ls
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh --topology=project/config/bkr_jslave \
             --project_defaults=ci-ops-central/project/config/project_defaults_osp7 --ssh_keyfile=ssh_${JSLAVENAME} \
