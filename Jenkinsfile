@@ -11,7 +11,7 @@ node('master') {
           git(url: 'https://code.engineering.redhat.com/gerrit/job-runner', branch: 'master')
         }
         withEnv(['JSLAVENAME=multiarch-test-slave']) {
-          sh '''#!/bin/bash -xeou
+          sh '''#!/bin/bash -xeu
 	    ls
 	    which ssh-keygen
 	    cat /proc/sys/kernel/random/entropy_avail
