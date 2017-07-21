@@ -13,7 +13,7 @@ node('master') {
         withEnv(['JSLAVENAME=multiarch-test-slave']) {
           sh '''#!/bin/bash -xeu
 	    ls
-	    rpm -qa | grep rng-utils
+	    rpm -qa | grep rng-utils || true
 	    which ssh-keygen
 	    cat /proc/sys/kernel/random/entropy_avail
 	    set +e
