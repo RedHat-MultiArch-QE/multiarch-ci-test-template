@@ -17,7 +17,7 @@ node('master') {
 	    which ssh-keygen
 	    cat /proc/sys/kernel/random/entropy_avail
 	    set +e
-	    ssh-keygen -vvv -N "test" -f ssh_${JSLAVENAME} 2>&1
+	    ssh-keygen -vvv -N 'test' -f ssh_${JSLAVENAME} 2>&1
 	    ret_code=$?
 	    if [[ $ret_code != 0 ]]; then
 	      echo $ret_code
