@@ -1,6 +1,6 @@
 node('master') {
-  ansiColor('xterm') {
-    timestamps {
+//  ansiColor('xterm') {
+//    timestamps {
       deleteDir()
       stage('Provision Slave') {
         git(url: 'https://github.com/detiber/multiarch-openshift-ci', branch: 'master')
@@ -35,8 +35,8 @@ node('master') {
           '''
         }
       }
-    }
-  }
+//    }
+//  }
 }
 
 // node('multiarch-test-slave') {
