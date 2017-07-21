@@ -1,6 +1,6 @@
 node('master') {
-//  ansiColor('xterm') {
-//    timestamps {
+  ansiColor('xterm') {
+    timestamps {
       deleteDir()
       stage('Provision Slave') {
         git(url: 'https://github.com/detiber/multiarch-openshift-ci', branch: 'master')
@@ -15,6 +15,7 @@ node('master') {
 	    ls
 	    rpm -qa | grep rng-utils || true
 	    which ssh-keygen
+	    which strace
 	    cat /proc/sys/kernel/random/entropy_avail
 	    set +e
 	    echo 'hi' 1>&2
@@ -35,8 +36,8 @@ node('master') {
           '''
         }
       }
-//    }
-//  }
+    }
+  }
 }
 
 // node('multiarch-test-slave') {
