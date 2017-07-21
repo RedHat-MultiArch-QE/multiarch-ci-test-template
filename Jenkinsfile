@@ -12,6 +12,7 @@ node('master') {
         }
         withEnv(['JSLAVENAME=multiarch-test-slave']) {
           sh '''#!/bin/bash -xe
+	    ssh-keygen -N "" -f ssh_${JSLAVENAME}
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh --topology=project/config/bkr_jslave \
             --project_defaults=ci-ops-central/project/config/project_defaults_osp7 --ssh_keyfile=ssh_${JSLAVENAME} \
             --jslavename=${JSLAVENAME} --jslavecreate --resources_file=${JSLAVENAME}.json
