@@ -20,7 +20,7 @@ node('master') {
 	    yum list installed openssh
 	    ssh-keygen --help 2>&1 | tee output.log || true
 	    cat output.log
-	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
+	    ssh-keygen -vvv -N '' -f ./ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    ret_code=$?
 	    cat output.log
 	    ls
