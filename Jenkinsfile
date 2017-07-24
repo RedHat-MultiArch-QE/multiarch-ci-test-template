@@ -18,16 +18,16 @@ node('master') {
 	    cat /proc/sys/kernel/random/entropy_avail
 	    set +e
 	    yum list installed openssh
-	    ssh-keygen --help 2>&1 | tee output.log || true
-	    cat output.log
+	    whoami
+	    pwd
 	    ssh-keygen -vvv -N '' -f ./ssh_${JSLAVENAME} 2>&1 | tee output.log || true
-	    ret_code=$?
 	    cat output.log
 	    ls
-	    if [[ $ret_code != 0 ]]; then
-	      echo $ret_code
-	      exit 1
-	    fi
+	    touch ssh_${JSLAVENAME}
+	    chmod 0600 ssh_${JSLAVENAME}
+	    ssh-keygen -vvv -N '' -f ./ssh_${JSLAVENAME} 2>&1 | tee output.log || true
+	    cat output.log
+	    ls
 	    exit 1
 
 	    set -e
