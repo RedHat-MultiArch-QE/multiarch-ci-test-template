@@ -18,11 +18,11 @@ node('master') {
 	    cat /proc/sys/kernel/random/entropy_avail
 	    set +e
 	    yum list installed openssh
+	    yum list installed jenkins
 	    whoami
 	    pwd
 	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    cat output.log
-	    rpm -qa | grep jenkins
 	    ls -alZ
 	    touch ssh_${JSLAVENAME}
 	    chmod 0600 ssh_${JSLAVENAME}
