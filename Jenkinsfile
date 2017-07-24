@@ -23,7 +23,7 @@ node('master') {
 	    whoami
 	    id -Z
 	    pwd
-	    tmp_dir=$(mktemp -d openshift-multiarch-ci-XXXXXX)
+	    tmp_dir=$(mktemp -d /tmp/openshift-multiarch-ci-XXXXXX)
 	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
 	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1 | tee output.log || true
 	    cat output.log
