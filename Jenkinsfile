@@ -23,12 +23,9 @@ node('master') {
 	    whoami
 	    id -Z
 	    pwd
-	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
-	    cat output.log
-	    ls -alZ
-	    touch ssh_${JSLAVENAME}
-	    chmod 0600 ssh_${JSLAVENAME}
-	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
+	    tmp_dir=$(mktemp -d openshift-multiarch-ci-XXXXXX)
+	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
+	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1 | tee output.log || true
 	    cat output.log
 	    ls -alZ
 	    exit 1
