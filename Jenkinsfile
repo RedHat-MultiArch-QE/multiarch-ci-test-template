@@ -27,7 +27,7 @@ node('master') {
 	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
 	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1 | tee output.log || true
 	    cat output.log
-	    ls -alZ
+	    ls -alZ ${tmp_dir}
 	    exit 1
 
 	    set -e
