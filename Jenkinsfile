@@ -17,6 +17,7 @@ node('master') {
 	    alias
 	    cat /proc/sys/kernel/random/entropy_avail
 	    set +e
+	    yum repolist
 	    yum list installed openssh
 	    yum list installed jenkins
 	    whoami
