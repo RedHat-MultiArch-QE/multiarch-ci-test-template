@@ -23,10 +23,12 @@ node('master') {
 	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    ret_code=$?
 	    cat output.log
+	    ls
 	    if [[ $ret_code != 0 ]]; then
 	      echo $ret_code
 	      exit 1
 	    fi
+	    exit 1
 
 	    set -e
 	    ls
