@@ -22,12 +22,12 @@ node('master') {
 	    pwd
 	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    cat output.log
-	    ls -al
+	    ls -alZ
 	    touch ssh_${JSLAVENAME}
 	    chmod 0600 ssh_${JSLAVENAME}
 	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    cat output.log
-	    ls -al
+	    ls -alZ
 	    exit 1
 
 	    set -e
