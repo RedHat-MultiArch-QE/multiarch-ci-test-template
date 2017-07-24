@@ -20,14 +20,14 @@ node('master') {
 	    yum list installed openssh
 	    whoami
 	    pwd
-	    ssh-keygen -vvv -N '' -f ./ssh_${JSLAVENAME} 2>&1 | tee output.log || true
+	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    cat output.log
-	    ls
+	    ls -al
 	    touch ssh_${JSLAVENAME}
 	    chmod 0600 ssh_${JSLAVENAME}
-	    ssh-keygen -vvv -N '' -f ./ssh_${JSLAVENAME} 2>&1 | tee output.log || true
+	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    cat output.log
-	    ls
+	    ls -al
 	    exit 1
 
 	    set -e
