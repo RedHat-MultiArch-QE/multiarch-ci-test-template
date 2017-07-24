@@ -21,6 +21,7 @@ node('master') {
 	    yum list installed openssh
 	    yum list installed jenkins
 	    whoami
+	    id -Z
 	    pwd
 	    ssh-keygen -vvv -N '' -f ssh_${JSLAVENAME} 2>&1 | tee output.log || true
 	    cat output.log
