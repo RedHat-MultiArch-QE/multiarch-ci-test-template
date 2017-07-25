@@ -25,11 +25,10 @@ node('master') {
 	    pwd
 	    tmp_dir=$(mktemp -d /tmp/openshift-multiarch-ci-XXXXXX)
 	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
+	    touch ${ssh_keyfile}
+	    chmod 0600 ${ssh_keyfile}
 	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1 | tee output.log || true
 	    cat output.log
-	    ls -alZ ${tmp_dir}
-	    echo test > ${ssh_keyfile}
-	    chmod 0600 ${ssh_keyfile}
 	    ls -alZ ${tmp_dir}
 	    exit 1
 
