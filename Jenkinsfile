@@ -12,14 +12,12 @@ node('master') {
         }
         withEnv(['JSLAVENAME=multiarch-test-slave']) {
           sh '''#!/bin/bash -xeu
-	    tmp_dir=$(mktemp -d openshift-multiarch-ci-XXXXXX)
-	    chcon -t ssh_home_t ${tmp_dir}
-	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
-	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1
-	    pub_key=$(cat ${ssh_keyfile}.pub)
-	    sed -e "s#PUB_KEY#${pub_key}#" project/config/bkr_jslave.json
-
-	    exit 1
+            tmp_dir=$(mktemp -d openshift-multiarch-ci-XXXXXX)
+            chcon -t ssh_home_t ${tmp_dir}
+            ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
+            ssh-keygen -N '' -f ${ssh_keyfile} 2>&1
+            pub_key=$(cat ${ssh_keyfile}.pub)
+            sed -i -e "s#PUB_KEY#${pub_key}#" project/config/bkr_jslave.json
 
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh --topology=project/config/bkr_jslave \
             --project_defaults=ci-ops-central/project/config/project_defaults_osp7 --ssh_keyfile=ssh_${JSLAVENAME} \
