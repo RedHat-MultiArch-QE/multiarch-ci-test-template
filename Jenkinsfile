@@ -22,7 +22,7 @@ node('master') {
 	    yum list installed jenkins
 	    whoami
 	    id -Z
-	    getpidcon $$
+	    ps -efZ $$
 	    pwd
 	    tmp_dir=$(mktemp -d /tmp/openshift-multiarch-ci-XXXXXX)
 	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
