@@ -20,7 +20,7 @@ node('master') {
             sed -i -e "s#PUB_KEY#${pub_key}#" project/config/bkr_jslave.json
 
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh --topology=project/config/bkr_jslave \
-            --project_defaults=ci-ops-central/project/config/project_defaults_osp7 --ssh_keyfile=ssh_${JSLAVENAME} \
+            --project_defaults=ci-ops-central/project/config/project_defaults_osp7 --ssh_keyfile=${ssh_keyfile} \
             --jslavename=${JSLAVENAME} --jslavecreate --resources_file=${JSLAVENAME}.json
             TR_STATUS=$?
             if [ "$TR_STATUS" != 0 ]; then echo "ERROR: Provisioning\nSTATUS: $TR_STATUS"; exit 1; fi
