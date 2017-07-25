@@ -16,7 +16,7 @@ node('master') {
 	    chcon -t ssh_home_t ${tmp_dir}
 	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
 	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1
-	    pub_key=$(sed -e 's/\n/ /' ${ssh_keyfile}.pub)
+	    pub_key=$(sed -e 's/\\n/ /' ${ssh_keyfile}.pub)
 	    sed -e "s/PUB_KEY/${pub_key}" project/config/bkr_jslave.json
 
 	    exit 1
