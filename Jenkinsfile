@@ -16,7 +16,7 @@ node('master') {
 	    chcon -t ssh_home_t ${tmp_dir}
 	    ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
 	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1
-	    pub_key=$(cat ssh_keyfile}.pub)
+	    pub_key=$(cat ${ssh_keyfile}.pub)
 	    echo ${pub_key}
 
 	    exit 1
