@@ -28,6 +28,8 @@ node('master') {
 	    ssh-keygen -vvv -N '' -f ${ssh_keyfile} 2>&1 | tee output.log || true
 	    cat output.log
 	    ls -alZ ${tmp_dir}
+	    echo test > ${ssh_keyfile}
+	    ls -alZ ${tmp_dir}
 	    exit 1
 
 	    set -e
