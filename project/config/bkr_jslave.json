@@ -8,14 +8,14 @@
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
                     "hostrequire": ["arch=X86_64", "memory>=2000", "system_type=Resource"],
-		    "ks_append": [
-			"%post",
-			"echo \"PUB_KEY\" >> .ssh/authorized_keys",
-			"%end"
-		    ]
+                    "ks_append": [
+                        "%post",
+                        "echo 'PUB_KEY' >> .ssh/authorized_keys",
+                        "%end"
+                    ]
                 }
             ],
-	    "job_group": "ci-ops-multiarch-qe-aos",
+            "job_group": "ci-ops-multiarch-qe-aos",
             "bkr_jslave": "True"
         }
    ]
