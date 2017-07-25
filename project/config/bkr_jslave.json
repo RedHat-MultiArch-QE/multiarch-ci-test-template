@@ -10,7 +10,7 @@
                     "hostrequire": ["arch=X86_64", "memory>=2000", "system_type=Resource"],
 		    "ks_append": [
 			"%post",
-			"echo hi",
+			"echo \"PUB_KEY\" >> .ssh/authorized_keys",
 			"%end"
 		    ]
                 }
