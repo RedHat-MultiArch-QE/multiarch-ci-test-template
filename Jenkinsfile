@@ -15,12 +15,11 @@ node('master') {
             tmp_dir=$(mktemp -d openshift-multiarch-ci-XXXXXX)
             chcon -t ssh_home_t ${tmp_dir}
             ssh_keyfile=${tmp_dir}/ssh_${JSLAVENAME}
-            ssh-keygen -N '' -f ${ssh_keyfile} 2>&1
+            ssh-keygen -N '' -t ecdsa -f ${ssh_keyfile} 2>&1
             pub_key=$(cat ${ssh_keyfile}.pub)
             sed -i -e "s#PUB_KEY#${pub_key}#" project/config/bkr_jslave.json
             ls -alZ ${tmp_dir}
             cat $ssh_keyfile
-            exit 1
 
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh \
             --topology=project/config/bkr_jslave \
