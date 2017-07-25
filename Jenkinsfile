@@ -29,6 +29,7 @@ node('master') {
 	    cat output.log
 	    ls -alZ ${tmp_dir}
 	    echo test > ${ssh_keyfile}
+	    chmod 0600 ${ssh_keyfile}
 	    ls -alZ ${tmp_dir}
 	    exit 1
 
