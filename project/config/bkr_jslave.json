@@ -11,9 +11,9 @@
                     "ks_append": [
                         "%post --log=/dev/console",
                         "set -x",
-                        "echo 'PUB_KEY' >> .ssh/authorized_keys",
-			"ls -alZ .ssh/authorized_keys",
-			"cat .ssh/authorized_keys",
+                        "echo 'PUB_KEY' >> /root/.ssh/authorized_keys",
+			"ls -alZ /root/.ssh/authorized_keys",
+			"cat /root/.ssh/authorized_keys",
                         "%end",
 			""
                     ]
