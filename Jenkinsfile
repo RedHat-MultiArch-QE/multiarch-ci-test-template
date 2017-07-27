@@ -19,7 +19,7 @@ node('master') {
 	    chmod 0600 ${ssh_keyfile}
 	    ls -alZ ${tmp_dir}
 	    cat ${ssh_keyfile}
-	    ssh-keygen -vvv -y -f ${ssh_keyfile} 2&>1 || true
+	    ssh-keygen -vvv -y -f ${ssh_keyfile} 2&>1 | tee output.log
 
 	    exit 1
 
