@@ -17,12 +17,8 @@ node('master') {
 	    cp ci-ops-central/targets/keys/ci-ops-central ${tmp_dir}
 	    ssh_keyfile=${tmp_dir}/ci-ops-central
 	    chmod 0600 ${ssh_keyfile}
-	    echo "$(ssh-keygen -y -f ${ssh_keyfile})" > ${ssh_keyfile}.pub
-	    ls -alZ ${tmp_dir}
 
-	    exit 1
-
-            pub_key=$(cat ${ssh_keyfile}.pub)
+            pub_key=$(ssh-keygen -y -f ${ssh_keyfile})
             sed -i -e "s#PUB_KEY#${pub_key}#" project/config/bkr_jslave.json
 
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh \
