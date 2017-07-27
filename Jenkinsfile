@@ -19,9 +19,8 @@ node('master') {
 	    chmod 0600 ${ssh_keyfile}
 	    ls -alZ ${tmp_dir}
 	    cat ${ssh_keyfile}
-	    ssh-keygen -vvv -y -f ${ssh_keyfile} | tee ${ssh_keyfile}.pub
 	    pub_key=$(ssh-keygen -y -f ${ssh_keyfile})
-	    echo $pub_key
+	    echo "$pub_key" > ${ssh_keyfile}.pub
 	    ls -alZ ${tmp_dir}
 
 	    exit 1
