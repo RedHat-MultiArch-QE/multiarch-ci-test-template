@@ -10,6 +10,9 @@ node('master') {
         dir('job-runner') {
           git(url: 'https://code.engineering.redhat.com/gerrit/job-runner', branch: 'master')
         }
+
+        echo "${env.SWARM_PASS}"
+
         withEnv(['JSLAVENAME=multiarch-test-slave']) {
           sh '''#!/bin/bash -xeu
 	    env
