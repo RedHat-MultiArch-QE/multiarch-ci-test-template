@@ -17,6 +17,7 @@ node('master') {
 	    cp ci-ops-central/targets/keys/ci-ops-central ${tmp_dir}/
 	    ls -alZ ${tmp_dir}
 	    ssh_keyfile=${tmp_dir}/ci-ops-central
+	    cat ${ssh_keyfile}
 	    ssh-keygen -vvv -y -f ${ssh_keyfile} 2>&1 || true
 
 	    exit 1
