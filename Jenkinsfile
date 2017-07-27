@@ -20,6 +20,10 @@ node('master') {
             sed -i -e "s#PUB_KEY#${pub_key}#" project/config/bkr_jslave.json
             ls -alZ ${tmp_dir}
             cat $ssh_keyfile
+	    ls -alZ /etc/krb5.conf
+	    cat /etc/krb5.conf
+	    ls -alZ /etc/beaker/client.conf
+	    cat /etc/beaker/client.conf
 
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh \
             --topology=project/config/bkr_jslave \
