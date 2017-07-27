@@ -16,7 +16,7 @@ node('master') {
             chcon -t ssh_home_t ${tmp_dir}
 	    cp ci-ops-central/targets/keys/ci-ops-central ${tmp_dir}
 	    ssh_keyfile=${tmp_dir}/ci-ops-central
-	    ssh-keygen -y -f ${ssh_keyfile} 2>&1
+	    ssh-keygen -y -f ${ssh_keyfile} 2>&1 || true
 
 	    exit 1
 
