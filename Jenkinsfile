@@ -20,6 +20,8 @@ node('master') {
 	    ls -alZ ${tmp_dir}
 	    cat ${ssh_keyfile}
 	    ssh-keygen -vvv -y -f ${ssh_keyfile} | tee ${ssh_keyfile}.pub
+	    pub_key=$(ssh-keygen -y -f ${ssh_keyfile})
+	    echo $pub_key
 	    ls -alZ ${tmp_dir}
 
 	    exit 1
