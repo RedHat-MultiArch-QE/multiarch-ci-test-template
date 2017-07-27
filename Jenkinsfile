@@ -17,10 +17,7 @@ node('master') {
 	    cp ci-ops-central/targets/keys/ci-ops-central ${tmp_dir}
 	    ssh_keyfile=${tmp_dir}/ci-ops-central
 	    chmod 0600 ${ssh_keyfile}
-	    ls -alZ ${tmp_dir}
-	    cat ${ssh_keyfile}
-	    pub_key=$(ssh-keygen -y -f ${ssh_keyfile})
-	    echo "$pub_key" > ${ssh_keyfile}.pub
+	    echo "$(ssh-keygen -y -f ${ssh_keyfile})" > ${ssh_keyfile}.pub
 	    ls -alZ ${tmp_dir}
 
 	    exit 1
