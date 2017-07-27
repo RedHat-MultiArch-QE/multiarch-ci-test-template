@@ -23,7 +23,7 @@ node('master') {
 
             $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh \
             --topology=project/config/bkr_jslave \
-            --project_defaults=ci-ops-central/project/config/project_defaults_osp7\
+            --project_defaults=ci-ops-central/project/config/project_defaults_osp7 \
             --ssh_keyfile=${ssh_keyfile} \
             --jslavename=${JSLAVENAME} --jslavecreate --resources_file=${JSLAVENAME}.json
             TR_STATUS=$?
