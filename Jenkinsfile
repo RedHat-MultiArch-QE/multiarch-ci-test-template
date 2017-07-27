@@ -12,6 +12,7 @@ node('master') {
         }
         withEnv(['JSLAVENAME=multiarch-test-slave']) {
           sh '''#!/bin/bash -xeu
+	    env
             tmp_dir=$(mktemp -d openshift-multiarch-ci-XXXXXX)
             chcon -t ssh_home_t ${tmp_dir}
 	    cp ci-ops-central/targets/keys/ci-ops-central ${tmp_dir}
