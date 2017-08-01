@@ -10,11 +10,6 @@ properties([
       ],
       description: 'Architecture'
     )
-    string(
-      defaultValue: 'Hello',
-      description: 'How should I greet the world?',
-      name: 'Greeting'
-    )
   ])
 ])
 
