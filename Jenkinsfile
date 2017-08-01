@@ -3,10 +3,10 @@ properties([
     choiceParam(
       name: 'ARCH',
       options: [
-        x86_64,
-        ppc64le,
-        aarch64,
-        s390x
+        'x86_64',
+        'ppc64le',
+        'aarch64',
+        's390x'
       ],
       description: 'Architecture'
     )
