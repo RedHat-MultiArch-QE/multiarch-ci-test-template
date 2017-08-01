@@ -1,56 +1,53 @@
-node('master') {
-  ansiColor('xterm') {
-    timestamps {
-      deleteDir()
-      stage('Provision Slave') {
-        git(url: 'https://github.com/detiber/multiarch-openshift-ci', branch: 'master')
-        dir('ci-ops-central') {
-          git(url: 'https://code.engineering.redhat.com/gerrit/ci-ops-central', branch: 'master')
-        }
-        dir('job-runner') {
-          git(url: 'https://code.engineering.redhat.com/gerrit/job-runner', branch: 'master')
-        }
+properties([
+  parameters([
+    choiceParam(
+      name: 'ARCH',
+      options: [
+        x86_64,
+        ppc64le,
+        aarch64,
+        s390x
+      ],
+      description: 'Architecture'
+    )
+    string(
+      defaultValue: 'Hello',
+      description: 'How should I greet the world?',
+      name: 'Greeting'
+    )
+  ])
+])
 
-        echo "${env.SWARM_PASS}"
-
-        withEnv(['JSLAVENAME=multiarch-test-slave']) {
-          sh '''#!/bin/bash -xeu
-	    env
-            tmp_dir=$(mktemp -d openshift-multiarch-ci-XXXXXX)
-            chcon -t ssh_home_t ${tmp_dir}
-	    cp ci-ops-central/targets/keys/ci-ops-central ${tmp_dir}
-	    ssh_keyfile=${tmp_dir}/ci-ops-central
-	    chmod 0600 ${ssh_keyfile}
-
-            pub_key=$(ssh-keygen -y -f ${ssh_keyfile})
-            sed -i -e "s#PUB_KEY#${pub_key}#" project/config/bkr_jslave.json
-
-            $WORKSPACE/ci-ops-central/bootstrap/provision_jslave.sh \
-	    --site=${SITE} \
-            --topology=project/config/bkr_jslave \
-            --project_defaults=ci-ops-central/project/config/project_defaults_osp7 \
-            --ssh_keyfile=${ssh_keyfile} \
-	    --jenkins_master_username=${SWARM_USER} \
-	    --jenkins_master_passsword=${SWARM_PASS} \
-            --jslavename=${JSLAVENAME} --jslavecreate --resources_file=${JSLAVENAME}.json
-            TR_STATUS=$?
-            if [ "$TR_STATUS" != 0 ]; then echo "ERROR: Provisioning\nSTATUS: $TR_STATUS"; exit 1; fi
-          '''
-        }
+stage('Provision Slave') {
+  node('master') {
+    ansiColor('xterm') {
+      timestamps {
+        build([
+          job: 'provision_beaker_slave',
+          parameters: [
+            string(name: 'ARCH', value: "${params.ARCH}"),
+            string(name: 'NAME', value: "multiarch-slave-${params.ARCH}"),
+            string(name: 'LABEL', value: "multiarch-slave-${params.ARCH}")
+          ]
+        ])
       }
     }
   }
 }
 
-// node('multiarch-test-slave') {
-//   ansiColor('xterm') {
-//     timestamps {
-//       deleteDir()
-//       stage('Checkout Repos') {
-//         dir('origin') {
-//           git(url: 'https://github.com/openshift/origin.git', branch: 'master')
-//         }
-//       }
-//     }
-//   }
-// }
+stage('Tests') {
+  node("multiarch-slave-${params.ARCH}") {
+    ansiColor('xterm') {
+      timestamps {
+        deleteDir()
+        git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
+        sh '''#!/bin/bash -xeu
+          make build-base-images
+          make build-release-images
+          make check
+        '''
+        }
+      }
+    }
+  }
+}
