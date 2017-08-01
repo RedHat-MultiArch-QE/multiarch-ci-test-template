@@ -2,7 +2,7 @@ properties([
   parameters([
     choiceParam(
       name: 'ARCH',
-      options: [
+      choices: [
         'x86_64',
         'ppc64le',
         'aarch64',
