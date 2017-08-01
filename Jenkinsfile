@@ -41,7 +41,6 @@ stage('Tests') {
           make build-release-images
           make check
         '''
-        }
       }
     }
   }
