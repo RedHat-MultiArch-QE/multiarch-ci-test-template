@@ -2,12 +2,7 @@ properties([
   parameters([
     choiceParam(
       name: 'ARCH',
-      choices: [
-        'x86_64',
-        'ppc64le',
-        'aarch64',
-        's390x'
-      ],
+      choices: "x86_64\nppc64le\naarch64\ns390x",
       description: 'Architecture'
     )
   ])
