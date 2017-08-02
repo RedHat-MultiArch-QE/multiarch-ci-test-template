@@ -35,7 +35,8 @@
                 }
 	    ],
             "job_group": "ci-ops-multiarch-qe-aos",
-            "bkr_jslave": "True"
+            "bkr_jslave": "True",
+	    "skip_max_attempts": "True"
         }
    ]
 }
