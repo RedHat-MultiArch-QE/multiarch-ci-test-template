@@ -16,6 +16,8 @@ stage('Provision Slave') {
         arch=params.ARCH
         def node_name = "multiarch-slave-${arch}"
         def node_label = node_name
+        hello.world
+        echo "nodes: ${nodes.getNodes()}"
         if (! nodes.nodeExists(node_name)) {
           build([
             job: 'provision_beaker_slave',
