@@ -28,7 +28,8 @@
             "packages": [
                 {
                     "yum":  "git make golang docker jq"
-                },
+                }
+	    ],
             "job_group": "ci-ops-multiarch-qe-aos",
             "bkr_jslave": "True"
         }
