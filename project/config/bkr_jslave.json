@@ -3,7 +3,7 @@
         {
             "recipesets": [
                 {
-                    "distro": "RHEL-7.3",
+                    "distro": "RHEL-7.4",
                     "arch": "X86_64",
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
@@ -23,7 +23,11 @@
                 {
                     "name": "epel7",
                     "mirrorlist": "https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch"
-                }
+                },
+		{
+		    "name": "rhel7-extras",
+		    "mirrorlist": "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/server/7/7Server/x86_64/extras/os/"
+		}
 	    ],
             "packages": [
                 {
