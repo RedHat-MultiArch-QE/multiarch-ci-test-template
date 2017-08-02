@@ -12,14 +12,19 @@ stage('Provision Slave') {
   node('master') {
     ansiColor('xterm') {
       timestamps {
-        build([
-          job: 'provision_beaker_slave',
-          parameters: [
-            string(name: 'ARCH', value: "${params.ARCH}"),
-            string(name: 'NAME', value: "multiarch-slave-${params.ARCH}"),
-            string(name: 'LABEL', value: "multiarch-slave-${params.ARCH}")
-          ]
-        ])
+         arch=params.ARCH
+        def node_name = "multiarch-slave-${arch}"
+        def node_label = node_name
+        if (! library('multiarch-openshift-ci-libraries').nodes.nodeExists(node_name)) {
+          build([
+            job: 'provision_beaker_slave',
+            parameters: [
+              string(name: 'ARCH', value: arch),
+              string(name: 'NAME', value: node_name),
+              string(name: 'LABEL', value: node_label)
+            ]
+          ])
+        }
       }
     }
   }
