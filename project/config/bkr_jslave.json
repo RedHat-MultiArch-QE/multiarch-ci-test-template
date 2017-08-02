@@ -25,6 +25,10 @@
                     "mirrorlist": "https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch"
                 }
 	    ],
+            "packages": [
+                {
+                    "yum":  "git make golang docker jq"
+                },
             "job_group": "ci-ops-multiarch-qe-aos",
             "bkr_jslave": "True"
         }
