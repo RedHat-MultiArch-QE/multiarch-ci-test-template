@@ -18,9 +18,6 @@ stage('Provision Slave') {
         def node_label = node_name
 	hello.name = node_name
 	echo hello.name
-	hello.greeting
-        hello_world
-        hello.world
         echo "nodes: ${nodes.getNodes()}"
         if (! nodes.nodeExists(node_name)) {
           build([
