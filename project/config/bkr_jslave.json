@@ -26,7 +26,7 @@
                 },
 		{
 		    "name": "rhel7-extras",
-		    "baseurl": "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/REPO_PATH_PART/server/7/7Server/$basearch/extras/os/"
+		    "baseurl": "http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os"
 		}
 	    ],
             "packages": [
