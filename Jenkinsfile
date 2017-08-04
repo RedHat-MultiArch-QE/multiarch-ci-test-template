@@ -50,7 +50,7 @@ stage('Tests') {
 	  }
 	  catch (exc) {
 	    echo "Test failed."
-	    throw
+	    throw exc
 	  }
 	  finally {
 	    archiveArtifacts '_output/scripts/**/*'
