@@ -40,12 +40,21 @@ stage('Tests') {
         git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
 	gopath = "${pwd(tmp: true)}/go"
         withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
-          sh '''#!/bin/bash -xeu
-            go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
-            make build-base-images
-            make build-release-images
-            hack/env make check
-          '''
+	  try {
+	    sh '''#!/bin/bash -xeu
+              go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
+              make build-base-images
+              make build-release-images
+              hack/env JUNIT_REPORT=true make check
+            '''
+	  }
+	  catch (exc) {
+	    echo "Test failed."
+	    throw
+	  }
+	  finally {
+	    archiveArtifacts '_output/scripts/**/*'
+	  }
         }
       }
     }
