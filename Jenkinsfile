@@ -38,12 +38,13 @@ stage('Tests') {
       timestamps {
         deleteDir()
         git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
-        withEnv(["GOPATH=${WORKSPACE}/go", "PATH=${PATH}:${WORKSPACE}/go/bin"]) {
+	gopath = "${pwd(tmp: true)}/go"
+        withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
           sh '''#!/bin/bash -xeu
             go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
             make build-base-images
             make build-release-images
-            make check
+            hack/env make check
           '''
         }
       }
