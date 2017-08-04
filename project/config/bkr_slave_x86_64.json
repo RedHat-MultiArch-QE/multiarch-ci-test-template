@@ -4,10 +4,10 @@
             "recipesets": [
                 {
                     "distro": "RHEL-7.4-20170801.n.0",
-                    "arch": "ARCH",
+                    "arch": "X86_64",
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
-                    "hostrequire": ["arch=ARCH", "memory>=2000"],
+                    "hostrequire": ["arch=X86_64", "memory>=2000", "system_type=Resource"],
                     "ks_append": [
                         "%post --log=/dev/console",
                         "set -x",
@@ -26,7 +26,7 @@
                 },
 		{
 		    "name": "rhel7-extras",
-		    "baseurl": "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/REPO_PATH_PART/server/7/7Server/$basearch/extras/os/"
+		    "baseurl": "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/server/7/7Server/x86_64/extras/os/"
 		}
 	    ],
             "packages": [

@@ -1,0 +1,9 @@
+---
+- name: Docker
+  hosts: '{{ hosts | default["testsystems") ]}}'
+  tasks:
+  - name: Ensure docker started and enabled
+    systemd:
+      name: docker
+      state: started
+      enabled: yes
