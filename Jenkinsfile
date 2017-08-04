@@ -16,8 +16,6 @@ stage('Provision Slave') {
         arch=params.ARCH
         def node_name = "multiarch-slave-${arch}"
         def node_label = node_name
-	hello.name = node_name
-	echo hello.name
         echo "nodes: ${nodes.getNodes()}"
         if (! nodes.nodeExists(node_name)) {
           build([
@@ -40,7 +38,7 @@ stage('Tests') {
       timestamps {
         deleteDir()
         git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
-        withEnv(["GOPATH=${WORKSPACE}/go", "PATH=${PATH}:${GOPATH}/bin"]) {
+        withEnv(["GOPATH=${WORKSPACE}/go", "PATH=${PATH}:${WORKSPACE}/go/bin"]) {
           sh '''#!/bin/bash -xeu
             go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
             make build-base-images
