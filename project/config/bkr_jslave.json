@@ -8,39 +8,30 @@
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
                     "hostrequire": ["arch=ARCH", "memory>=2000"],
+		    "package": [],
+		    "repo": [
+			"https://download-ib01.fedoraproject.org/pub/epel/7/$basearch",
+			"http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os"
+		    ],
+		    "package": [
+                      "git",
+		      "make",
+		      "golang",
+		      "docker",
+		      "jq"
+		    ],
                     "ks_append": [
                         "%post --log=/dev/console",
                         "set -x",
                         "echo 'PUB_KEY' >> /root/.ssh/authorized_keys",
 			"ls -alZ /root/.ssh/authorized_keys",
 			"cat /root/.ssh/authorized_keys",
+			"systemctl enable docker",
                         "%end",
 			""
                     ]
                 }
             ],
-            "repos": [
-                {
-                    "name": "epel7",
-                    "mirrorlist": "https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch"
-                },
-		{
-		    "name": "rhel7-extras",
-		    "baseurl": "http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os"
-		}
-	    ],
-            "packages": [
-                {
-                    "yum":  "git make golang docker jq"
-                }
-	    ],
-	    "ansible": {
-                "playbooks": [
-                    "multiarch-openshift-ci/ansible/docker.yml"
-		],
-		"remote_user": "root",
-		"pattern": "testsystems"
-	    },
             "job_group": "ci-ops-multiarch-qe-aos",
             "bkr_jslave": "True",
 	    "skip_max_attempts": "True"
