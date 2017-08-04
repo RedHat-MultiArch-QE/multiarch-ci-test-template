@@ -34,6 +34,13 @@
                     "yum":  "git make golang docker jq"
                 }
 	    ],
+	    "ansible": {
+                "playbooks": [
+                    "multiarch-openshift-ci/ansible/docker.yml"
+		],
+		"remote_user": "root",
+		"pattern": "testsystems"
+	    },
             "job_group": "ci-ops-multiarch-qe-aos",
             "bkr_jslave": "True",
 	    "skip_max_attempts": "True"
