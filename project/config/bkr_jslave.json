@@ -8,7 +8,6 @@
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
                     "hostrequire": ["arch=ARCH", "memory>=2000"],
-		    "package": [],
 		    "repo": [
 			"https://download-ib01.fedoraproject.org/pub/epel/7/$basearch",
 			"http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os"
