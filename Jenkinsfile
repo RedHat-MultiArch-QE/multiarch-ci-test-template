@@ -54,6 +54,7 @@ stage('Tests') {
 	  }
 	  finally {
 	    archiveArtifacts '_output/scripts/**/*'
+	    junit '_output/scripts/**/*.xml'
 	  }
         }
       }
