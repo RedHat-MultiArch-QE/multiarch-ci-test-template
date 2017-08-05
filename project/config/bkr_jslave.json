@@ -12,19 +12,13 @@
 			"https://download-ib01.fedoraproject.org/pub/epel/7/$basearch",
 			"http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os"
 		    ],
-		    "package": [
-                      "git",
-		      "make",
-		      "golang",
-		      "docker",
-		      "jq"
-		    ],
                     "ks_append": [
                         "%post --log=/dev/console",
                         "set -x",
                         "echo 'PUB_KEY' >> /root/.ssh/authorized_keys",
 			"ls -alZ /root/.ssh/authorized_keys",
 			"cat /root/.ssh/authorized_keys",
+			"yum install -y git make golang docker jq",
 			"systemctl enable docker",
                         "%end",
 			""
