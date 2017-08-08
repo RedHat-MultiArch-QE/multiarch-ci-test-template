@@ -45,7 +45,7 @@ stage('Tests') {
               go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
               make build-base-images
               make build-release-images
-              hack/env JUNIT_REPORT=true DETECT_RACES=false make check
+              hack/env JUNIT_REPORT=true DETECT_RACES=false make check -k
             '''
 	  }
 	  catch (exc) {
