@@ -8,8 +8,8 @@ properties([
   ])
 ])
 
-stage('Provision Slave') {
-  node('master') {
+node('master') {
+  stage('Provision Slave') {
     ansiColor('xterm') {
       timestamps {
         @Library('multiarch-openshift-ci-libraries')
@@ -32,31 +32,39 @@ stage('Provision Slave') {
   }
 }
 
-stage('Tests') {
-  node("multiarch-slave-${params.ARCH}") {
-    ansiColor('xterm') {
-      timestamps {
-        deleteDir()
-        git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
-	gopath = "${pwd(tmp: true)}/go"
-        withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
+node("multiarch-slave-${params.ARCH}") {
+  ansiColor('xterm') {
+    timestamps {
+      gopath = "${pwd(tmp: true)}/go"
+      withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
+        stage('Prep') {
+          git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
 	  try {
 	    sh '''#!/bin/bash -xeu
               go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
               make build-base-images
               make build-release-images
+            '''
+	  }
+	  catch (exc) {
+	    archiveArtifacts '_output/scripts/**/*'
+	    junit '_output/scripts/**/*.xml'
+	    throw exc
+	  }
+	}
+        stage('Tests') {
+	  success = True
+	  try {
+	    sh '''#!/bin/bash -xeu
               hack/env JUNIT_REPORT=true DETECT_RACES=false make check -k
             '''
 	  }
 	  catch (exc) {
-	    echo "Test failed."
-	    throw exc
+	    success = False
 	  }
-	  finally {
-	    archiveArtifacts '_output/scripts/**/*'
-	    junit '_output/scripts/**/*.xml'
-	  }
-        }
+	}
+        archiveArtifacts '_output/scripts/**/*'
+        junit '_output/scripts/**/*.xml'
       }
     }
   }
