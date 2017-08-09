@@ -35,7 +35,7 @@ node('master') {
 node("multiarch-slave-${params.ARCH}") {
   ansiColor('xterm') {
     timestamps {
-      gopath = "${pwd(tmp: true)}/go"
+      def gopath = "${pwd(tmp: true)}/go"
       withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
         stage('Prep') {
           git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
