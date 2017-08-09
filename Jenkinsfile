@@ -53,7 +53,7 @@ node("multiarch-slave-${params.ARCH}") {
 	  }
 	}
         stage('Tests') {
-	  success = True
+	  def success = True
 	  try {
 	    sh '''#!/bin/bash -xeu
               hack/env JUNIT_REPORT=true DETECT_RACES=false make check -k
