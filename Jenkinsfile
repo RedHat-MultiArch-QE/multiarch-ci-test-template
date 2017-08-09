@@ -52,15 +52,54 @@ node("multiarch-slave-${params.ARCH}") {
 	    throw exc
 	  }
 	}
-        stage('Tests') {
-	  def success = true
+        stage('Pre-release Tests') {
 	  try {
 	    sh '''#!/bin/bash -xeu
               hack/env JUNIT_REPORT=true DETECT_RACES=false make check -k
             '''
 	  }
 	  catch (exc) {
-	    success = False
+	    archiveArtifacts '_output/scripts/**/*'
+	    junit '_output/scripts/**/*.xml'
+	    throw exc
+	  }
+	}
+        stage('Locally build release') {
+          try {
+	    sh '''#!/bin/bash -xeu
+              hack/env JUNIT_REPORT=true make release
+            '''
+	  }
+	  catch (exc) {
+	    archiveArtifacts '_output/scripts/**/*'
+	    junit '_output/scripts/**/*.xml'
+	    throw exc
+	  }
+	}
+        stage('Integration tests') {
+          try {
+	    sh '''#!/bin/bash -xeu
+	      hack/env JUNIT_REPORT='true' make test-tools test-integration
+            '''
+	  }
+	  catch (exc) {
+	    archiveArtifacts '_output/scripts/**/*'
+	    junit '_output/scripts/**/*.xml'
+	    throw exc
+	  }
+	}
+        stage('End to End tests') {
+          try {
+	    sh '''#!/bin/bash -xeu
+	      OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/end-to-end.test hack/env make build-router-e2e-test
+              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/etcdhelper hack/env make build WHAT=tools/etcdhelper
+              OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
+            '''
+	  }
+	  catch (exc) {
+	    archiveArtifacts '_output/scripts/**/*'
+	    junit '_output/scripts/**/*.xml'
+	    throw exc
 	  }
 	}
         archiveArtifacts '_output/scripts/**/*'
