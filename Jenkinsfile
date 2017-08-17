@@ -55,7 +55,7 @@ node("multiarch-slave-${params.ARCH}") {
         stage('Pre-release Tests') {
 	  try {
 	    sh '''#!/bin/bash -xeu
-              hack/env JUNIT_REPORT=true DETECT_RACES=false make check -k
+              hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k
             '''
 	  }
 	  catch (exc) {
