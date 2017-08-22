@@ -50,63 +50,63 @@ node("multiarch-slave-${params.ARCH}") {
       withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
         stage('Prep') {
           git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
-	  try {
-	    sh '''#!/bin/bash -xeu
+         try {
+           sh '''#!/bin/bash -xeu
               go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
               make build-base-images
               make build-release-images
             '''
-	  }
-	  catch (exc) {
-	    archiveArtifacts '_output/scripts/**/*'
-	    junit '_output/scripts/**/*.xml'
-	    throw exc
-	  }
-	}
-        try{
+         }
+         catch (exc) {
+           archiveArtifacts '_output/scripts/**/*'
+           junit '_output/scripts/**/*.xml'
+           throw exc
+         }
+       }
+        try {
           stage('Pre-release Tests') {
-	    sh '''#!/bin/bash -xeu
+           sh '''#!/bin/bash -xeu
               hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k
             '''
           }
-	}
-	catch (exc) {
+       }
+       catch (exc) {
           failed_stages+='Pre-release Tests'
-	}
+       }
         stage('Locally build release') {
           try {
-	    sh '''#!/bin/bash -xeu
+           sh '''#!/bin/bash -xeu
               hack/env JUNIT_REPORT=true make release
             '''
-	  }
-	  catch (exc) {
-	    archiveArtifacts '_output/scripts/**/*'
-	    junit '_output/scripts/**/*.xml'
-	    throw exc
-	  }
-	}
-        try{
+         }
+         catch (exc) {
+           archiveArtifacts '_output/scripts/**/*'
+           junit '_output/scripts/**/*.xml'
+           throw exc
+         }
+       }
+        try {
           stage('Integration Tests') {
-	    sh '''#!/bin/bash -xeu
-	      hack/env JUNIT_REPORT='true' make test-tools test-integration
+           sh '''#!/bin/bash -xeu
+             hack/env JUNIT_REPORT='true' make test-tools test-integration
             '''
           }
-	}
-	catch (exc) {
+       }
+       catch (exc) {
           failed_stages+='Integration Tests'
-	}
-        try{
+       }
+        try {
           stage('End to End tests') {
-	    sh '''#!/bin/bash -xeu
-	      OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/end-to-end.test hack/env make build-router-e2e-test
+           sh '''#!/bin/bash -xeu
+             OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/end-to-end.test hack/env make build-router-e2e-test
               OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/etcdhelper hack/env make build WHAT=tools/etcdhelper
               OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
             '''
           }
-	}
-	catch (exc) {
+       }
+       catch (exc) {
           failed_stages+='End to End Tests'
-	}
+       }
         archiveArtifacts '_output/scripts/**/*'
         junit '_output/scripts/**/*.xml'
       }
