@@ -3,7 +3,7 @@
         {
             "recipesets": [
                 {
-                    "distro": "RHEL-7.4-20170801.n.0",
+                    "distro": "RHEL-7.4",
                     "arch": "ARCH",
                     "variant": "Server",
                     "keyvalue": ["DISKSPACE>=20000"],
