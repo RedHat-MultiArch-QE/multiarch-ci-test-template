@@ -4,6 +4,16 @@ properties([
       name: 'ARCH',
       choices: "x86_64\nppc64le\naarch64\ns390x",
       description: 'Architecture'
+    ),
+    string(
+      name: 'ORIGIN_REPO',
+      description: 'Origin repo',
+      defaultValue: 'https://github.com/detiber/origin.git'
+    ),
+    string(
+      name: 'ORIGIN_BRANCH',
+      description: 'Origin branch',
+      defaultValue: 'ppc64le'
     )
   ])
 ])
@@ -38,7 +48,7 @@ node("multiarch-slave-${params.ARCH}") {
       def gopath = "${pwd(tmp: true)}/go"
       withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
         stage('Prep') {
-          git(url: 'https://github.com/detiber/origin.git', branch: 'ppc64le')
+          git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
 	  try {
 	    sh '''#!/bin/bash -xeu
               go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
