@@ -76,6 +76,9 @@ node("multiarch-slave-${params.ARCH}") {
         stage('Locally build release') {
           try {
            sh '''#!/bin/bash -xeu
+              arch=$(arch)
+              docker tag openshift/origin-source-${arch}:latest openshift/origin-source:latest
+              docker tag openshift/origin-base-${arch}:latest openshift/origin-base:latest
               hack/env JUNIT_REPORT=true make release
             '''
          }
@@ -98,7 +101,7 @@ node("multiarch-slave-${params.ARCH}") {
         try {
           stage('End to End tests') {
            sh '''#!/bin/bash -xeu
-             OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/end-to-end.test hack/env make build-router-e2e-test
+              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/end-to-end.test hack/env make build-router-e2e-test
               OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/etcdhelper hack/env make build WHAT=tools/etcdhelper
               OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
             '''
