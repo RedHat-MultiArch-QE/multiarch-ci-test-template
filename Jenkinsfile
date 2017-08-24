@@ -13,7 +13,7 @@ properties([
     string(
       name: 'ORIGIN_BRANCH',
       description: 'Origin branch',
-      defaultValue: 'ppc64le'
+      defaultValue: 'ppc64le-rebase-wip'
     )
   ])
 ])
