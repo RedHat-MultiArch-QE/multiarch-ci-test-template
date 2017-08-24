@@ -101,8 +101,9 @@ node("multiarch-slave-${params.ARCH}") {
         try {
           stage('End to End tests') {
            sh '''#!/bin/bash -xeu
-              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/end-to-end.test hack/env make build-router-e2e-test
-              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/amd64/etcdhelper hack/env make build WHAT=tools/etcdhelper
+              arch=$(go env GOHOSTARCH)
+              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${arch}/end-to-end.test hack/env make build-router-e2e-test
+              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${arch}/etcdhelper hack/env make build WHAT=tools/etcdhelper
               OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
             '''
           }
