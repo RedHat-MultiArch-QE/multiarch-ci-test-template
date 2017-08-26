@@ -18,7 +18,7 @@
                         "echo 'PUB_KEY' >> /root/.ssh/authorized_keys",
 			"ls -alZ /root/.ssh/authorized_keys",
 			"cat /root/.ssh/authorized_keys",
-			"yum install -y bc git make golang docker jq",
+			"yum install -y bc git make golang docker jq dig",
 			"echo 'insecure_registries:' >> /etc/containers/registries.conf",
 			"echo '  - 172.30.0.0/16' >> /etc/containers/registries.conf",
 			"systemctl enable docker",
