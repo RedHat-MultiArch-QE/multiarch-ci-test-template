@@ -16,7 +16,7 @@ properties([
       description: 'Origin branch',
       defaultValue: 'master'
 //      defaultValue: 'ppc64le-rebase-wip'
-    )
+    ),
     string(
       name: 'OS_BUILD_ENV_IMAGE',
       description: 'openshift-release image',
