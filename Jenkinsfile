@@ -8,12 +8,19 @@ properties([
     string(
       name: 'ORIGIN_REPO',
       description: 'Origin repo',
-      defaultValue: 'https://github.com/detiber/origin.git'
+      defaultValue: 'https://github.com/openshift/origin.git'
+//      defaultValue: 'https://github.com/detiber/origin.git'
     ),
     string(
       name: 'ORIGIN_BRANCH',
       description: 'Origin branch',
-      defaultValue: 'ppc64le-rebase-wip'
+      defaultValue: 'master'
+//      defaultValue: 'ppc64le-rebase-wip'
+    )
+    string(
+      name: 'OS_BUILD_ENV_IMAGE',
+      description: 'openshift-release image',
+      defaultValue: 'openshiftmultiarch/origin-release:golang-1.8'
     )
   ])
 ])
@@ -50,57 +57,57 @@ node("multiarch-slave-${params.ARCH}") {
       withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
         stage('Prep') {
           git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
-         try {
-           sh '''#!/bin/bash -xeu
-              go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
-              make build-base-images
-              make build-release-images
-            '''
-         }
-         catch (exc) {
-           archiveArtifacts '_output/scripts/**/*'
-           junit '_output/scripts/**/*.xml'
-           throw exc
-         }
-       }
+//          try {
+//            sh '''#!/bin/bash -xeu
+//              go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
+//              make build-base-images
+//              make build-release-images
+//            '''
+//          }
+//          catch (exc) {
+//            archiveArtifacts '_output/scripts/**/*'
+//            junit '_output/scripts/**/*.xml'
+//            throw exc
+//          }
+        }
         try {
           stage('Pre-release Tests') {
-           sh '''#!/bin/bash -xeu
+            sh '''#!/bin/bash -xeu
               hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k
             '''
           }
-       }
-       catch (exc) {
+        }
+        catch (exc) {
           failed_stages+='Pre-release Tests'
-       }
+        }
         stage('Locally build release') {
           try {
-           sh '''#!/bin/bash -xeu
+            sh '''#!/bin/bash -xeu
               arch=$(arch)
               docker tag openshift/origin-source-${arch}:latest openshift/origin-source:latest
               docker tag openshift/origin-base-${arch}:latest openshift/origin-base:latest
               hack/env JUNIT_REPORT=true make release
             '''
-         }
-         catch (exc) {
-           archiveArtifacts '_output/scripts/**/*'
-           junit '_output/scripts/**/*.xml'
-           throw exc
-         }
-       }
+          }
+          catch (exc) {
+            archiveArtifacts '_output/scripts/**/*'
+            junit '_output/scripts/**/*.xml'
+            throw exc
+          }
+        }
         try {
           stage('Integration Tests') {
-           sh '''#!/bin/bash -xeu
-             hack/env JUNIT_REPORT='true' make test-tools test-integration
+            sh '''#!/bin/bash -xeu
+              hack/env JUNIT_REPORT='true' make test-tools test-integration
             '''
           }
-       }
-       catch (exc) {
+        }
+        catch (exc) {
           failed_stages+='Integration Tests'
-       }
+        }
         try {
           stage('End to End tests') {
-           sh '''#!/bin/bash -xeu
+            sh '''#!/bin/bash -xeu
               arch=$(go env GOHOSTARCH)
               OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${arch}/end-to-end.test hack/env make build-router-e2e-test
               OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${arch}/etcdhelper hack/env make build WHAT=tools/etcdhelper
@@ -109,10 +116,10 @@ node("multiarch-slave-${params.ARCH}") {
           }
        }
        catch (exc) {
-          failed_stages+='End to End Tests'
+         failed_stages+='End to End Tests'
        }
-        archiveArtifacts '_output/scripts/**/*'
-        junit '_output/scripts/**/*.xml'
+       archiveArtifacts '_output/scripts/**/*'
+       junit '_output/scripts/**/*.xml'
       }
     }
   }
