@@ -87,6 +87,7 @@ node("multiarch-slave-${params.ARCH}") {
               #docker tag openshift/origin-source-${arch}:latest openshift/origin-source:latest
               #docker tag openshift/origin-base-${arch}:latest openshift/origin-base:latest
 
+              go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
               hack/build-base-images.sh
               hack/env JUNIT_REPORT=true make release
             '''
