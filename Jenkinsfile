@@ -57,18 +57,11 @@ node("multiarch-slave-${params.ARCH}") {
       withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
         stage('Prep') {
           git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
-//          try {
-//            sh '''#!/bin/bash -xeu
-//              go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
-//              make build-base-images
-//              make build-release-images
-//            '''
-//          }
-//          catch (exc) {
-//            archiveArtifacts '_output/scripts/**/*'
-//            junit '_output/scripts/**/*.xml'
-//            throw exc
-//          }
+	  sh '''#!/bin/bash -xeu
+            git remote add detiber https://github.com/detiber/origin.git
+	    git fetch detiber
+	    git merge detiber/multiarch
+	  '''
         }
         try {
           stage('Pre-release Tests') {
@@ -83,12 +76,7 @@ node("multiarch-slave-${params.ARCH}") {
         stage('Locally build release') {
           try {
             sh '''#!/bin/bash -xeu
-              #arch=$(arch)
-              #docker tag openshift/origin-source-${arch}:latest openshift/origin-source:latest
-              #docker tag openshift/origin-base-${arch}:latest openshift/origin-base:latest
-
-              go get -u github.com/openshift/imagebuilder/cmd/imagebuilder
-              hack/build-base-images.sh
+              hack/env hack/build-base-images.sh
               hack/env JUNIT_REPORT=true make release
             '''
           }
