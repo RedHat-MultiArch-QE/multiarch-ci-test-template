@@ -58,7 +58,7 @@ node("multiarch-slave-${params.ARCH}") {
         stage('Prep') {
           git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
 	  sh '''#!/bin/bash -xeu
-            git remote add detiber https://github.com/detiber/origin.git
+            git remote add detiber https://github.com/detiber/origin.git || true
 	    git fetch detiber
 	    git merge detiber/multiarch
 	  '''
