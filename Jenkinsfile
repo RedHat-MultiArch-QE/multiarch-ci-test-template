@@ -37,7 +37,7 @@ node('master') {
         def node_label = node_name
         echo "nodes: ${nodes.getNodes()}"
         if (! nodes.nodeExists(node_name)) {
-          build([
+          def buildResult = build([
               job: 'provision-multiarch-slave',
               parameters: [
                 string(name: 'ARCH', value: arch),
