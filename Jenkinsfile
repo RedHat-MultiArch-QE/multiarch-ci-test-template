@@ -1,29 +1,31 @@
 properties([
-  parameters([
-    choiceParam(
-      name: 'ARCH',
-      choices: "x86_64\nppc64le\naarch64\ns390x",
-      description: 'Architecture'
-    ),
-    string(
-      name: 'ORIGIN_REPO',
-      description: 'Origin repo',
-      defaultValue: 'https://github.com/openshift/origin.git'
-//      defaultValue: 'https://github.com/detiber/origin.git'
-    ),
-    string(
-      name: 'ORIGIN_BRANCH',
-      description: 'Origin branch',
-      defaultValue: 'master'
-//      defaultValue: 'ppc64le-rebase-wip'
-    ),
-    string(
-      name: 'OS_BUILD_ENV_IMAGE',
-      description: 'openshift-release image',
-      defaultValue: 'openshiftmultiarch/origin-release:golang-1.8'
-    )
+    parameters([
+        choiceParam(
+          name: 'ARCH',
+          choices: "x86_64\nppc64le\naarch64\ns390x",
+          description: 'Architecture'
+        ),
+        string(
+          name: 'ORIGIN_REPO',
+          description: 'Origin repo',
+          defaultValue: 'https://github.com/openshift/origin.git'
+          //      defaultValue: 'https://github.com/detiber/origin.git'
+        ),
+        string(
+          name: 'ORIGIN_BRANCH',
+          description: 'Origin branch',
+          defaultValue: 'master'
+          //      defaultValue: 'ppc64le-rebase-wip'
+        ),
+        string(
+          name: 'OS_BUILD_ENV_IMAGE'
+          description: 'openshift-release image',
+          defaultValue: 'openshiftmultiarch/origin-release:golang-1.8'
+        )
+      ])
   ])
-])
+
+def provisionedNode = null
 
 node('master') {
   stage('Provision Slave') {
@@ -36,20 +38,41 @@ node('master') {
         echo "nodes: ${nodes.getNodes()}"
         if (! nodes.nodeExists(node_name)) {
           build([
-            job: 'provision_beaker_slave',
-            parameters: [
-              string(name: 'ARCH', value: arch),
-              string(name: 'NAME', value: node_name),
-              string(name: 'LABEL', value: node_label)
-            ]
-          ])
+              job: 'provision-multiarch-slave',
+              parameters: [
+                string(name: 'ARCH', value: arch),
+                string(name: 'NAME', value: node_name),
+                string(name: 'LABEL', value: node_label)
+              ],
+              propagate: true,
+              wait: true
+            ])
+
+          // Get results of provisioning job
+          step([$class: 'CopyArtifact',
+              filter: 'slave.properties',
+              fingerprintArtifacts: true,
+              flatten             : true,
+              projectName         : 'provision-multiarch-slave',
+              selector: [
+                $class: 'SpecificBuildSelector',
+                buildNumber: buildResult.getNumber().toString()
+              ]
+            ])
+
+          // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
+          Properties slaveProps = new Properties()
+          provisioner.load(new StringReader(readFile('slave.properties')))
+
+          // Assign the appropriate slave name
+          provisionedNode = slaveProps.name
         }
       }
     }
   }
 }
 
-node("multiarch-slave-${params.ARCH}") {
+node(provisionedNode) {
   ansiColor('xterm') {
     timestamps {
       def gopath = "${pwd(tmp: true)}/go"
@@ -57,11 +80,11 @@ node("multiarch-slave-${params.ARCH}") {
       withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
         stage('Prep') {
           git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
-	  sh '''#!/bin/bash -xeu
+          sh '''#!/bin/bash -xeu
             git remote add detiber https://github.com/detiber/origin.git || true
-	    git fetch detiber
-	    git merge detiber/multiarch
-	  '''
+        git fetch detiber
+        git merge detiber/multiarch
+      '''
         }
         try {
           stage('Pre-release Tests') {
@@ -105,12 +128,12 @@ node("multiarch-slave-${params.ARCH}") {
               OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
             '''
           }
-       }
-       catch (exc) {
-         failed_stages+='End to End Tests'
-       }
-       archiveArtifacts '_output/scripts/**/*'
-       junit '_output/scripts/**/*.xml'
+        }
+        catch (exc) {
+          failed_stages+='End to End Tests'
+        }
+        archiveArtifacts '_output/scripts/**/*'
+        junit '_output/scripts/**/*.xml'
       }
     }
   }
