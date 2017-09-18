@@ -18,7 +18,7 @@ properties([
           //      defaultValue: 'ppc64le-rebase-wip'
         ),
         string(
-          name: 'OS_BUILD_ENV_IMAGE'
+          name: 'OS_BUILD_ENV_IMAGE',
           description: 'openshift-release image',
           defaultValue: 'openshiftmultiarch/origin-release:golang-1.8'
         )
