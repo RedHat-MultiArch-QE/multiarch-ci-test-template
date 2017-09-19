@@ -23,6 +23,8 @@ properties([
   ])
 ])
 
+@Library('cico-pipeline-library') _
+
 def provisionHost(){
   def utils = new Utils()
   utils.allocateDuffyCciskel('Provision')
