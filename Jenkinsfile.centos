@@ -23,6 +23,9 @@ properties([
   ])
 ])
 
+@Library('github.com/CentOS/cico-pipeline-library@master') import org.centos.*
+@Library('github.com/detiber/multiarch-openshift-ci') _
+
 node("paas-sig-ci-slave01") {
   ansiColor('xterm') {
     timestamps {
