@@ -1,7 +1,6 @@
-import org.centos.Utils
-
 def call(Closure body) {
-  def utils = New Utils()
+
+  def utils = library('cico-pipeline-library').org.centos.Utils.new(this)
   try {
 //    utils.allocateDuffyCciskel('test')
     body()
