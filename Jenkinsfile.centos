@@ -23,22 +23,6 @@ properties([
   ])
 ])
 
-@Library('github.com/CentOS/cico-pipeline-library@master') import org.centos.*
-
-def provisionHost(){
-  def utils = new Utils()
-  utils.allocateDuffyCciskel('Provision')
-  job_props = "${env.ORIGIN_WORKSPACE}/job.props"
-  job_props_groovy = "${env.ORIGIN_WORKSPACE}/job.groovy"
-  utils.convertProps(job_props, job_props_groovy)
-  load(job_props_groovy)
-}
-
-def teardownHost(){
-  def utils = new Utils()
-  utils.teardownDuffyCciskel('Teardown')
-}
-
 node("paas-sig-ci-slave01") {
   ansiColor('xterm') {
     timestamps {
