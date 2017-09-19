@@ -23,7 +23,7 @@ properties([
   ])
 ])
 
-@Library('cico-pipeline-library') _
+@Library('github.com/CentOS/cico-pipeline-library@master') _
 
 def provisionHost(){
   def utils = new Utils()
