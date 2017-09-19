@@ -24,10 +24,10 @@ properties([
 ])
 
 // Import the CentOS/cico-pipeline-library
-library identifier: "cico-pipeline-library@master",
-        retriever: modernSCM([$class: 'GitSCMSource',
-                              remote: "https://github.com/CentOS/cico-pipeline-library"])
-import org.centos.*
+//library identifier: "cico-pipeline-library@master",
+//        retriever: modernSCM([$class: 'GitSCMSource',
+//                              remote: "https://github.com/CentOS/cico-pipeline-library"])
+//import org.centos.*
 
 library identifier: "multiarch-openshift-ci@master",
         retriever: modernSCM([$class: 'GitSCMSource',
