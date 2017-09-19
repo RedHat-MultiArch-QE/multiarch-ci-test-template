@@ -8,7 +8,7 @@ def call(Closure body) {
 from cicoclient.wrapper import CicoWrapper
 
 api_key=open('/home/sig-paas/duffy.key').read().strip()
-cico=CicoWrapper(api_key=api_key)
+cico=CicoWrapper(api_key=api_key, endpoint='http://admin.ci.centos.org:8080/')
 print(cico.inventory)
 ''')
     utils.allocateDuffyCciskel('test')
