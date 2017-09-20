@@ -4,7 +4,7 @@ def call(Closure body) {
 
   def utils = new Utils()
   try {
-    sh('''#!/usr/bin/bash
+    sh('''#!/usr/bin/bash -xeu
           ssid=$(cico node get -f value -c comment)
           if [[ -z "${ssid:-}" ]]; then
             echo "Failed to provision duffy host"
@@ -23,7 +23,7 @@ def call(Closure body) {
     throw err
   }
   finally {
-     sh('''#!/usr/bin/bash
+     sh('''#!/usr/bin/bash -xeu
           ssid=$(cat duffy.ssid)
           if [[ -n "${ssid:-}" ]]; then
             cico node done $ssid
