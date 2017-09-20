@@ -13,8 +13,8 @@ def call(Closure body) {
 
           cico inventory --ssid ${ssid}
 
-          echo "${ssid}" >> duffy.ssid
-          cico inventory --ssid ${ssid} -f json >> duffy.inventory
+          echo "${ssid}" > duffy.ssid
+          cico inventory --ssid ${ssid} -f json > duffy.inventory
        ''')
     body()
   }
