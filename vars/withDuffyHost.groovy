@@ -5,7 +5,11 @@ def call(Closure body) {
   def utils = new Utils()
   try {
     sh('''#!/usr/bin/bash -xeu
-          ssid=$(cico node get -f value -c comment)
+          if [[ "${ARCH}" == "x86_64" ]]; then
+            ssid=$(cico node get -f value -c comment)
+          else
+            ssid=$(cico node get -f value -c comment --arch "${ARCH}" --flavor xram.medium )
+          fi
           if [[ -z "${ssid:-}" ]]; then
             echo "Failed to provision duffy host"
             exit 1
