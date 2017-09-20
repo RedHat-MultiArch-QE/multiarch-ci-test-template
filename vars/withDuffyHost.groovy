@@ -26,7 +26,7 @@ def call(Closure body) {
      sh('''#!/usr/bin/bash
           ssid=$(cat duffy.ssid)
           if [[ -n "${ssid:-}" ]]; then
-            cico node done ${ssid}
+            cico node done $ssid
           fi
        ''')
   }
