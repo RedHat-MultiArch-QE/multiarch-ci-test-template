@@ -4,21 +4,30 @@ def call(Closure body) {
 
   def utils = new Utils()
   try {
-    sh('''#!/usr/bin/python
-from cicoclient.wrapper import CicoWrapper
+    sh('''#!/usr/bin/bash
+          ssid=$(cico node get -f value -c comment)
+          if [[ -z "${ssid:-}" ]]; then
+            echo "Failed to provision duffy host"
+            exit 1
+          fi
 
-api_key=open('/home/sig-paas/duffy.key').read().strip()
-cico=CicoWrapper(api_key=api_key, endpoint='http://admin.ci.centos.org:8080/')
-print(cico.inventory())
-''')
-    //utils.allocateDuffyCciskel('test')
+          cico inventory --ssid ${ssid}
+
+          echo "${ssid}" >> duffy.ssid
+          cico inventory --ssid ${ssid} -f json >> duffy.inventory
+       ''')
     body()
   }
   catch (err) {
     echo err.getMessage()
     throw err
   }
-//  finally {
-//    utils.teardownDuffyCciskel('test')
-//  }
+  finally {
+     sh('''#!/usr/bin/bash
+          ssid=$(cat duffy.ssid)
+          if [[ -n "${ssid:-}" ]]; then
+            cico node done --ssid ${ssid}
+          fi
+       ''')
+  }
 }
