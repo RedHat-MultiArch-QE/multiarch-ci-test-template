@@ -20,7 +20,7 @@ def call(Closure body) {
     archiveArtifacts 'duffy.ssid'
     archiveArtifacts 'duffy.hostname'
     archiveArtifacts 'duffy.inventory'
-    def test_hostname=readFile(duffy.hostname)
+    def test_hostname=readFile('duffy.hostname')
     echo "test_hostname: ${duffy_hostname}"
     body()
   }
