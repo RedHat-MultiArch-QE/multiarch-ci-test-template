@@ -41,27 +41,13 @@ node("paas-sig-ci-slave01") {
           checkout(
             changelog: true,
             poll: true,
-            scm: [
-              $class: 'GitSCM',
-              branches: [[name:'*/${ORIGIN_BRANCH}']],
-              doGenerateSubmoduleConfigurations: false,
-              extensions: [
-                [$class: 'PreBuildMerge',
-                 options: [
-                   fastForwardMode: 'FF',
-                   mergeRemote: 'https://github.com/detiber/origin.git',
-                   mergeStrategy: <object of type org.jenkinsci.plugins.gitclient.MergeCommand.Strategy>,
-                   mergeTarget: 'multiarch'
-                 ]
-                ],
-                [$class: 'RelativeTargetDirectory',
-                 relativeTargetDir:'origin'
-                ]
-              ],
-              gitTool: 'Default',
-              submoduleCfg: [],
-              userRemoteConfigs: [[url:'${ORIGIN_REPO}']]
-            ]
+            scm: [$class: 'GitSCM',
+                  branches: [[name:'*/${ORIGIN_BRANCH}']],
+                  doGenerateSubmoduleConfigurations: false,
+                  extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir:'origin']],
+                  gitTool: 'Default',
+                  submoduleCfg: [],
+                  userRemoteConfigs: [[url:'${ORIGIN_REPO}']]]
           )
 	}
         withCiHost {
