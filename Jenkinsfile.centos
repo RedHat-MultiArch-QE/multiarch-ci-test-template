@@ -36,7 +36,7 @@ library identifier: "multiarch-openshift-ci@master",
 node("paas-sig-ci-slave01") {
   ansiColor('xterm') {
     timestamps {
-      withEnv(["PROVISION_STAGE_NAME=provision", DEPROVISION_STAGE_NAME=deprovision"]) {
+      withEnv(["PROVISION_STAGE_NAME=provision", "DEPROVISION_STAGE_NAME=deprovision"]) {
         withCiHost {
 	  stage('prep') {
             remoteCommands([
