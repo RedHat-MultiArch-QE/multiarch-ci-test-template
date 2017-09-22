@@ -1,7 +1,7 @@
 def call(List<String> remote_cmds=[]) {
   try {
     unstash('test.hostname')
-    def test_hostname = readFile('test.hostname')
+    def test_hostname = readFile('test.hostname').replaceAll("\\s","")
     echo "test_hostname: ${test_hostname}"
     for (cmd in remote_cmds) {
       withEnv(["test_hostname=${test_hostname}", "cmd=${cmd}"]) {
