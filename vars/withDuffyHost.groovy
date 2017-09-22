@@ -17,7 +17,7 @@ def call(Closure body) {
 	  cico inventory --ssid ${ssid} -f value -c hostname > duffy.hostname
           cico inventory --ssid ${ssid} -f json > duffy.inventory
        ''')
-    stash name: 'duffy-results' includes: 'duffy.*'
+    stash name: 'duffy-results', includes: 'duffy.*'
     archiveArtifacts 'duffy.inventory'
     body()
   }
