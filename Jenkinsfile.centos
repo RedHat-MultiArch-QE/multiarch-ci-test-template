@@ -54,7 +54,7 @@ node("paas-sig-ci-slave01") {
           )
           sh('''#!/usr/bin/bash -xeu
 	        pushd origin
-		git remote add detiber https://github.com/detiber/origin.git
+		git remote add detiber https://github.com/detiber/origin.git || true
 		git fetch detiber
 		git merge detiber/multiarch
 		popd
