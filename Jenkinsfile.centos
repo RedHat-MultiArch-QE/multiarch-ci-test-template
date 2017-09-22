@@ -44,7 +44,10 @@ node("paas-sig-ci-slave01") {
             scm: [$class: 'GitSCM',
                   branches: [[name:'*/${ORIGIN_BRANCH}']],
                   doGenerateSubmoduleConfigurations: false,
-                  extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir:'origin']],
+                  extensions: [
+		    [$class: 'RelativeTargetDirectory', relativeTargetDir:'origin'],
+		    [$class: 'CleanBeforeCheckout']
+		  ],
                   gitTool: 'Default',
                   submoduleCfg: [],
                   userRemoteConfigs: [[url:'${ORIGIN_REPO}']]]
