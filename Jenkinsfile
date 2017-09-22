@@ -31,42 +31,32 @@ node('master') {
   stage('Provision Slave') {
     ansiColor('xterm') {
       timestamps {
-        @Library('multiarch-openshift-ci-libraries')
-        arch=params.ARCH
-        def node_name = "multiarch-slave-${arch}"
-        def node_label = node_name
-        echo "nodes: ${nodes.getNodes()}"
-        if (! nodes.nodeExists(node_name)) {
-          def buildResult = build([
-              job: 'provision-multiarch-slave',
-              parameters: [
-                string(name: 'ARCH', value: arch),
-                string(name: 'NAME', value: node_name),
-                string(name: 'LABEL', value: node_label)
-              ],
-              propagate: true,
-              wait: true
-            ])
+        def buildResult = build([
+          job: 'provision-multiarch-slave',
+          parameters: [
+            string(name: 'ARCH', value: arch),
+          ],
+          propagate: true,
+          wait: true
+        ])
 
-          // Get results of provisioning job
-          step([$class: 'CopyArtifact',
-              filter: 'slave.properties',
-              fingerprintArtifacts: true,
-              flatten             : true,
-              projectName         : 'provision-multiarch-slave',
-              selector: [
-                $class: 'SpecificBuildSelector',
-                buildNumber: buildResult.getNumber().toString()
-              ]
-            ])
+        // Get results of provisioning job
+        step([$class: 'CopyArtifact',
+          filter: 'slave.properties',
+          fingerprintArtifacts: true,
+          flatten             : true,
+          projectName         : 'provision-multiarch-slave',
+          selector: [
+            $class: 'SpecificBuildSelector',
+            buildNumber: buildResult.getNumber().toString()
+          ]
+        ])
 
-          // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
-          Properties slaveProps = new Properties()
-          provisioner.load(new StringReader(readFile('slave.properties')))
+        // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
+        def props = readProperties file: 'slave.properties'
 
-          // Assign the appropriate slave name
-          provisionedNode = slaveProps.name
-        }
+        // Assign the appropriate slave name
+        provisionedNode = slaveProps.name
       }
     }
   }
