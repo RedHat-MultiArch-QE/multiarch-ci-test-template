@@ -41,8 +41,8 @@ node("paas-sig-ci-slave01") {
 	  remoteCommands([
 	    "yum install -y git",
 	    "git clone -b ${ORIGIN_BRANCH} ${ORIGIN_REPO}",
-            "cp origin/images/source/cbs-paas7-openshift-multiarch-el7-build.repo /etc/yum.repos.d/"
-	    "yum install -y bc make golang docker jq bind-utils"
+            "cp origin/images/source/cbs-paas7-openshift-multiarch-el7-build.repo /etc/yum.repos.d/",
+	    "yum install -y bc make golang docker jq bind-utils",
             "echo 'insecure_registries: [172.30.0.0/16]' >> /etc/containers/registries.conf",
             "systemctl enable docker",
             "systemctl start docker"
