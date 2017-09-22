@@ -38,32 +38,31 @@ node("paas-sig-ci-slave01") {
     timestamps {
       withEnv(["PROVISION_STAGE_NAME=provision", "DEPROVISION_STAGE_NAME=deprovision"]) {
         stage('pre') {
-	  checkout(
-	    changelog: true,
-	    poll: true,
-	    scm: [
-	      $class: 'GitSCM',
-	      branches: [[name: '*/${ORIGIN_BRANCH}']],
-	      doGenerateSubmoduleConfigurations: false,
-	      extensions: [
-	        [
-	          $class: 'PreBuildMerge',
-		  options: [
-		    fastForwardMode: 'FF',
-		    mergeRemote: 'https://github.com/detiber/origin.git',
-		    mergeStrategy: <object of type org.jenkinsci.plugins.gitclient.MergeCommand.Strategy>, mergeTarget: 'multiarch'
-		  ]
+          checkout(
+            changelog: true,
+            poll: true,
+            scm: [
+              $class: 'GitSCM',
+              branches: [[name:'*/${ORIGIN_BRANCH}']],
+              doGenerateSubmoduleConfigurations: false,
+              extensions: [
+                [$class: 'PreBuildMerge',
+                 options: [
+                   fastForwardMode: 'FF',
+                   mergeRemote: 'https://github.com/detiber/origin.git',
+                   mergeStrategy: <object of type org.jenkinsci.plugins.gitclient.MergeCommand.Strategy>,
+                   mergeTarget: 'multiarch'
+                 ]
                 ],
-                [
-		  $class: 'RelativeTargetDirectory',
-		  relativeTargetDir: 'origin'
-		]
-	      ],
+                [$class: 'RelativeTargetDirectory',
+                 relativeTargetDir:'origin'
+                ]
+              ],
               gitTool: 'Default',
-	      submoduleCfg: [],
-	      userRemoteConfigs: [[url: '${ORIGIN_REPO}']]
-	    ]
-	  )
+              submoduleCfg: [],
+              userRemoteConfigs: [[url:'${ORIGIN_REPO}']]
+            ]
+          )
 	}
         withCiHost {
 	  stage('prep') {
