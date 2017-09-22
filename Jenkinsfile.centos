@@ -37,8 +37,10 @@ node("paas-sig-ci-slave01") {
   ansiColor('xterm') {
     timestamps {
       stage('Test') {
-        withDuffyHost {
-	  remoteTest()
+        withCiHost {
+	  remoteTest([
+	    "hostname"
+	  ])
 	}
       }
     }
