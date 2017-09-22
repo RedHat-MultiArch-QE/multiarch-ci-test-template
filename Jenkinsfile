@@ -69,6 +69,7 @@ node(provisionedNode) {
             def failed_stages = []
             withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
               stage('Prep') {
+                sh 'git config user.email jpoulin@redhat.com && git config user.name jaypoulz'
                 git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
                 sh '''#!/bin/bash -xeu
                 git remote add detiber https://github.com/detiber/origin.git || true
@@ -144,6 +145,5 @@ node(provisionedNode) {
             }
         }
     }
-}
 }
 
