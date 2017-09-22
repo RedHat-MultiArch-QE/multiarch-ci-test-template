@@ -72,7 +72,7 @@ node("paas-sig-ci-slave01") {
 	  }
 	  stage('check') {
             remoteCommands([
-  	      "OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k"
+  	      "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k"
 	    ])
           }
 	}
