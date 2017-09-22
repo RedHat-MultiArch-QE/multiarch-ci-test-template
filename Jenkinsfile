@@ -26,6 +26,7 @@ properties([
   ])
 
 def provisionedNode = null
+def provisionedNodeBuildNumber = null
 
 node('master') {
   stage('Provision Slave') {
@@ -57,6 +58,7 @@ node('master') {
 
         // Assign the appropriate slave name
         provisionedNode = slaveProps.name
+        provisionedNodeBuildNumber = buildResult.getNumber().toString()
       }
     }
   }
@@ -70,7 +72,7 @@ try {
                 def failed_stages = []
                 withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
                   stage('Prep') {
-                    sh 'git config user.email "jpoulin@redhat.com" && git config user.name "Jeremy Poulin"'
+                    sh 'yum install install -y git && git config user.email "jpoulin@redhat.com" && git config user.name "Jeremy Poulin"'
                     git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
                     sh '''#!/bin/bash -xeu
                     git remote add detiber https://github.com/detiber/origin.git || true
@@ -138,7 +140,7 @@ try {
                 stage ('Teardown Slave') {
                     build([job: 'teardown-multiarch-slave',
                         parameters: [
-                            string(name: 'BUILD_NUMBER', value: provisionedNode)
+                            string(name: 'BUILD_NUMBER', value: provisionedNodeBuildNumber)
                         ],
                         propagate: true,
                         wait: true
