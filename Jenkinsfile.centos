@@ -40,7 +40,7 @@ node("paas-sig-ci-slave01") {
         withCiHost {
 	  remoteCommands([
 	    "hostname",
-	    "git checkout -b ${ORIGIN_BRANCH} ${ORIGIN_REPO}"
+	    "git clone -b ${ORIGIN_BRANCH} ${ORIGIN_REPO}"
 	  ])
 	}
       }
