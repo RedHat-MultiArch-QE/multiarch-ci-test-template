@@ -4,7 +4,7 @@ def call(List<String> remote_cmds=[]) {
     def test_hostname = readFile('test.hostname')
     echo "test_hostname: ${test_hostname}"
     for (cmd in remote_cmds) {
-      withEnv(["test_hostname=${test_hostname}", "task=${task}"]) {
+      withEnv(["test_hostname=${test_hostname}", "cmd=${cmd}"]) {
         sh('''#!/usr/bin/bash -xeu
               ssh_opts="-t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l root"
               ssh ${ssh_opts} ${test_hostname} "${cmd}"
