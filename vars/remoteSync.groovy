@@ -7,7 +7,7 @@ def call(List<String> dirs=[]) {
       withEnv(["test_hostname=${test_hostname}", "d=${d}"]) {
         sh('''#!/usr/bin/bash -xeu
               ssh_opts="-t -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l root"
-	      rsync -avzhe "ssh ${ssh_opts}" "${test_hostname}:${d}" "${d}"
+	      rsync -avzhe "ssh ${ssh_opts}" ${test_hostname}:"${d}" "${d}"
            ''')
       }
     }
