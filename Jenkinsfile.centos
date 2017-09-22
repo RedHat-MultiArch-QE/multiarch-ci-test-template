@@ -67,7 +67,7 @@ node("paas-sig-ci-slave01") {
               "echo 'insecure_registries: [172.30.0.0/16]' >> /etc/containers/registries.conf",
               "systemctl enable docker",
               "systemctl start docker"
-  	    ]),
+  	    ])
 	    remoteSync(['origin'])
 	  }
 	}
