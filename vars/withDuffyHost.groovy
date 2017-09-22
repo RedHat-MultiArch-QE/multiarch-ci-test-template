@@ -24,8 +24,8 @@ def call(Closure body) {
     archiveArtifacts 'test.hostname'
     remoteCommands([
       "yum install -y bc git make golang docker jq bind-utils",
-      "echo 'insecure_registries: [172.30.0.0/16]' >> /etc/containers/registries.conf"
-      "systemctl enable docker"
+      "echo 'insecure_registries: [172.30.0.0/16]' >> /etc/containers/registries.conf",
+      "systemctl enable docker",
       "systemctl start docker"
     ])
     body()
