@@ -39,7 +39,8 @@ node("paas-sig-ci-slave01") {
       stage('Test') {
         withCiHost {
 	  remoteTest([
-	    "hostname"
+	    "hostname",
+	    "git checkout -b ${ORIGIN_BRANCH} ${ORIGIN_REPO}"
 	  ])
 	}
       }

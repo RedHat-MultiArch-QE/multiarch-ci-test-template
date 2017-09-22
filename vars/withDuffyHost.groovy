@@ -16,9 +16,12 @@ def call(Closure body) {
           echo "${ssid}" > duffy.ssid
 	  cico inventory --ssid ${ssid} -f value -c hostname > duffy.hostname
           cico inventory --ssid ${ssid} -f json > duffy.inventory
+	  cp duffy.hostname test.hostname
        ''')
     stash name: 'duffy-results', includes: 'duffy.*'
-    archiveArtifacts 'duffy.inventory'
+    stash name: 'test.hostname', includes: 'test.hostname'
+    archiveArtifacts 'duffy.*'
+    archiveArtifacts 'test.hostname'
     body()
   }
   catch (err) {
