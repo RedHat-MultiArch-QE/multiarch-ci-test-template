@@ -53,7 +53,7 @@ node('master') {
         ])
 
         // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
-        def props = readProperties file: 'slave.properties'
+        def slaveProps = readProperties file: 'slave.properties'
 
         // Assign the appropriate slave name
         provisionedNode = slaveProps.name
