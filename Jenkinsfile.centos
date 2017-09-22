@@ -52,18 +52,23 @@ node("paas-sig-ci-slave01") {
                   submoduleCfg: [],
                   userRemoteConfigs: [[url:'${ORIGIN_REPO}']]]
           )
+          sh('''#!/usr/bin/bash -xeu
+	        pushd origin
+		git remote add detiber https://github.com/detiber/origin.git
+		git fetch detiber
+		git merge detiber/multiarch
+		popd
+	  ''')
 	}
         withCiHost {
 	  stage('prep') {
             remoteCommands([
-  	      "yum install -y git",
-  	      "git clone -b ${ORIGIN_BRANCH} ${ORIGIN_REPO}",
-              "cp origin/images/source/cbs-paas7-openshift-multiarch-el7-build.repo /etc/yum.repos.d/",
-  	      "yum install -y bc make golang docker jq bind-utils",
+  	      "yum install -y rsync docker",
               "echo 'insecure_registries: [172.30.0.0/16]' >> /etc/containers/registries.conf",
               "systemctl enable docker",
               "systemctl start docker"
-  	    ])
+  	    ]),
+	    remoteSync(['origin'])
 	  }
 	}
       }
