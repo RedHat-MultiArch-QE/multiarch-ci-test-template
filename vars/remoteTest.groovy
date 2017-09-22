@@ -1,6 +1,7 @@
 def call(List<String> remote_tasks=[]) {
   try {
-    def test_hostname = readFile('duffy.hostname')
+    unstash('test.hostname')
+    def test_hostname = readFile('test.hostname')
     echo "test_hostname: ${test_hostname}"
     for (task in remote_tasks) {
       withEnv(["test_hostname=${test_hostname}", "task=${task}"]) {

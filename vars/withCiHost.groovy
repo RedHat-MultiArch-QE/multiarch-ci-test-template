@@ -9,7 +9,7 @@ def call(Closure body) {
     throw err
   }
 
-  if (provisioner == 'duffy'){
+  if (provisioner == 'duffy') {
     withDuffyHost{
       body()
     }
