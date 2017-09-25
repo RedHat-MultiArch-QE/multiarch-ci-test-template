@@ -36,11 +36,46 @@ library identifier: "multiarch-openshift-ci@master",
 node("paas-sig-ci-slave01") {
   ansiColor('xterm') {
     timestamps {
-      stage('Test') {
+      withEnv(["PROVISION_STAGE_NAME=provision", "DEPROVISION_STAGE_NAME=deprovision"]) {
+        stage('pre') {
+          checkout(
+            changelog: true,
+            poll: true,
+            scm: [$class: 'GitSCM',
+                  branches: [[name:'*/${ORIGIN_BRANCH}']],
+                  doGenerateSubmoduleConfigurations: false,
+                  extensions: [
+		    [$class: 'RelativeTargetDirectory', relativeTargetDir:'origin'],
+		    [$class: 'CleanBeforeCheckout']
+		  ],
+                  gitTool: 'Default',
+                  submoduleCfg: [],
+                  userRemoteConfigs: [[url:'${ORIGIN_REPO}']]]
+          )
+          sh('''#!/usr/bin/bash -xeu
+	        pushd origin
+		git remote add detiber https://github.com/detiber/origin.git || true
+		git fetch detiber
+		git merge detiber/multiarch
+		popd
+	  ''')
+	}
         withCiHost {
-	  remoteTest([
-	    "hostname"
-	  ])
+	  stage('prep') {
+            remoteCommands([
+  	      "yum install -y rsync docker",
+              "echo 'insecure_registries: [172.30.0.0/16]' >> /etc/containers/registries.conf",
+              "systemctl enable docker",
+              "systemctl start docker"
+  	    ])
+	    remoteSync(['origin'])
+	  }
+	  stage('check') {
+	    input 'Ready to proceed?'
+            remoteCommands([
+  	      "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k"
+	    ])
+          }
 	}
       }
     }
