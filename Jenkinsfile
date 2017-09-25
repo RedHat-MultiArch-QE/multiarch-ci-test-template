@@ -133,6 +133,7 @@ try {
         }
     }
 } catch (e) {
+    currentBuild.result = 'FAILURE'
 } finally {
     node('master') {
         ansiColor('xterm') {
