@@ -71,12 +71,19 @@ node("paas-sig-ci-slave01") {
 	    remoteSync(['origin'])
 	  }
 	  stage('check') {
-            remoteCommands([
-  	      "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k"
-	    ])
-            fetchScriptOutput
-	    archiveArtifacts 'origin/_output/scripts/**/*'
-	    junit 'origin/_output/scripts/**/*.xml'
+	    try {
+              remoteCommands([
+  	        "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k"
+	      ])
+	    }
+            catch (exc) {
+	      throw exc
+	    }
+	    finally {
+              fetchScriptOutput
+	      archiveArtifacts 'origin/_output/scripts/**/*'
+	      junit 'origin/_output/scripts/**/*.xml'
+	    }
           }
 	}
       }
