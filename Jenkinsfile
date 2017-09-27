@@ -72,7 +72,7 @@ try {
                 def failed_stages = []
                 withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
                   stage('Prep') {
-                    sh 'yum install install -y git && git config user.email "jpoulin@redhat.com" && git config user.name "Jeremy Poulin"'
+                    sh 'git config --global user.email "jpoulin@redhat.com" && git config --global user.name "Jeremy Poulin"'
                     git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
                     sh '''#!/bin/bash -xeu
                     git remote add detiber https://github.com/detiber/origin.git || true
@@ -133,6 +133,7 @@ try {
         }
     }
 } catch (e) {
+    currentBuild.result = 'FAILURE'
 } finally {
     node('master') {
         ansiColor('xterm') {
