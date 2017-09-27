@@ -80,7 +80,7 @@ node("paas-sig-ci-slave01") {
 	      throw exc
 	    }
 	    finally {
-              fetchScriptOutput
+              fetchScriptOutput()
 	      archiveArtifacts 'origin/_output/scripts/**/*'
 	      junit 'origin/_output/scripts/**/*.xml'
 	    }
