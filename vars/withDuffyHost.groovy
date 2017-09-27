@@ -32,7 +32,6 @@ def call(Closure body) {
   }
   finally {
     stage("${DEPROVISION_STAGE_NAME}"){
-      input('Wait to deprovision.')
       unstash 'duffy-results'
       sh('''#!/usr/bin/bash -xeu
            ssid=$(cat duffy.ssid)
