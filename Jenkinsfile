@@ -32,7 +32,7 @@ ansiColor('xterm') {
     try {
       node('master') {
         stage('Provision Slave') {
-          def buildResult = build([
+          buildResult = build([
             job: 'provision-multiarch-slave',
             parameters: [
               string(name: 'ARCH', value: arch),
