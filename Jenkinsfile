@@ -25,7 +25,8 @@ properties([
 ])
 
 def provisionedNode = null
-def provisionedNodeBuildNumber = null
+def buildResult = null
+
 ansiColor('xterm') {
   timestamps {
     try {
@@ -57,7 +58,6 @@ ansiColor('xterm') {
 
           // Assign the appropriate slave name
           provisionedNode = slaveProps.name
-          provisionedNodeBuildNumber = buildResult.getNumber().toString()
         }
       }
 
@@ -131,7 +131,7 @@ ansiColor('xterm') {
         stage ('Teardown Slave') {
           build([job: 'teardown-multiarch-slave',
             parameters: [
-              string(name: 'BUILD_NUMBER', value: provisionedNodeBuildNumber)
+              string(name: 'BUILD_NUMBER', value: buildResult.getNumber().toString())
             ],
             propagate: true,
             wait: true
