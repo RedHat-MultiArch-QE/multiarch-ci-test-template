@@ -124,6 +124,7 @@ ansiColor('xterm') {
           archiveArtifacts '_output/scripts/**/*'
           junit '_output/scripts/**/*.xml'
         }
+      }
     } catch (e) {
       currentBuild.result = 'FAILURE'
     } finally {
