@@ -25,14 +25,14 @@ properties([
 ])
 
 def provisionedNode = null
-def buildResult = null
+def provisionedNodeBuildNumber = null
 
 ansiColor('xterm') {
   timestamps {
     try {
       node('master') {
         stage('Provision Slave') {
-          buildResult = build([
+          def buildResult = build([
             job: 'provision-multiarch-slave',
             parameters: [
               string(name: 'ARCH', value: arch),
@@ -40,6 +40,8 @@ ansiColor('xterm') {
             propagate: true,
             wait: true
           ])
+          
+          provisionedNodeBuildNumber = buildResult.getNumber().toString()
 
           // Get results of provisioning job
           step([$class: 'CopyArtifact',
@@ -49,7 +51,7 @@ ansiColor('xterm') {
             projectName         : 'provision-multiarch-slave',
             selector: [
               $class: 'SpecificBuildSelector',
-              buildNumber: buildResult.getNumber().toString()
+              buildNumber: provisionedNodeBuildNumber
             ]
           ])
 
@@ -125,13 +127,16 @@ ansiColor('xterm') {
         }
       }
     } catch (e) {
+      println e
+      if (provisionedNodeBuildNumber == null) provisionedNodeBuildNumber = (e =~ "(#)([0-9]*)")[0][2])
+      println provisionedNodeBuildNumber
       currentBuild.result = 'FAILURE'
     } finally {
       node('master') {
         stage ('Teardown Slave') {
           build([job: 'teardown-multiarch-slave',
             parameters: [
-              string(name: 'BUILD_NUMBER', value: buildResult.getNumber().toString())
+              string(name: 'BUILD_NUMBER', value: provisionedNodeBuildNumber)
             ],
             propagate: true,
             wait: true
