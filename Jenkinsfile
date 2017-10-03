@@ -128,7 +128,7 @@ ansiColor('xterm') {
       }
     } catch (e) {
       println e
-      if (provisionedNodeBuildNumber == null) provisionedNodeBuildNumber = (e =~ "(#)([0-9]*)")[0][2])
+      if (provisionedNodeBuildNumber == null) provisionedNodeBuildNumber = ((e =~ "(#)([0-9]*)")[0][2])
       println provisionedNodeBuildNumber
       currentBuild.result = 'FAILURE'
     } finally {
