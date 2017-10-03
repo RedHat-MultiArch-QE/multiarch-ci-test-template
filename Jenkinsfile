@@ -127,9 +127,8 @@ ansiColor('xterm') {
         }
       }
     } catch (e) {
-      println e
-      if (provisionedNodeBuildNumber == null) provisionedNodeBuildNumber = ((e =~ "(#)([0-9]*)")[0][2])
-      println provisionedNodeBuildNumber
+      if (e.startsWith('hudson.AbortException: provision-multiarch-slave'))
+        provisionedNodeBuildNumber = ((e =~ "(#)([0-9]*)")[0][2])
       currentBuild.result = 'FAILURE'
     } finally {
       node('master') {
