@@ -44,11 +44,8 @@ ansiColor('xterm') {
           provisionedNodeBuildNumber = buildResult.getNumber().toString()
 
           // Get results of provisioning job
-          step([$class: 'CopyArtifact',
-            filter: 'slave.properties',
-            fingerprintArtifacts: true,
-            flatten             : true,
-            projectName         : 'provision-multiarch-slave',
+          step([$class: 'CopyArtifact', filter: 'slave.properties',
+            projectName: 'provision-multiarch-slave',
             selector: [
               $class: 'SpecificBuildSelector',
               buildNumber: provisionedNodeBuildNumber
