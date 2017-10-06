@@ -27,37 +27,36 @@ properties([
 def provisionedNode = null
 def provisionedNodeBuildNumber = null
 
+node('master') {
 ansiColor('xterm') {
   timestamps {
     try {
-      node('master') {
-        stage('Provision Slave') {
-          def buildResult = build([
-            job: 'provision-multiarch-slave',
-            parameters: [
-              string(name: 'ARCH', value: arch),
-            ],
-            propagate: true,
-            wait: true
-          ])
+      stage('Provision Slave') {
+        def buildResult = build([
+          job: 'provision-multiarch-slave',
+          parameters: [
+            string(name: 'ARCH', value: arch),
+          ],
+          propagate: true,
+          wait: true
+        ])
           
-          provisionedNodeBuildNumber = buildResult.getNumber().toString()
+        provisionedNodeBuildNumber = buildResult.getNumber().toString()
 
-          // Get results of provisioning job
-          step([$class: 'CopyArtifact', filter: 'slave.properties',
-            projectName: 'provision-multiarch-slave',
-            selector: [
-              $class: 'SpecificBuildSelector',
-              buildNumber: provisionedNodeBuildNumber
-            ]
-          ])
+        // Get results of provisioning job
+        step([$class: 'CopyArtifact', filter: 'slave.properties',
+          projectName: 'provision-multiarch-slave',
+          selector: [
+            $class: 'SpecificBuildSelector',
+            buildNumber: provisionedNodeBuildNumber
+          ]
+        ])
 
-          // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
-          def slaveProps = readProperties file: 'slave.properties'
+        // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
+        def slaveProps = readProperties file: 'slave.properties'
 
-          // Assign the appropriate slave name
-          provisionedNode = slaveProps.name
-        }
+        // Assign the appropriate slave name
+        provisionedNode = slaveProps.name
       }
 
       node(provisionedNode) {
@@ -119,8 +118,12 @@ ansiColor('xterm') {
           catch (exc) {
             failed_stages+='End to End Tests'
           }
-          archiveArtifacts '_output/scripts/**/*'
-          junit '_output/scripts/**/*.xml'
+        )
+        post {
+          always {
+            archiveArtifacts '_output/scripts/**/*'
+            junit '_output/scripts/**/*.xml'
+          }
         }
       }
     } catch (e) {
@@ -128,17 +131,16 @@ ansiColor('xterm') {
       provisionedNodeBuildNumber = ((e =~ "(provision-multiarch-slave #)([0-9]*)")[0][2])
       currentBuild.result = 'FAILURE'
     } finally {
-      node('master') {
-        stage ('Teardown Slave') {
-          build([job: 'teardown-multiarch-slave',
-            parameters: [
-              string(name: 'BUILD_NUMBER', value: provisionedNodeBuildNumber)
-            ],
-            propagate: true,
-            wait: true
-          ])
-        }
+      stage ('Teardown Slave') {
+        build([job: 'teardown-multiarch-slave',
+          parameters: [
+            string(name: 'BUILD_NUMBER', value: provisionedNodeBuildNumber)
+          ],
+          propagate: true,
+          wait: true
+        ])
       }
     }
   }
+}
 }
