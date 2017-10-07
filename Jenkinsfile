@@ -126,11 +126,9 @@ ansiColor('xterm') {
                 failed_stages+='End to End Tests'
               }
             }
-            post {
-              always {
-                archiveArtifacts '_output/scripts/**/*'
-                junit '_output/scripts/**/*.xml'
-              }
+            stage ('Archive Test Output')
+              archiveArtifacts '_output/scripts/**/*'
+              junit '_output/scripts/**/*.xml'
             }
           }
         } catch (e) {
