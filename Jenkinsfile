@@ -134,6 +134,8 @@ ansiColor('xterm') {
         } catch (e) {
           println(e)
         }
+      } catch (e) {
+        println(e)
       } finally {
         stage ('Teardown Slave') {
           build([job: 'teardown-multiarch-slave',
