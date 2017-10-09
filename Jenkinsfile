@@ -84,9 +84,8 @@ ansiColor('xterm') {
                   sh '''#!/bin/bash -xeu
                     hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k
                     '''
-                  }
-                }
-              catch (exc) {
+                }  
+              } catch (exc) {
                 failed_stages+='Pre-release Tests'
               }
               stage('Locally build release') {
@@ -95,8 +94,7 @@ ansiColor('xterm') {
                     hack/env hack/build-base-images.sh
                     hack/env JUNIT_REPORT=true make release
                     '''
-                }
-                catch (exc) {
+                } catch (exc) {
                   archiveArtifacts '_output/scripts/**/*'
                   junit '_output/scripts/**/*.xml'
                   throw exc
@@ -108,8 +106,7 @@ ansiColor('xterm') {
                     hack/env JUNIT_REPORT='true' make test-tools test-integration
                     '''
                 }
-              }
-              catch (exc) {
+              } catch (exc) {
                 failed_stages+='Integration Tests'
               }
               try {
@@ -121,12 +118,11 @@ ansiColor('xterm') {
                     OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
                     '''
                  }
-              }
-              catch (exc) {
+              } catch (exc) {
                 failed_stages+='End to End Tests'
               }
             }
-            stage ('Archive Test Output')
+            stage ('Archive Test Output') {
               archiveArtifacts '_output/scripts/**/*'
               junit '_output/scripts/**/*.xml'
             }
