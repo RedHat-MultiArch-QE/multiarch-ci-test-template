@@ -61,7 +61,7 @@ ansiColor('xterm') {
           }
         } catch (e) {
           provisionedNodeBuildNumber = ((e =~ "(provision-multiarch-slave #)([0-9]*)")[0][2])
-          currentBuild.result = 'ABORTED'
+          currentBuild.result = 'NOT_BUILT'
           throw e
         }
 
