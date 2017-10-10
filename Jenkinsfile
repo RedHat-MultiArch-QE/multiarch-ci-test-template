@@ -60,9 +60,9 @@ ansiColor('xterm') {
             provisionedNode = slaveProps.name
           }
         } catch (e) {
-          println e
           provisionedNodeBuildNumber = ((e =~ "(provision-multiarch-slave #)([0-9]*)")[0][2])
-          currentBuild.result = 'FAILURE'
+          currentBuild.result = 'ABORTED'
+          throw e
         }
 
         try {
@@ -87,6 +87,7 @@ ansiColor('xterm') {
                 }  
               } catch (exc) {
                 failed_stages+='Pre-release Tests'
+                currentBuild.result = 'UNSTABLE'
               }
               stage('Locally build release') {
                 try {
@@ -94,10 +95,9 @@ ansiColor('xterm') {
                     hack/env hack/build-base-images.sh
                     hack/env JUNIT_REPORT=true make release
                     '''
-                } catch (exc) {
-                  archiveArtifacts '_output/scripts/**/*'
-                  junit '_output/scripts/**/*.xml'
-                  throw exc
+                } catch (e) {
+                  currentBuild.result = 'FAILURE'
+                  throw e
                 }
               }
               try {
@@ -106,8 +106,9 @@ ansiColor('xterm') {
                     hack/env JUNIT_REPORT='true' make test-tools test-integration
                     '''
                 }
-              } catch (exc) {
+              } catch (e) {
                 failed_stages+='Integration Tests'
+                currentBuild.result = 'UNSTABLE'
               }
               try {
                 stage('End to End tests') {
@@ -118,17 +119,19 @@ ansiColor('xterm') {
                     OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
                     '''
                  }
-              } catch (exc) {
+              } catch (e) {
                 failed_stages+='End to End Tests'
+                currentBuild.result = 'UNSTABLE'
               }
-            }
-            stage ('Archive Test Output') {
-              archiveArtifacts '_output/scripts/**/*'
-              junit '_output/scripts/**/*.xml'
             }
           }
         } catch (e) {
           println(e)
+        } finally {
+          stage ('Archive Test Output') {
+            archiveArtifacts '_output/scripts/**/*'
+            junit '_output/scripts/**/*.xml'
+          }
         }
       } catch (e) {
         println(e)
