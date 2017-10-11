@@ -31,7 +31,7 @@ properties([
 
 library identifier: "multiarch-openshift-ci@master",
         retriever: modernSCM([$class: 'GitSCMSource',
-                              remote: "https://github.com/detiber/multiarch-openshift-ci"])
+                              remote: "https://github.com/CentOS-PaaS-SIG/multiarch-openshift-ci"])
 
 node("paas-sig-ci-slave01") {
   ansiColor('xterm') {
