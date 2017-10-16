@@ -14,7 +14,6 @@ properties([
       name: 'ORIGIN_BRANCH',
       description: 'Origin branch',
       defaultValue: 'master'
-      // defaultValue: 'ppc64le-rebase-wip'
     ),
     string(
       name: 'OS_BUILD_ENV_IMAGE',
@@ -34,24 +33,28 @@ ansiColor('xterm') {
         try {
           stage('Provision Slave') {
             def buildResult = build([
-              job: 'provision-multiarch-slave',
-              parameters: [
-                string(name: 'ARCH', value: arch),
-              ],
-              propagate: true,
-              wait: true
-            ])
+                job: 'provision-multiarch-slave',
+                parameters: [
+                  string(name: 'ARCH', value: arch),
+                  // TODO Add repo and file path for optional post provision configuration
+                  string(name: 'CONFIG_REPO', value: '')
+                  string(name: 'CONFIG_FILE', value: '')
+                ],
+                propagate: true,
+                wait: true
+              ])
 
+            // If provision was successful, you will be able to grab the build number
             provisionedNodeBuildNumber = buildResult.getNumber().toString()
 
             // Get results of provisioning job
             step([$class: 'CopyArtifact', filter: 'slave.properties',
-              projectName: 'provision-multiarch-slave',
-              selector: [
-                $class: 'SpecificBuildSelector',
-                buildNumber: provisionedNodeBuildNumber
-              ]
-            ])
+                projectName: 'provision-multiarch-slave',
+                selector: [
+                  $class: 'SpecificBuildSelector',
+                  buildNumber: provisionedNodeBuildNumber
+                ]
+              ])
 
             // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
             def slaveProps = readProperties file: 'slave.properties'
@@ -60,6 +63,7 @@ ansiColor('xterm') {
             provisionedNode = slaveProps.name
           }
         } catch (e) {
+          // If provision fails, grab the build number from the error message and set build status to not built
           provisionedNodeBuildNumber = ((e =~ "(provision-multiarch-slave #)([0-9]*)")[0][2])
           currentBuild.result = 'NOT_BUILT'
           throw e
@@ -134,16 +138,18 @@ ansiColor('xterm') {
           }
         }
       } catch (e) {
+        // This is just a wrapper step to ensure that teardown is run upon failure
         println(e)
       } finally {
+        // Ensure teardown runs before the pipeline exits
         stage ('Teardown Slave') {
           build([job: 'teardown-multiarch-slave',
-            parameters: [
-              string(name: 'BUILD_NUMBER', value: provisionedNodeBuildNumber)
-            ],
-            propagate: true,
-            wait: true
-          ])
+              parameters: [
+                string(name: 'BUILD_NUMBER', value: provisionedNodeBuildNumber)
+              ],
+              propagate: true,
+              wait: true
+            ])
         }
       }
     }
