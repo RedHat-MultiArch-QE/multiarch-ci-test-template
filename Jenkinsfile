@@ -1,27 +1,27 @@
 properties([
-  parameters([
-    choiceParam(
-      name: 'ARCH',
-      choices: "x86_64\nppc64le\naarch64\ns390x",
-      description: 'Architecture'
-    ),
-    string(
-      name: 'ORIGIN_REPO',
-      description: 'Origin repo',
-      defaultValue: 'https://github.com/openshift/origin.git'
-    ),
-    string(
-      name: 'ORIGIN_BRANCH',
-      description: 'Origin branch',
-      defaultValue: 'master'
-    ),
-    string(
-      name: 'OS_BUILD_ENV_IMAGE',
-      description: 'openshift-release image',
-      defaultValue: 'openshiftmultiarch/origin-release:golang-1.8'
-    )
+    parameters([
+        choiceParam(
+          name: 'ARCH',
+          choices: "x86_64\nppc64le\naarch64\ns390x",
+          description: 'Architecture'
+        ),
+        string(
+          name: 'ORIGIN_REPO',
+          description: 'Origin repo',
+          defaultValue: 'https://github.com/openshift/origin.git'
+        ),
+        string(
+          name: 'ORIGIN_BRANCH',
+          description: 'Origin branch',
+          defaultValue: 'master'
+        ),
+        string(
+          name: 'OS_BUILD_ENV_IMAGE',
+          description: 'openshift-release image',
+          defaultValue: 'openshiftmultiarch/origin-release:golang-1.8'
+        )
+      ])
   ])
-])
 
 def provisionedNode = null
 def provisionedNodeBuildNumber = null
@@ -36,9 +36,8 @@ ansiColor('xterm') {
                 job: 'provision-multiarch-slave',
                 parameters: [
                   string(name: 'ARCH', value: arch),
-                  // TODO Add repo and file path for optional post provision configuration
-                  string(name: 'CONFIG_REPO', value: '')
-                  string(name: 'CONFIG_FILE', value: '')
+                  string(name: 'CONFIG_REPO', value: 'https://github.com/jaypoulz/multiarch-ci-test-openshift'),
+                  string(name: 'CONFIG_FILE', value: 'config/beaker-config.yml')
                 ],
                 propagate: true,
                 wait: true
@@ -88,7 +87,7 @@ ansiColor('xterm') {
                   sh '''#!/bin/bash -xeu
                     hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k
                     '''
-                }  
+                }
               } catch (exc) {
                 failed_stages+='Pre-release Tests'
                 currentBuild.result = 'UNSTABLE'
@@ -122,7 +121,7 @@ ansiColor('xterm') {
                     OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${arch}/etcdhelper hack/env make build WHAT=tools/etcdhelper
                     OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
                     '''
-                 }
+                }
               } catch (e) {
                 failed_stages+='End to End Tests'
                 currentBuild.result = 'UNSTABLE'
