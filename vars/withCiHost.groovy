@@ -1,7 +1,7 @@
 def call(Closure body) {
   def provisioner=null
   try {
-    sh 'cico --help'
+    sh 'cico --help > /dev/null'
     provisioner='duffy'
   }
   catch (err) {

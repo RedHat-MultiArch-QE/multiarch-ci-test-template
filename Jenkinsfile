@@ -2,20 +2,18 @@ properties([
   parameters([
     choiceParam(
       name: 'ARCH',
-      choices: "x86_64\nppc64le\naarch64\ns390x",
+      choices: "x86_64\nppc64le\naarch64",
       description: 'Architecture'
     ),
     string(
       name: 'ORIGIN_REPO',
       description: 'Origin repo',
       defaultValue: 'https://github.com/openshift/origin.git'
-//      defaultValue: 'https://github.com/detiber/origin.git'
     ),
     string(
       name: 'ORIGIN_BRANCH',
       description: 'Origin branch',
       defaultValue: 'master'
-//      defaultValue: 'ppc64le-rebase-wip'
     ),
     string(
       name: 'OS_BUILD_ENV_IMAGE',
@@ -25,92 +23,150 @@ properties([
   ])
 ])
 
-node('master') {
-  stage('Provision Slave') {
-    ansiColor('xterm') {
-      timestamps {
-        @Library('multiarch-openshift-ci-libraries')
-        arch=params.ARCH
-        def node_name = "multiarch-slave-${arch}"
-        def node_label = node_name
-        echo "nodes: ${nodes.getNodes()}"
-        if (! nodes.nodeExists(node_name)) {
-          build([
-            job: 'provision_beaker_slave',
-            parameters: [
-              string(name: 'ARCH', value: arch),
-              string(name: 'NAME', value: node_name),
-              string(name: 'LABEL', value: node_label)
-            ]
-          ])
-        }
-      }
-    }
-  }
-}
+// Import the CentOS/cico-pipeline-library
+//library identifier: "cico-pipeline-library@master",
+//        retriever: modernSCM([$class: 'GitSCMSource',
+//                              remote: "https://github.com/CentOS/cico-pipeline-library"])
+//import org.centos.*
 
-node("multiarch-slave-${params.ARCH}") {
+library identifier: "multiarch-openshift-ci@master",
+        retriever: modernSCM([$class: 'GitSCMSource',
+                              remote: "https://github.com/CentOS-PaaS-SIG/multiarch-openshift-ci"])
+
+node("paas-sig-ci-slave01") {
   ansiColor('xterm') {
     timestamps {
-      def gopath = "${pwd(tmp: true)}/go"
-      def failed_stages = []
-      withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
-        stage('Prep') {
-          git(url: params.ORIGIN_REPO, branch: params.ORIGIN_BRANCH)
-	  sh '''#!/bin/bash -xeu
-            git remote add detiber https://github.com/detiber/origin.git || true
-	    git fetch detiber
-	    git merge detiber/multiarch
-	  '''
+      withEnv(["PROVISION_STAGE_NAME=provision", "DEPROVISION_STAGE_NAME=deprovision"]) {
+        stage('pre') {
+          checkout(
+            changelog: true,
+            poll: true,
+            scm: [$class: 'GitSCM',
+                  branches: [[name:'*/${ORIGIN_BRANCH}']],
+                  doGenerateSubmoduleConfigurations: false,
+                  extensions: [
+                    [$class: 'RelativeTargetDirectory', relativeTargetDir:'origin'],
+                    [$class: 'CleanBeforeCheckout']
+                  ],
+                  gitTool: 'Default',
+                  submoduleCfg: [],
+                  userRemoteConfigs: [[url:'${ORIGIN_REPO}']]]
+          )
+          sh('''#!/usr/bin/bash -xeu
+                pushd origin
+                git remote add detiber https://github.com/detiber/origin.git || true
+                git fetch detiber
+                git merge detiber/multiarch
+                popd
+             ''')
         }
-        try {
-          stage('Pre-release Tests') {
-            sh '''#!/bin/bash -xeu
-              hack/env JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -k
-            '''
+        withCiHost {
+          stage('prep') {
+            remoteCommands([
+              "yum install -y rsync docker git",
+              "echo 'insecure_registries: [172.30.0.0/16]' >> /etc/containers/registries.conf",
+              "systemctl enable docker",
+              "systemctl start docker"
+            ])
+            remoteSync(['origin'])
           }
-        }
-        catch (exc) {
-          failed_stages+='Pre-release Tests'
-        }
-        stage('Locally build release') {
+          def failed_stages = []
           try {
-            sh '''#!/bin/bash -xeu
-              hack/env hack/build-base-images.sh
-              hack/env JUNIT_REPORT=true make release
-            '''
+            stage('check') {
+              try {
+                remoteCommands([
+                  "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env TEST_KUBE=true JUNIT_REPORT=true DETECT_RACES=false TIMEOUT=300s make check -j -k"
+                ])
+              }
+              catch (exc) {
+                throw exc
+              }
+              finally {
+                fetchScriptOutput()
+                archiveArtifacts 'origin/_output/scripts/**/*'
+                junit 'origin/_output/scripts/**/*.xml'
+              }
+            }
           }
           catch (exc) {
-            archiveArtifacts '_output/scripts/**/*'
-            junit '_output/scripts/**/*.xml'
-            throw exc
+            failed_stages += 'check'
+          }
+          try {
+            stage('build release') {
+              try {
+                remoteCommands([
+                  "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env hack/build-base-images.sh",
+                  "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true make release"
+                ])
+              }
+              catch (exc) {
+                throw exc
+              }
+              finally {
+                fetchScriptOutput()
+                archiveArtifacts 'origin/_output/scripts/**/*'
+                junit 'origin/_output/scripts/**/*.xml'
+              }
+            }
+          }
+          catch (exc) {
+            failed_stages += 'build release'
+          }
+          try {
+            stage('integration') {
+              try {
+                remoteCommands([
+                  "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true TIMEOUT=300s make test-tools test-integration"
+                ])
+              }
+              catch (exc) {
+                throw exc
+              }
+              finally {
+                fetchScriptOutput()
+                archiveArtifacts 'origin/_output/scripts/**/*'
+                junit 'origin/_output/scripts/**/*.xml'
+              }
+            }
+          }
+          catch (exc) {
+            failed_stages += 'integration'
+          }
+          try {
+            stage('e2e') {
+              try {
+                def go_arch
+                switch(params.ARCH) {
+                  case "x86_64":
+                    go_arch="amd64"
+                    break
+                  case "aarch64":
+                    go_arch="arm64"
+                    break
+                  default:
+                    go_arch=params.ARCH
+                    break
+                }
+                remoteCommands([
+                  "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${go_arch}/end-to-end.test hack/env make build-router-e2e-test",
+                  "cd origin; OS_BUILD_ENV_IMAGE=${OS_BUILD_ENV_IMAGE} hack/env JUNIT_REPORT=true OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${go_arch}/etcdhelper hack/env make build WHAT=tools/etcdhelper",
+		  "OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build"
+                ])
+              }
+              catch (exc) {
+                throw exc
+              }
+              finally {
+                fetchScriptOutput()
+                archiveArtifacts 'origin/_output/scripts/**/*'
+                junit 'origin/_output/scripts/**/*.xml'
+              }
+            }
+          }
+          catch (exc) {
+            failed_stages += 'e2e'
           }
         }
-        try {
-          stage('Integration Tests') {
-            sh '''#!/bin/bash -xeu
-              hack/env JUNIT_REPORT='true' make test-tools test-integration
-            '''
-          }
-        }
-        catch (exc) {
-          failed_stages+='Integration Tests'
-        }
-        try {
-          stage('End to End tests') {
-            sh '''#!/bin/bash -xeu
-              arch=$(go env GOHOSTARCH)
-              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${arch}/end-to-end.test hack/env make build-router-e2e-test
-              OS_BUILD_ENV_PRESERVE=_output/local/bin/linux/${arch}/etcdhelper hack/env make build WHAT=tools/etcdhelper
-              OPENSHIFT_SKIP_BUILD='true' JUNIT_REPORT='true' make test-end-to-end -o build
-            '''
-          }
-       }
-       catch (exc) {
-         failed_stages+='End to End Tests'
-       }
-       archiveArtifacts '_output/scripts/**/*'
-       junit '_output/scripts/**/*.xml'
       }
     }
   }
