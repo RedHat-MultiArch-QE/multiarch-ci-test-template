@@ -54,16 +54,16 @@ ansiColor('xterm') {
           throw e
         }
 
-        try {
-          node(provisionedNode) {
+        node(provisionedNode) {
+          try {
             // TODO INSERT TEST CODE HERE
-          }
-        } catch (e) {
-          println(e)
-        } finally {
-          stage ('Archive Test Output') {
-            archiveArtifacts '_output/scripts/**/*'
-            junit '_output/scripts/**/*.xml'
+          } catch (e) {
+            println(e)
+          } finally {
+            stage ('Archive Test Output') {
+              archiveArtifacts '_output/scripts/**/*'
+              junit '_output/scripts/**/*.xml'
+            }
           }
         }
       } catch (e) {
