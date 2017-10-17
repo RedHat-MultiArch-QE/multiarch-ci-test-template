@@ -68,8 +68,8 @@ ansiColor('xterm') {
           throw e
         }
 
-        try {
-          node(provisionedNode) {
+        node(provisionedNode) {
+          try {
             def gopath = "${pwd(tmp: true)}/go"
             def failed_stages = []
             withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
@@ -127,13 +127,13 @@ ansiColor('xterm') {
                 currentBuild.result = 'UNSTABLE'
               }
             }
-          }
-        } catch (e) {
-          println(e)
-        } finally {
-          stage ('Archive Test Output') {
-            archiveArtifacts '_output/scripts/**/*'
-            junit '_output/scripts/**/*.xml'
+          } catch (e) {
+            println(e)
+          } finally {
+            stage ('Archive Test Output') {
+              archiveArtifacts '_output/scripts/**/*'
+              junit '_output/scripts/**/*.xml'
+            }
           }
         }
       } catch (e) {
