@@ -27,8 +27,8 @@ properties([
           description: 'openshift-release image',
           defaultValue: 'openshiftmultiarch/origin-release:golang-1.8'
         )
-      ])
-  ])
+    ])
+])
 
 def provisionedNode = null
 def provisionedNodeBuildNumber = null
@@ -155,7 +155,7 @@ ansiColor('xterm') {
               ],
               propagate: true,
               wait: true
-            ])
+          ])
         }
       }
     }
