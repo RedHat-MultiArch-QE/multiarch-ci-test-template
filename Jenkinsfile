@@ -3,7 +3,7 @@ properties([
         // TODO fill out pkg-name and relevant-tag
         [$class: 'CIBuildTrigger', 
           checks: [], 
-          providerName: 'CI Publish', 
+          providerName: 'CI Subscribe', 
           selector: 'name = \'pkg-name\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'relevant-tag\''
         ]
     ]),
