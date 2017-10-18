@@ -8,9 +8,15 @@ properties([
     ]),
     parameters([
         choiceParam(
-          name: 'ARCH',
-          choices: "x86_64\nppc64le\naarch64\ns390x",
-          description: 'Architecture'
+          choices: 'x86_64\nppc64le\naarch64\ns390x',
+          defaultValue: 'x86_64',
+          description: 'Architecture',
+          name: 'ARCH'
+        ),
+        string(
+          defaultValue: 'master',
+          description: 'Default node to run the test from. If CONNECT_AS_SLAVE is true, only the provisioning and teardown will be run on this node.',
+          name: 'TARGET_NODE'
         ),
         string(
           name: 'ORIGIN_REPO',
@@ -35,7 +41,7 @@ def provisionedNodeBuildNumber = null
 
 ansiColor('xterm') {
   timestamps {
-    node('master') {
+    node(params.TARGET_NODE) {
       try {
         try {
           stage('Provision Slave') {
