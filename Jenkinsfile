@@ -1,12 +1,20 @@
 properties([
+    pipelineTriggers([
+        // TODO fill out pkg-name and relevant-tag
+        [$class: 'CIBuildTrigger', 
+          checks: [], 
+          providerName: 'CI Publish', 
+          selector: 'name = \'pkg-name\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'relevant-tag\''
+        ]
+    ]),
     parameters([
         choiceParam(
           name: 'ARCH',
           choices: "x86_64\nppc64le\naarch64\ns390x",
           description: 'Architecture'
         )
-      ])
-  ])
+    ])
+])
 
 def provisionedNode = null
 def provisionedNodeBuildNumber = null
@@ -78,7 +86,7 @@ ansiColor('xterm') {
               ],
               propagate: true,
               wait: true
-            ])
+          ])
         }
       }
     }
