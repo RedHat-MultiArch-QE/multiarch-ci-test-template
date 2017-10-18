@@ -1,4 +1,11 @@
 properties([
+    pipelineTriggers([
+        [$class: 'CIBuildTrigger', 
+          checks: [], 
+          providerName: 'CI Subscribe', 
+          selector: 'name = \'openshift\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \' rhaos-%-rhel-%-newarches-candidate\''
+        ]
+    ]),
     parameters([
         choiceParam(
           name: 'ARCH',
