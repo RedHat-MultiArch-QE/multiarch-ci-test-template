@@ -32,7 +32,6 @@ def provisionedNodeBuildNumber = null
 
 ansiColor('xterm') {
   timestamps {
-    // TODO Fill out the static-slave
     node(params.TARGET_NODE) {
       try {
         try {
@@ -82,8 +81,6 @@ ansiColor('xterm') {
         } else {
           // TODO Insert test code to connect and test the provisioned node from your static slave here
         }
-
-
       } catch (e) {
         // This is just a wrapper step to ensure that teardown is run upon failure
         println(e)
