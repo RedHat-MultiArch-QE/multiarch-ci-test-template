@@ -1,6 +1,6 @@
 properties([
     pipelineTriggers([
-        // TODO fill out pkg-name and relevant-tag
+        // TODO Fill out pkg-name and relevant-tag
         [$class: 'CIBuildTrigger', 
           checks: [], 
           providerName: 'CI Subscribe', 
@@ -9,9 +9,20 @@ properties([
     ]),
     parameters([
         choiceParam(
-          name: 'ARCH',
-          choices: "x86_64\nppc64le\naarch64\ns390x",
-          description: 'Architecture'
+          choices: 'x86_64\nppc64le\naarch64\ns390x',
+          defaultValue: 'x86_64',
+          description: 'Architecture',
+          name: 'ARCH'
+        ),
+        booleanParam(
+          defaultValue: true,
+          description: 'Connect the provisioned slave node to the Jenkins master to run the test on it directly.',
+          name: 'CONNECT_AS_SLAVE'
+        ),
+        string(
+          defaultValue: 'master',
+          description: 'Default node to run the test from. If CONNECT_AS_SLAVE is true, only the provisioning and teardown will be run on this node.',
+          name: 'TARGET_NODE'
         )
     ])
 ])
@@ -21,7 +32,8 @@ def provisionedNodeBuildNumber = null
 
 ansiColor('xterm') {
   timestamps {
-    node('master') {
+    // TODO Fill out the static-slave
+    node(params.TARGET_NODE) {
       try {
         try {
           stage('Provision Slave') {
@@ -29,9 +41,10 @@ ansiColor('xterm') {
                 job: 'provision-multiarch-slave',
                 parameters: [
                   string(name: 'ARCH', value: arch),
+                  boolean(name: 'CONNECT_AS_SLAVE', value: params.CONNECT_AS_SLAVE),
                   // TODO Add repo and file path for optional post provision configuration
+                  string(name: 'CONFIG_FILE', value: ''),
                   string(name: 'CONFIG_REPO', value: '')
-                  string(name: 'CONFIG_FILE', value: '')
                 ],
                 propagate: true,
                 wait: true
@@ -62,18 +75,15 @@ ansiColor('xterm') {
           throw e
         }
 
-        node(provisionedNode) {
-          try {
-            // TODO INSERT TEST CODE HERE
-          } catch (e) {
-            println(e)
-          } finally {
-            stage ('Archive Test Output') {
-              archiveArtifacts '_output/scripts/**/*'
-              junit '_output/scripts/**/*.xml'
-            }
+        if (params.CONNECT_AS_SLAVE) {
+          node(provisionedNode) {
+            // TODO Insert test code to run directly on provisioned node here
           }
+        } else {
+          // TODO Insert test code to connect and test the provisioned node from your static slave here
         }
+
+
       } catch (e) {
         // This is just a wrapper step to ensure that teardown is run upon failure
         println(e)
