@@ -1,9 +1,9 @@
 properties([
     pipelineTriggers([
-        [$class: 'CIBuildTrigger', 
-          checks: [], 
-          providerName: 'CI Subscribe', 
-          selector: 'name = \'openshift\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \' rhaos-%-rhel-%-newarches-candidate\''
+        [$class: 'CIBuildTrigger',
+          checks: [],
+          providerName: 'CI Subscribe',
+          selector: 'name = \'openshift\' AND CI_TYPE = \'brew-tag\' AND tag (tag LIKE \'rhaos-%-rhel-%-newarches-candidate\' OR tag LIKE \'rhose-%-rhel-%-candidate\')'
         ]
     ]),
     parameters([
