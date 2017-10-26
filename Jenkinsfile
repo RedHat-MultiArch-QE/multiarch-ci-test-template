@@ -82,7 +82,7 @@ ansiColor('xterm') {
         node(provisionedNode) {
           try {
             stage ("Install dependencies") {
-              git 'https://github.com/jaypoulz/multiarch-ci-openshift-test'
+              git 'https://github.com/jaypoulz/multiarch-ci-test-openshift'
               ansible-playbook -i "localhost," config/beaker-config.yml
             }  
 
