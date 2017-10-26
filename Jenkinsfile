@@ -13,16 +13,6 @@ properties([
           defaultValue: 'x86_64',
           description: 'Architecture',
           name: 'ARCH'
-        ),
-        booleanParam(
-          defaultValue: true,
-          description: 'Connect the provisioned slave node to the Jenkins master to run the test on it directly.',
-          name: 'CONNECT_AS_SLAVE'
-        ),
-        string(
-          defaultValue: 'master',
-          description: 'Default node to run the test from. If CONNECT_AS_SLAVE is true, only the provisioning and teardown will be run on this node.',
-          name: 'TARGET_NODE'
         )
     ])
 ])
@@ -39,11 +29,8 @@ ansiColor('xterm') {
             def buildResult = build([
                 job: 'provision-multiarch-slave',
                 parameters: [
-                  string(name: 'ARCH', value: arch),
-                  boolean(name: 'CONNECT_AS_SLAVE', value: params.CONNECT_AS_SLAVE),
-                  // TODO Add repo and file path for optional post provision configuration
-                  string(name: 'CONFIG_FILE', value: ''),
-                  string(name: 'CONFIG_REPO', value: '')
+                  string(name: 'ARCH', value: params.ARCH),
+                  boolean(name: 'CONNECT_AS_SLAVE', value: params.CONNECT_AS_SLAVE)
                 ],
                 propagate: true,
                 wait: true
@@ -62,7 +49,7 @@ ansiColor('xterm') {
               ])
 
             // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
-            def slaveProps = readProperties file: 'slave.properties'
+            def slaveProps = readProperties file: "${params.ARCH}-slave.properties"
 
             // Assign the appropriate slave name
             provisionedNode = slaveProps.name
