@@ -88,7 +88,8 @@ ansiColor('xterm') {
           try {
             stage ("Install dependencies") {
               git 'https://github.com/jaypoulz/multiarch-ci-test-openshift'
-              sh "ansible-playbook config/beaker-config.yml"
+              sh 'yum install ansible -y'
+              sh "ansible-playbook -i 'localhost' config/beaker-config.yml"
             }  
 
             def gopath = "${pwd(tmp: true)}/go"
