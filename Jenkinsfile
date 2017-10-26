@@ -71,6 +71,11 @@ ansiColor('xterm') {
 
             // Assign the appropriate slave name
             provisionedNode = slaveProps.name
+              
+            // Check that the provision was successful
+            if (!slaveProps.provisioned) {
+              throw new Exception(slaveProps.error)
+            }
           }
         } catch (e) {
           // If provision fails, grab the build number from the error message and set build status to not built
