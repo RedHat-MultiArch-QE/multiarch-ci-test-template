@@ -48,9 +48,7 @@ ansiColor('xterm') {
             def buildResult = build([
                 job: 'provision-multiarch-slave',
                 parameters: [
-                  string(name: 'ARCH', value: arch),
-                  string(name: 'CONFIG_REPO', value: 'https://github.com/jaypoulz/multiarch-ci-test-openshift'),
-                  string(name: 'CONFIG_FILE', value: 'config/beaker-config.yml')
+                  string(name: 'ARCH', value: params.ARCH)
                 ],
                 propagate: true,
                 wait: true
@@ -69,7 +67,7 @@ ansiColor('xterm') {
               ])
 
             // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
-            def slaveProps = readProperties file: 'slave.properties'
+            def slaveProps = readProperties file: "${params.ARCH}-slave.properties"
 
             // Assign the appropriate slave name
             provisionedNode = slaveProps.name
@@ -83,6 +81,11 @@ ansiColor('xterm') {
 
         node(provisionedNode) {
           try {
+            stage ("Install dependencies") {
+              git 'https://github.com/jaypoulz/multiarch-ci-openshift-test'
+              ansible-playbook -i "localhost," config/beaker-config.yml
+            }  
+
             def gopath = "${pwd(tmp: true)}/go"
             def failed_stages = []
             withEnv(["GOPATH=${gopath}", "PATH=${PATH}:${gopath}/bin"]) {
