@@ -88,7 +88,8 @@ ansiColor('xterm') {
           try {
             stage ("Install dependencies") {
               git 'https://github.com/jaypoulz/multiarch-ci-test-openshift'
-              sh 'sudo rpm -i epel-release-latest-7.noarch.rpm; sudo yum update -y --skip-broken; sudo yum install ansible -y'
+              sh "sudo yum-config-manager --add-repo https://download.fedoraproject.org/pub/epel/7/${params.ARCH}/"
+              sh "sudo yum update -y --skip-broken; sudo yum install ansible -y"
               sh "ansible-playbook -i 'localhost' config/beaker-config.yml"
             }  
 
