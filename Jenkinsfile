@@ -88,7 +88,7 @@ ansiColor('xterm') {
           try {
             stage ("Install dependencies") {
               git 'https://github.com/jaypoulz/multiarch-ci-test-openshift'
-              sh 'yum install ansible -y'
+              sh 'sudo yum install ansible -y'
               sh "ansible-playbook -i 'localhost' config/beaker-config.yml"
             }  
 
