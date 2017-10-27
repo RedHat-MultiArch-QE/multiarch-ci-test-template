@@ -90,7 +90,7 @@ ansiColor('xterm') {
               git 'https://github.com/jaypoulz/multiarch-ci-test-openshift'
               sh "sudo yum install epel-release -y"
               sh "sudo yum install python-pip python-setuptools"
-              sh "pip install -U pip; pip install ansible"
+              sh "sudo pip install -U pip; pip install ansible"
               sh "ansible-playbook -i 'localhost' config/beaker-config.yml"
             }  
 
