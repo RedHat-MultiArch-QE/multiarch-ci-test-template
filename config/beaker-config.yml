@@ -1,5 +1,5 @@
 ---
-- hosts: jenkins_slave
+- hosts: all
   tasks:
 
     - name: Add EPEL repository
