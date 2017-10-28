@@ -91,7 +91,7 @@ ansiColor('xterm') {
               sh "sudo yum install epel-release -y"
               sh "sudo yum install python-pip python-setuptools -y"
               sh "sudo pip install -U pip; sudo pip install -U setuptools; sudo pip install ansible"
-              sh "ansible-playbook -i "localhost," config/beaker-config.yml"
+              sh "ansible-playbook -i 'localhost,' config/beaker-config.yml"
             }  
 
             def gopath = "${pwd(tmp: true)}/go"
