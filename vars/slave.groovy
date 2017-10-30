@@ -5,6 +5,7 @@ def call(String arch, Closure body, def Boolean runOnProvisionedHost = false) {
   try {
     try {
       stage('Provision Slave') {
+        println("Provisioning ${arch} slave and runOnProvisionedHost=${runOnProvisionedHost}") 
         def buildResult = build([
             job: 'provision-multiarch-slave',
             parameters: [
