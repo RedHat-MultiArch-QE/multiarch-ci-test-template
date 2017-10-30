@@ -28,7 +28,7 @@ properties(
   ]
 )
 
-@Library("multiarch-ci-test-template")
+@Library('multiarch-ci-test-template') _
 
 ansiColor('xterm') {
   timestamps {
