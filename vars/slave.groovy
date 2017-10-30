@@ -9,7 +9,7 @@ def call(String arch, Closure body, def Boolean runOnProvisionedHost = false) {
             job: 'provision-multiarch-slave',
             parameters: [
               string(name: 'ARCH', value: arch),
-              booleanParam(name: 'CONNECT_AS_SLAVE', value: connectAsSlave)
+              booleanParam(name: 'CONNECT_AS_SLAVE', value: runOnProvisionedHost)
             ],
             propagate: true,
             wait: true
