@@ -43,15 +43,7 @@ properties(
   ]
 )
 
-library(
-  identifier: "multiarch-ci-test-template",
-  retriever: modernSCM(
-    [
-      $class: 'GitSCMSource',
-      remote: "https://github.com/jaypoulz/multiarch-ci-test-template"
-    ]
-  )
-)
+@Library("multiarch-ci-test-template")
 
 ansiColor('xterm') {
   timestamps {
