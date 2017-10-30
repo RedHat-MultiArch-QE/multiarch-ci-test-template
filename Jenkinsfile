@@ -14,7 +14,7 @@ properties(
     parameters(
       [
         string(
-          defaultValue: 'x86_64,ppc64l,aarch64,s390x',
+          defaultValue: 'x86_64,ppc64le,aarch64,s390x',
           description: 'Architectures to run the test on.',
           name: 'ARCHES'
         ),
@@ -28,15 +28,7 @@ properties(
   ]
 )
 
-library(
-  identifier: "multiarch-ci-test-template",
-  retriever: modernSCM(
-    [
-      $class: 'GitSCMSource',
-      remote: "https://github.com/jaypoulz/multiarch-ci-test-template"
-    ]
-  )
-)
+@Library("multiarch-ci-test-template")
 
 ansiColor('xterm') {
   timestamps {
