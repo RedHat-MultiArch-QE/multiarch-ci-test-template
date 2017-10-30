@@ -14,7 +14,7 @@ properties(
     parameters(
       [
         string(
-          defaultValue: 'x86_64,ppc64l,aarch64,s390x',
+          defaultValue: 'x86_64,ppc64le,aarch64,s390x',
           description: 'Architectures to run the test on.',
           name: 'ARCHES'
         ),
@@ -49,7 +49,7 @@ ansiColor('xterm') {
   timestamps {
     node(params.TARGET_NODE) {
       arches(
-        params.ARCHES.split(','),
+        params.ARCHES.tokenize(','),
         {
           arch ->
           slave(
