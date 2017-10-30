@@ -1,11 +1,10 @@
 def call(List<String> arches=[], Closure body) {
-  arch_tasks=[:]
+  archTasks=[:]
   for (arch in arches) {
     def task_name = arch
-    arch_tasks[arch] = {
-      task task_name
+    archTasks[arch] = {
       body()
     }
   }
-  parallel arch_tasks
+  parallel archTasks
 }
