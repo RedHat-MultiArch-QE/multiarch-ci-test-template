@@ -62,7 +62,7 @@ ansiColor('xterm') {
               /* @param provisionedSlave    Name of the provisioned host. */
               /************************************************************/
 
-              node(provisionedNode) {
+              node(provisionedSlave) {
                 try {
                   stage ("Install dependencies") {
                     git 'https://github.com/jaypoulz/multiarch-ci-test-openshift'
