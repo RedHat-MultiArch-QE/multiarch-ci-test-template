@@ -4,10 +4,10 @@ properties(
       [
         // TODO Fill out pkg-name and relevant-tag
         [
-          $class: 'CIBuildTrigger',
-          checks: [],
-          providerName: 'CI Subscribe',
-          selector: 'name = \'pkg-name\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'relevant-tag\''
+          $class: 'CIBuildTrigger', 
+          checks: [], 
+          overrides: [topic: 'Consumer.rh-jenkins-ci-plugin.6691192e-fa5d-4994-b8e9-03b3ce731bb0.VirtualTopic.qe.ci.>'], 
+          providerName: 'Red Hat UMB', selector: 'name = \'pkg-name\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'relevant-tag\')'
         ]
       ]
     ),
