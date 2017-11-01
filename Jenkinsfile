@@ -145,8 +145,8 @@ ansiColor('xterm') {
               /* END TEST BODY                                            */
               /* Do not edit beyond this point                            */
               /************************************************************/
-            }, true
-          )
+            //}, true
+          //)
         }
       )
     }
