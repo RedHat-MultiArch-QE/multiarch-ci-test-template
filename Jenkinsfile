@@ -6,7 +6,8 @@ properties(
         [
           $class: 'CIBuildTrigger',
           checks: [],
-          providerName: 'CI Subscribe',
+          overrides: [topic: "Consumer.rh-jenkins-ci-plugin.${UUID.randomUUID().toString()}.VirtualTopic.qe.ci.>"],
+          providerName: 'Red Hat UMB',
           selector: 'name = \'openshift\' AND CI_TYPE = \'brew-tag\' AND tag (tag LIKE \'rhaos-%-rhel-%-newarches-candidate\' OR tag LIKE \'rhose-%-rhel-%-candidate\')'
         ]
       ]
