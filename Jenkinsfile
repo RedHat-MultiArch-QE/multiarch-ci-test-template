@@ -44,7 +44,7 @@ properties(
   ]
 )
 
-@Library('multiarch-ci-test-template@master') _
+@Library('multiarch-ci-test-template') _
 
 ansiColor('xterm') {
   timestamps {
@@ -52,10 +52,10 @@ ansiColor('xterm') {
       arches(
         params.ARCHES.tokenize(','),
         {
-          arch -> 
+          arch ->
           def s = new String(arch)
           return {
-            println("${s}")
+            println s
             slave(
               s,
               {
