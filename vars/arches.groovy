@@ -6,7 +6,7 @@ def call(List<String> arches = [], Closure body) {
   println arches
   def archTasks = [:]
   for (arch in arches) {
-    archTasks[arch] = wrapBody(arch, body)
+    archTasks[arch] = wrapBody("${arch}", body)
   }
   
   println archTasks
