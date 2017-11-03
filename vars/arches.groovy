@@ -3,5 +3,6 @@ def call(List<String> arches = [], Closure body) {
   archTasks = arches.collectEntries {
     [ (it) : { body(it) } ]
   }
+  println archTasks
   parallel archTasks
 }
