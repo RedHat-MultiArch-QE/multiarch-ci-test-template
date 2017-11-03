@@ -5,14 +5,13 @@ def call(List<String> arches = [], Closure body) {
     println "Wrapped ${arch} into var ${s}"
     return {
       println(s) 
+      body(s)
     }
   }
   
   // Loop through the submitted arches and wrap each body call in a closure
   def archTasks = [:]
   for (arch in arches) {
-    //def a = new String(arch) + "${counter}"
-    println "Looping through arch ${arch}"
     archTasks[arch] = wrapBody(arch)
   }
 
