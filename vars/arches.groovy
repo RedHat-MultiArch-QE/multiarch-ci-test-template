@@ -10,7 +10,7 @@ def call(List<String> arches = [], Closure body) {
   }
   
   for (task in archTasks) {
-    task()
+    task.getValue()()
   }
   
   //parallel archTasks
