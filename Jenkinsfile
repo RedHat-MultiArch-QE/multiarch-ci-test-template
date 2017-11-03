@@ -53,17 +53,16 @@ ansiColor('xterm') {
         params.ARCHES.tokenize(','),
         {
           arch -> println("${arch}")
-          /*
           slave(
             arch,
             {
               provisionedSlave ->
-          */
+
               /************************************************************/
               /* TEST BODY                                                */
               /* @param provisionedSlave    Name of the provisioned host. */
               /************************************************************/
-          /*
+
               node(provisionedSlave) {
                 try {
                   stage ("Install dependencies") {
@@ -135,18 +134,18 @@ ansiColor('xterm') {
                   println(e)
                 } finally {
                   stage ('Archive Test Output') { */
-          //          archiveArtifacts '_output/scripts/**/*'
-           //         junit '_output/scripts/**/*.xml'
-             /*     }
+                    archiveArtifacts '_output/scripts/**/*'
+                    junit '_output/scripts/**/*.xml'
+                  }
                 }
-              }*/
+              }
 
               /************************************************************/
               /* END TEST BODY                                            */
               /* Do not edit beyond this point                            */
               /************************************************************/
-            //}, true
-          //)
+            }, true
+          )
         }
       )
     }
