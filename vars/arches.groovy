@@ -1,6 +1,6 @@
 def call(List<String> arches = [], Closure body) {
   archTasks = arches.collectEntries {
-    [ arch, { body(arch) } ]
+    [ it, { body(it) } ]
   }
   parallel archTasks
 }
