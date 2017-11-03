@@ -1,18 +1,18 @@
 def call(List<String> arches = [], Closure body) {
   // This closure is necessary to ensure that the arch string param gets wrapped immutably
-  def Closure wrapBody = { arch ->
-    def a = new String(arch)
-    println "Wrapped ${arch} to new variable ${a}"
+  def Closure wrapBody = { String arch ->
+    println "Wrapped ${arch}"
     return {
-      def b = new String(a)
-      body(b) 
+      body(arch) 
     }
   }
   
   // Loop through the submitted arches and wrap each body call in a closure
   def archTasks = [:]
   for (arch in arches) {
-    archTasks[arch] = wrapBody(arch)
+    def a = new String(arch)
+    println "Looping through arch ${a}"
+    archTasks[a] = wrapBody(a)
   }
 
   parallel archTasks
