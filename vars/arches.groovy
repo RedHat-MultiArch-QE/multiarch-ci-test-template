@@ -3,7 +3,7 @@ def call(List<String> arches = [], Closure body) {
   def Closure wrapBody = { String arch ->
     println "Wrapped ${arch}"
     return {
-      body(arch) 
+      println(arch) 
     }
   }
   
@@ -14,6 +14,7 @@ def call(List<String> arches = [], Closure body) {
     def a = new String(arch) + "${counter}"
     println "Looping through arch ${a}"
     archTasks[arch] = wrapBody(a)
+    counter++;
   }
 
   parallel archTasks
