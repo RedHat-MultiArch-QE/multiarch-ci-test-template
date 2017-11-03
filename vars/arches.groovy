@@ -4,8 +4,9 @@ def call(List<String> arches = [], Closure body) {
   }
   
   println arches
-  archTasks = arches.collectEntries {
-    [ (it) : wrapBody(it, body) ]
+  def archTasks = [:]
+  for arch in arches {
+    archTasks[arch] = wrapBody(arch, body)
   }
   
   println archTasks
