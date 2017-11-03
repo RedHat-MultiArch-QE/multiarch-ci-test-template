@@ -1,8 +1,8 @@
 def call(List<String> arches = [], Closure body) {
   // This closure is necessary to ensure that the arch string param gets wrapped immutably
   def Closure wrapBody = { String arch ->
-    def s = arch.clone()
-    println "Wrapped ${arch}"
+    def s = new String(arch)
+    println "Wrapped ${arch} into var ${s}"
     return {
       println(s) 
     }
