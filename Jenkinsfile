@@ -55,9 +55,9 @@ ansiColor('xterm') {
           arch -> 
           def s = new String(arch)
           return {
-            println("${arch}")
+            println("${s}")
             slave(
-              arch,
+              s,
               {
                 provisionedSlave ->
 
