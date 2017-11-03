@@ -6,9 +6,10 @@ def call(List<String> arches = [], Closure body) {
   }
 
   for (entry in archTasks) {
-    println entry.getValue()
+    entry.setValue(wrapFunction(entry.getValue(), body))
   }
-  //parallel archTasks
+  
+  parallel archTasks
 }
 
 def wrapFunction(String arch, Closure body) {
