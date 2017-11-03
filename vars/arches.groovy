@@ -10,12 +10,10 @@ def call(List<String> arches = [], Closure body) {
   
   // Loop through the submitted arches and wrap each body call in a closure
   def archTasks = [:]
-  def counter = 0
   for (arch in arches) {
-    def a = new String(arch) + "${counter}"
-    println "Looping through arch ${a}"
-    archTasks[arch] = wrapBody(a)
-    counter++;
+    //def a = new String(arch) + "${counter}"
+    println "Looping through arch ${arch}"
+    archTasks[arch] = wrapBody(arch)
   }
 
   parallel archTasks
