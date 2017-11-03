@@ -1,8 +1,8 @@
 # Multi-Arch CI Test Template
-This project is a template for multi-arch tests for RedHat's downstream CI. You can see our latest release notes [here](https://github.com/jaypoulz/multiarch-ci-test-template/releases).
+This project is a template for multi-arch tests for RedHat's downstream CI. You can see our latest release notes [here](https://github.com/RedHat-MultiArch-QE/multiarch-ci-test-template/releases).
 
 ## Overview
-Currently, this template is equipped on to run on a maintained installation of the [Multi-Arch CI Pipeline](https://github.com/jaypoulz/multiarch-ci-pipeline) project. However, since development work on end-to-end installation for that project is currently a work in progress, there exists only one such maintained [instance](https://multiarch-qe-aos-jenkins.rhev-ci-vms.eng.rdu2.redhat.com), which is only accessible from within the RedHat network. It is possible that this project may be generalized for CentOS CI Jenkins environments in the future (see https://github.com/CentOS-PaaS-SIG/multiarch-openshift-ci for an example of this effort specifically for OpenShift), but currently all efforts are focused on setting up this generalized test infrastructure for internal RedHat resources.
+Currently, this template is equipped on to run on a maintained installation of the [Multi-Arch CI Pipeline](https://github.com/RedHat-MultiArch-QE/multiarch-ci-pipeline) project. However, since development work on end-to-end installation for that project is currently a work in progress, there exists only one such maintained [instance](https://multiarch-qe-aos-jenkins.rhev-ci-vms.eng.rdu2.redhat.com), which is only accessible from within the RedHat network. It is possible that this project may be generalized for CentOS CI Jenkins environments in the future (see https://github.com/CentOS-PaaS-SIG/multiarch-openshift-ci for an example of this effort specifically for OpenShift), but currently all efforts are focused on setting up this generalized test infrastructure for internal RedHat resources.
 
 ## Using the Template
 These are all the changes to the template that should be made in order to run the test.
