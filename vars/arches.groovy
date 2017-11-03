@@ -1,5 +1,5 @@
 def call(List<String> arches = [], Closure body) {
-  def Closure wrapBody = { (String a, Closure b) ->
+  def Closure wrapBody = { String a, Closure b ->
     return { b(a) }
   }
   
