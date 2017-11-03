@@ -133,7 +133,7 @@ ansiColor('xterm') {
                 } catch (e) {
                   println(e)
                 } finally {
-                  stage ('Archive Test Output') { */
+                  stage ('Archive Test Output') {
                     archiveArtifacts '_output/scripts/**/*'
                     junit '_output/scripts/**/*.xml'
                   }
