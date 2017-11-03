@@ -37,11 +37,11 @@ ansiColor('xterm') {
         params.ARCHES.tokenize(','),
         {
           arch ->
+          def s = new String(arch)
           return {
-            def s = new String(arch)
-          
+            println s
             slave(
-              arch,
+              s,
               {
                 provisionedSlave ->
                 /************************************************************/
