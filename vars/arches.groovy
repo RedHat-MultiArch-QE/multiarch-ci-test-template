@@ -9,6 +9,9 @@ def call(List<String> arches = [], Closure body) {
     archTasks[arch] = wrapBody("${arch}", body)
   }
   
-  println archTasks
-  parallel archTasks
+  for (task in archTasks) {
+    task()
+  }
+  
+  //parallel archTasks
 }
