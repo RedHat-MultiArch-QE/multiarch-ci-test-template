@@ -6,8 +6,9 @@ properties(
         [
           $class: 'CIBuildTrigger', 
           checks: [], 
-          overrides: [topic: 'Consumer.rh-jenkins-ci-plugin.6691192e-fa5d-4994-b8e9-03b3ce731bb0.VirtualTopic.qe.ci.>'], 
-          providerName: 'Red Hat UMB', selector: 'name = \'pkg-name\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'relevant-tag\')'
+          overrides: [topic: "Consumer.rh-jenkins-ci-plugin.${UUID.randomUUID().toString()}.VirtualTopic.qe.ci.>"], 
+          providerName: 'Red Hat UMB',
+          selector: 'name = \'pkg-name\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'relevant-tag\')'
         ]
       ]
     ),
@@ -56,8 +57,8 @@ ansiColor('xterm') {
                 /* Do not edit beyond this point                            */
                 /************************************************************/
               }
-            }
-          )
+            )
+          }
         }
       )
     }
