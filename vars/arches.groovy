@@ -3,7 +3,10 @@ def call(List<String> arches = [], Closure body) {
   def Closure wrapBody = { arch ->
     def a = new String(arch)
     println "Wrapped ${arch} to new variable ${a}"
-    return { body(a) }
+    return {
+      def b = new String(a)
+      body(b) 
+    }
   }
   
   // Loop through the submitted arches and wrap each body call in a closure
