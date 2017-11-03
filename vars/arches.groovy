@@ -1,7 +1,8 @@
 def call(List<String> arches = [], Closure body) {
   def Closure wrapBody = { String a, Closure b ->
     println "String ${a} is totally immutable, like for sure - now wrapping it in a closure"
-    return { b(a) }
+    def s = new String(a)
+    return { b(s) }
   }
   
   println arches
