@@ -5,6 +5,8 @@ def call(String arch, Closure body, def Boolean runOnProvisionedHost = false) {
   try {
     try {
       stage('Provision Slave') {
+        println("Provisioning ${arch} slave and runOnProvisionedHost=${runOnProvisionedHost}")
+
         def buildResult = build([
             job: 'provision-multiarch-slave',
             parameters: [
@@ -32,6 +34,7 @@ def call(String arch, Closure body, def Boolean runOnProvisionedHost = false) {
 
         // Assign the appropriate slave name
         provisionedNode = slaveProps.name
+
       }
     } catch (e) {
       // If provision fails, grab the build number from the error message and set build status to not built

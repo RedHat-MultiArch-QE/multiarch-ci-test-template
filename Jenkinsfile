@@ -34,24 +34,28 @@ ansiColor('xterm') {
   timestamps {
     node(params.TARGET_NODE) {
       arches(
-        params.ARCHES.split(','),
+        params.ARCHES.tokenize(','),
         {
           arch ->
-          slave(
-            arch,
-            {
-              provisionedSlave ->
-              /************************************************************/
-              /* TEST BODY                                                */
-              /* @param provisionedSlave    Name of the provisioned host. */
-              /************************************************************/
+          return {
+            def s = new String(arch)
+          
+            slave(
+              arch,
+              {
+                provisionedSlave ->
+                /************************************************************/
+                /* TEST BODY                                                */
+                /* @param provisionedSlave    Name of the provisioned host. */
+                /************************************************************/
 
-              // TODO write test body here
+                // TODO write test body here
 
-              /************************************************************/
-              /* END TEST BODY                                            */
-              /* Do not edit beyond this point                            */
-              /************************************************************/
+                /************************************************************/
+                /* END TEST BODY                                            */
+                /* Do not edit beyond this point                            */
+                /************************************************************/
+              }
             }
           )
         }
