@@ -2,7 +2,7 @@ def call(List<String> arches = [], Closure body) {
   // This closure is necessary to ensure that the arch string param gets wrapped immutably
   def Closure wrapBody = { arch ->
     def a = new String(arch)
-    println "Wrapped ${arch} to new variable "${a}"
+    println "Wrapped ${arch} to new variable ${a}"
     return { body(a) }
   }
   
