@@ -52,7 +52,9 @@ ansiColor('xterm') {
       arches(
         params.ARCHES.tokenize(','),
         {
-          x -> println x
+          x -> 
+          def s = new String(x)
+          return { println s }
         }
       )
     }
