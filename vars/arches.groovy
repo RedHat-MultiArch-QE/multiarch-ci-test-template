@@ -1,6 +1,6 @@
-def call(List<String> arches = [], Closure body) { 
+def call(Closure body) { 
   def archTasks = [:]
-  for (arch in arches) {
+  for (arch in params.ARCHES.tokenize(',')) {
     archTasks[arch] = body(arch)
   }
   
