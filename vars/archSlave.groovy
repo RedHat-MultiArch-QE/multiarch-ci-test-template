@@ -13,8 +13,8 @@ def call(Closure body, def Boolean runOnSlave = false) {
       def slave = [ buildNumber: null, hostName: null ]
       try {
         println arch
-        slave = slave(arch)
-        println slave
+        slave = getSlave(arch)
+        println host
 
         if (runOnSlave) {
           node(slave.hostName) {

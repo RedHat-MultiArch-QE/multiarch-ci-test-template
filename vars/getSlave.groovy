@@ -1,5 +1,5 @@
 /**
- * slave.groovy
+ * getSlave.groovy
  *
  * Provisions a multi-arch slave.
  *
