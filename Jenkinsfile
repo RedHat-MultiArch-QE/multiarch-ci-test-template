@@ -35,16 +35,13 @@ ansiColor('xterm') {
   timestamps {
     node(params.TARGET_NODE) {
       arches(
-        params.ARCHES.tokenize(','),
-        {
-          arch ->
+        { arch ->
           def s = new String(arch)
           return {
             println s
             slave(
               s,
-              {
-                provisionedSlave ->
+              { provisionedSlave ->
                 /************************************************************/
                 /* TEST BODY                                                */
                 /* @param provisionedSlave    Name of the provisioned host. */
