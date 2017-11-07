@@ -14,7 +14,7 @@ def call(Closure body, def Boolean runOnSlave = false) {
       try {
         println arch
         slave = getSlave(arch)
-        println host
+        println slave 
 
         if (runOnSlave) {
           node(slave.hostName) {
