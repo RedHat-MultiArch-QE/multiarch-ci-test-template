@@ -10,9 +10,11 @@
 def call(Closure body, def Boolean runOnSlave = false) {
   arches(
     { arch ->
+      def slave = [ buildNumber: null, hostName: null ]
       try {
         println arch
-        def slave = slave(arch)
+        slave = slave(arch)
+        println slave
 
         if (runOnSlave) {
           node(slave.hostName) {

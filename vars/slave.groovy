@@ -31,7 +31,7 @@ def call(String arch) {
           projectName: 'provision-multiarch-slave',
           selector: [
             $class: 'SpecificBuildSelector',
-            buildNumber: provisionedNodeBuildNumber
+            buildNumber: slave.buildNumber
           ]
         ])
 
@@ -47,7 +47,7 @@ def call(String arch) {
     slave.buildNumber = ((e =~ "(provision-multiarch-slave #)([0-9]*)")[0][2])
     currentBuild.result = 'NOT_BUILT'
     throw e
+  } finally {
+    return slave
   }
-
-  return slave
 }
