@@ -6,7 +6,7 @@
  * @param arch String specifying the architecture of the slave to provision.
  * @return LinkedHashMap contained the hostName and buildNumber of the provisioned slave.
  */
-def call(String arch) {
+def LinkedHashMap call(String arch) {
   def slave = [ buildNumber: null, hostName: null ]
 
   try {
