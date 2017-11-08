@@ -56,16 +56,16 @@ ansiColor('xterm') {
           /* @param provisionedSlave    Name of the provisioned host. */
           /************************************************************/
 
-          node(provisionedSlave) {
             try {
               stage ("Install dependencies") {
-                sh "sudo yum-config-manager --add-repo https://download.fedoraproject.org/pub/epel/7/$basearch"
-                sh "sudo yum-config-manager --add-repo http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os"
-                // TODO Disable GPG? Add key? 
-                sh "sudo yum install -y bc git make golang docker jq bind-utils"
-                sh "sudo echo 'insecure_registries:' >> /etc/containers/registries.conf"
-                sh "sudo echo '  - 172.30.0.0/16' >> /etc/containers/registries.conf"
-                sh "sudo systemctl enable docker" 
+                sh """
+                  sudo yum-config-manager --add-repo https://download.fedoraproject.org/pub/epel/7/$basearch;
+                  sudo yum-config-manager --add-repo http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os;
+                  sudo yum install -y bc git make golang docker jq bind-utils;
+                  sudo echo 'insecure_registries:' >> /etc/containers/registries.conf;
+                  sudo echo '  - 172.30.0.0/16' >> /etc/containers/registries.conf;
+                  sudo systemctl enable docker
+                """ 
               }
 
               def gopath = "${pwd(tmp: true)}/go"
@@ -133,7 +133,6 @@ ansiColor('xterm') {
                 junit '_output/scripts/**/*.xml'
               }
             }
-          }
 
           /************************************************************/
           /* END TEST BODY                                            */
