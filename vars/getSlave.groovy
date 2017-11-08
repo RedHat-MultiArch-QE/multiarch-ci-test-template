@@ -5,10 +5,10 @@
  *
  * @param arch String specifying the architecture of the slave to provision.
  * @param runOnProvisionedHost Boolean determining whether cinch should be run post provisioning.
- * @return LinkedHashMap contained the hostName and buildNumber of the provisioned slave.
+ * @return LinkedHashMap contained the name and buildNumber of the provisioned slave.
  */
 def LinkedHashMap call(String arch, Boolean runOnProvisionedHost) {
-  def slave = [ buildNumber: null, hostName: null, buildError: null ]
+  def slave = [ buildNumber: null, name: null, buildError: null ]
 
   try {
     stage('Provision Slave') {
@@ -29,7 +29,7 @@ def LinkedHashMap call(String arch, Boolean runOnProvisionedHost) {
       println "getSlave build successful: ${slave}"
 
       // Get results of provisioning job
-      step([$class: 'CopyArtifact', filter: 'slave.properties',
+      step([$class: 'CopyArtifact', filter: '*-slave.properties',
           projectName: 'provision-multiarch-slave',
           selector: [
             $class: 'SpecificBuildSelector',
@@ -38,11 +38,8 @@ def LinkedHashMap call(String arch, Boolean runOnProvisionedHost) {
         ])
 
       // Load slave properties (you may need to turn off sandbox or approve this in Jenkins)
-      def slaveProps = readProperties file: "${arch}-slave.properties"
-
-      // Assign the appropriate slave name
-      slave.hostName = slaveProps.name
-      println "assigned the host name from the properties file ${slave}"
+      slave = readProperties(file: "${arch}-slave.properties", defaults: slave)
+      println "Assigned the host name from the properties file ${slave}"
     }
   } catch (e) {
     // If provision fails, grab the build number from the error message and set build status to not built

@@ -3,7 +3,7 @@
  *
  * Runs closure body on a multi-arch slave for each arch in params.ARCHES.
  *
- * @param body Closure that takes a single String parameter representing the hostName of the slave.
+ * @param body Closure that takes a single String parameter representing the name of the slave.
  * @param runOnSlave Boolean that specificies whether the
  *        closure should be run on directly on the provisioned slave.
  */
@@ -12,7 +12,7 @@ def call(Closure body, def Boolean runOnSlave = false) {
     { a ->
       def arch = new String(a)
       return {
-        def slave = [ buildNumber: null, hostName: null, buildError: null ]
+        def slave = [ buildNumber: null, name: null, buildError: null ]
         try {
           println arch
           slave = getSlave(arch, runOnSlave)
@@ -22,20 +22,20 @@ def call(Closure body, def Boolean runOnSlave = false) {
             throw slave.buildError
           }
 
-          if (slave.hostName == null) {
-            throw new Exception("Failed to provisioned multiarch slave: ${slave}")
+          if (slave.name == null) {
+            throw new Exception("Could not find name for provisioned slave: ${slave}")
           }
 
           println slave
 
           if (runOnSlave) {
-            node(slave.hostName) {
-              body(slave.hostName)
+            node(slave.name) {
+              body(slave.name)
             }
             return
           }
 
-          body(slave.hostName)
+          body(slave.name)
         } catch (e) {
           // This is just a wrapper step to ensure that teardown is run upon failure
           println(e)
