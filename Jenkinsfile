@@ -8,7 +8,7 @@ properties(
           checks: [],
           overrides: [topic: "Consumer.rh-jenkins-ci-plugin.${UUID.randomUUID().toString()}.VirtualTopic.qe.ci.>"],
           providerName: 'Red Hat UMB',
-          selector: 'name = \'openshift\' AND CI_TYPE = \'brew-tag\' AND tag (tag LIKE \'rhaos-%-rhel-%-newarches-candidate\' OR tag LIKE \'rhose-%-rhel-%-candidate\')'
+          selector: 'name = \'openshift\' AND CI_TYPE = \'brew-tag\' AND (tag LIKE \'rhaos-%-rhel-%-newarches-candidate\' OR tag LIKE \'rhose-%-rhel-%-candidate\')'
         ]
       ]
     ),
@@ -59,11 +59,13 @@ ansiColor('xterm') {
           node(provisionedSlave) {
             try {
               stage ("Install dependencies") {
-                git 'https://github.com/jaypoulz/multiarch-ci-test-openshift'
-                sh "sudo yum install epel-release -y"
-                sh "sudo yum install python-pip python-setuptools -y"
-                sh "sudo pip install -U pip; sudo pip install -U setuptools; sudo pip install ansible"
-                sh "ansible-playbook -i 'localhost,' config/beaker-config.yml"
+                sh "sudo yum-config-manager --add-repo https://download.fedoraproject.org/pub/epel/7/$basearch"
+                sh "sudo yum-config-manager --add-repo http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os"
+                // TODO Disable GPG? Add key? 
+                sh "sudo yum install -y bc git make golang docker jq bind-utils"
+                sh "sudo echo 'insecure_registries:' >> /etc/containers/registries.conf"
+                sh "sudo echo '  - 172.30.0.0/16' >> /etc/containers/registries.conf"
+                sh "sudo systemctl enable docker" 
               }
 
               def gopath = "${pwd(tmp: true)}/go"
