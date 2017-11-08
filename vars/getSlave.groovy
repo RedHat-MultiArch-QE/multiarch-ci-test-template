@@ -8,7 +8,7 @@
  * @return LinkedHashMap contained the hostName and buildNumber of the provisioned slave.
  */
 def LinkedHashMap call(String arch, Boolean runOnProvisionedHost) {
-  def slave = [ buildNumber: null, hostName: null ]
+  def slave = [ buildNumber: null, hostName: null, buildError: null ]
 
   try {
     stage('Provision Slave') {
@@ -48,7 +48,7 @@ def LinkedHashMap call(String arch, Boolean runOnProvisionedHost) {
     // If provision fails, grab the build number from the error message and set build status to not built
     slave.buildNumber = ((e =~ "(provision-multiarch-slave #)([0-9]*)")[0][2])
     currentBuild.result = 'NOT_BUILT'
-    throw e
+    slave.buildError = e
   } finally {
     println "getSlave returning ${slave}"
     return slave
