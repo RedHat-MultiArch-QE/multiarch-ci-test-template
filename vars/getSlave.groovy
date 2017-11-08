@@ -11,7 +11,7 @@ def call(String arch) {
 
   try {
     stage('Provision Slave') {
-      println("Provisioning ${arch} slave and runOnProvisionedHost=${runOnProvisionedHost}")
+      println("Provisioning ${arch} slave")
 
       def buildResult = build([
           job: 'provision-multiarch-slave',
@@ -46,7 +46,7 @@ def call(String arch) {
     // If provision fails, grab the build number from the error message and set build status to not built
     slave.buildNumber = ((e =~ "(provision-multiarch-slave #)([0-9]*)")[0][2])
     currentBuild.result = 'NOT_BUILT'
-    throw e
+    println e
   } finally {
     return slave
   }
