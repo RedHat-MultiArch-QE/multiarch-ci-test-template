@@ -29,7 +29,7 @@ properties(
   ]
 )
 
-@Library('multiarch-ci-test-template') _
+@Library('multiarch-ci-libraries') _
 
 ansiColor('xterm') {
   timestamps {
