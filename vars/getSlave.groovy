@@ -48,6 +48,7 @@ def call(String arch) {
     currentBuild.result = 'NOT_BUILT'
     println e
   } finally {
+    println "getSlave returning ${slave}"
     return slave
   }
 }
