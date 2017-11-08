@@ -9,37 +9,50 @@
  */
 def call(Closure body, def Boolean runOnSlave = false) {
   arches(
-    { arch ->
-      def slave = [ buildNumber: null, hostName: null ]
-      try {
-        println arch
-        slave = getSlave(arch, runOnSlave)
-        println slave
+    { a ->
+      def arch = new String(a)
+      return {
+        def slave = [ buildNumber: null, hostName: null, buildError: null ]
+        try {
+          println arch
+          slave = getSlave(arch, runOnSlave)
 
-        if (runOnSlave) {
-          node(slave.hostName) {
-            body(slave.hostName)
+          // If the provision failed, there will be an error
+          if (slave.buildError != null) {
+            throw slave.buildError
           }
-          return
-        }
 
-        body(slave.hostName)
-      } catch (e) {
-        // This is just a wrapper step to ensure that teardown is run upon failure
-        println(e)
-      } finally {
-        // Ensure teardown runs before the pipeline exits
-        stage ('Teardown Slave') {
-          build(
-            [
-              job: 'teardown-multiarch-slave',
-              parameters: [
-                string(name: 'BUILD_NUMBER', value: slave.buildNumber)
-              ],
-              propagate: true,
-              wait: true
-            ]
-          )
+          if (slave.hostName == null) {
+            throw new Exception("Failed to provisioned multiarch slave: ${slave}")
+          }
+
+          println slave
+
+          if (runOnSlave) {
+            node(slave.hostName) {
+              body(slave.hostName)
+            }
+            return
+          }
+
+          body(slave.hostName)
+        } catch (e) {
+          // This is just a wrapper step to ensure that teardown is run upon failure
+          println(e)
+        } finally {
+          // Ensure teardown runs before the pipeline exits
+          stage ('Teardown Slave') {
+            build(
+              [
+                job: 'teardown-multiarch-slave',
+                parameters: [
+                  string(name: 'BUILD_NUMBER', value: slave.buildNumber)
+                ],
+                propagate: true,
+                wait: true
+              ]
+            )
+          }
         }
       }
     }
