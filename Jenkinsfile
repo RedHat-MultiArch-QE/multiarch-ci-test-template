@@ -32,9 +32,9 @@ properties(
 @Library('multiarch-ci-libraries') _
 
 ansiColor('xterm') {
-  sh 'printenv'
   timestamps {
     node(params.TARGET_NODE) {
+      sh 'printenv'
       archSlave(
         { provisionedSlave, arch ->
           /************************************************************/
