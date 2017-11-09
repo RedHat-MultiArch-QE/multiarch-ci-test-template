@@ -32,6 +32,7 @@ properties(
 @Library('multiarch-ci-libraries') _
 
 ansiColor('xterm') {
+  println env
   timestamps {
     node(params.TARGET_NODE) {
       archSlave(
@@ -40,6 +41,9 @@ ansiColor('xterm') {
           /* TEST BODY                                                */
           /* @param provisionedSlave    Name of the provisioned host. */
           /************************************************************/
+          stage ('Download Test Files') {
+            git "${scm.repo.url}"
+          }
 
           // TODO insert test body here
           stage ('Run Test') {
