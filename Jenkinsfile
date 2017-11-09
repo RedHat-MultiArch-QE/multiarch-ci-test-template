@@ -50,7 +50,7 @@ ansiColor('xterm') {
   timestamps {
     node(params.TARGET_NODE) {
       archSlave(
-        { provisionedSlave ->
+        { provisionedSlave, arch ->
           /************************************************************/
           /* TEST BODY                                                */
           /* @param provisionedSlave    Name of the provisioned host. */
@@ -58,14 +58,16 @@ ansiColor('xterm') {
 
           try {
             stage ("Install dependencies") {
-              sh '''
-                sudo yum-config-manager --add-repo https://download.fedoraproject.org/pub/epel/7/$basearch;
-                sudo yum-config-manager --add-repo http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/$basearch/os;
+              sh """
+                sudo yum-config-manager --add-repo https://download.fedoraproject.org/pub/epel/7/${arch};
+                sudo yum-config-manager --add-repo http://download-node-02.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/${arch}/os;
+                sudo rpm --import http://download.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/${arch}/os/RPM-GPG-KEY-redhat-beta;
+                sudo rpm --import http://download.eng.bos.redhat.com/composes/nightly/EXTRAS-RHEL-7.4/latest-EXTRAS-7-RHEL-7/compose/Server/${arch}/os/RPM-GPG-KEY-redhat-release;
                 sudo yum install -y bc git make golang docker jq bind-utils;
                 sudo echo 'insecure_registries:' >> /etc/containers/registries.conf;
                 sudo echo '  - 172.30.0.0/16' >> /etc/containers/registries.conf;
                 sudo systemctl enable docker
-              '''
+              """
             }
 
             def gopath = "${pwd(tmp: true)}/go"
