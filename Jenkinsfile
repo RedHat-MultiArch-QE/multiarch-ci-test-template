@@ -34,7 +34,6 @@ properties(
 ansiColor('xterm') {
   timestamps {
     node(params.TARGET_NODE) {
-      sh 'printenv'
       archSlave(
         { provisionedSlave, arch ->
           /************************************************************/
@@ -42,7 +41,7 @@ ansiColor('xterm') {
           /* @param provisionedSlave    Name of the provisioned host. */
           /************************************************************/
           stage ('Download Test Files') {
-            git "${scm.repo.url}"
+            checkout scm
           }
 
           // TODO insert test body here
