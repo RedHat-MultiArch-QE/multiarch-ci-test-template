@@ -42,6 +42,14 @@ ansiColor('xterm') {
           /************************************************************/
 
           // TODO insert test body here
+          stage ('Run Test') {
+            sh 'ansible-playbook tests/playbooks/*/playbook.yml'
+          }
+
+          stage ('Archive Test Output') {
+            archiveArtifacts 'tests/playbooks/**/report.d/*'
+          }
+		
 
           /************************************************************/
           /* END TEST BODY                                            */
