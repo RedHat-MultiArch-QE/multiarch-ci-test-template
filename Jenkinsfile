@@ -42,7 +42,7 @@ ansiColor('xterm') {
           /************************************************************/
           stage ('Download Test Files') {
             checkout scm
-            sh 'sudo yum install ansible -y'
+            sh 'sudo pip install ansible'
           }
 
           // TODO insert test body here
