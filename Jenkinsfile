@@ -42,6 +42,7 @@ ansiColor('xterm') {
           /************************************************************/
           stage ('Download Test Files') {
             checkout scm
+            sh 'sudo yum install libffi-devel -y'
             sh 'sudo pip install --upgrade pip setuptools; sudo pip install ansible'
           }
 
