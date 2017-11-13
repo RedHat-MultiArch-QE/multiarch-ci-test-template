@@ -36,14 +36,13 @@ ansiColor('xterm') {
     node(params.TARGET_NODE) {
       archSlave(
         { provisionedSlave, arch ->
-          /************************************************************/
-          /* TEST BODY                                                */
-          /* @param provisionedSlave    Name of the provisioned host. */
-          /************************************************************/
+          /******************************************************************/
+          /* TEST BODY                                                      */
+          /* @param provisionedSlave    Name of the provisioned host.       */
+          /* @param arch                Architeture of the provisioned host */
+          /******************************************************************/
           stage ('Download Test Files') {
             checkout scm
-            sh 'sudo yum install python-devel openssl-devel libffi-devel -y'
-            sh 'sudo pip install --upgrade pip setuptools; sudo pip install ansible'
           }
 
           // TODO insert test body here
@@ -54,12 +53,11 @@ ansiColor('xterm') {
           stage ('Archive Test Output') {
             archiveArtifacts 'tests/playbooks/**/report.d/*'
           }
-		
 
-          /************************************************************/
-          /* END TEST BODY                                            */
-          /* Do not edit beyond this point                            */
-          /************************************************************/
+          /*****************************************************************/
+          /* END TEST BODY                                                 */
+          /* Do not edit beyond this point                                 */
+          /*****************************************************************/
         }
       )
     }
