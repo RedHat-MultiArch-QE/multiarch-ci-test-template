@@ -15,7 +15,7 @@ properties(
     parameters(
       [
         string(
-          defaultValue: 'x86_64,ppc64le,aarch64,s390x',
+          defaultValue: 'x86_64,ppc64le',
           description: 'Architectures to run the test on.',
           name: 'ARCHES'
         ),
