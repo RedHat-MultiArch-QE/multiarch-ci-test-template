@@ -7,6 +7,7 @@ This project serves as a template for multi-arch tests for RedHat's downstream C
   - [Creating Your Own Jenkins Job](#creating-your-own-jenkins-job)
   - [Running the Test](#running-the-test)
 - [License](#license)
+- [Authors](#authors)
 - [Further Documentation](#further-documentation)
 
 ## Getting Started
@@ -36,6 +37,12 @@ The only current Jenkins [instance](https://multiarch-qe-aos-jenkins.rhev-ci-vms
 
 ## License
 This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
+
+## Authors
+This project would not be possible without the work of following people.
+- [jaypoulz](https://github.com/jaypoulz/) - *Develops and maintains the current template.*
+- [detiber](https://github.com/detiber/) - *Engineered the starting point for this template in [multiarch-openshift-ci](https://github.com/CentOS-PaaS-SIG/multiarch-openshift-ci).*
+- [arilivigni](https://github.com/arilivigni) - *Provided basis of the Jenkinsfile via [ci-pipeline](https://github.com/CentOS-PaaS-SIG/ci-pipeline).*
 
 ## Further Documentation
 For directions on how to add your own tests more details on the pipeline, please visit our [wiki](https://github.com/RedHat-MultiArch-QE/multiarch-ci-test-template/wiki).
