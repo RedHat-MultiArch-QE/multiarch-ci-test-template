@@ -5,11 +5,11 @@ This project serves as a template for multi-arch tests for RedHat's downstream C
 
 - [Multi-Arch CI Test Template](#)
   - [Table of Contents](#)
-	- [Getting Started](#)
-		- [Forking the Template](#)
-		- [Creating Your Own Jenkins Job](#)
-		- [Running the Test](#)
-	- [Further Documentation](#)
+  - [Getting Started](#)
+    - [Forking the Template](#)
+    - [Creating Your Own Jenkins Job](#)
+    - [Running the Test](#)
+  - [Further Documentation](#)
 
 ## Getting Started
 The only current Jenkins [instance](https://multiarch-qe-aos-jenkins.rhev-ci-vms.eng.rdu2.redhat.com) equipped with the tools and configuration capable of running this test template is internal to RedHat. This guide assumes that you have admin access to this enviroment, or have been able to set up an equivalent enviroment using Multi-Arch CI Pipeline](https://github.com/RedHat-MultiArch-QE/multiarch-ci-pipeline). Further documentation on setting up your own enviroment can be found [here](https://github.com/RedHat-MultiArch-QE/multiarch-ci-pipeline).
