@@ -15,6 +15,7 @@ The only current Jenkins [instance](https://multiarch-qe-aos-jenkins.rhev-ci-vms
 
 ### Forking the Template
 1. In the github UI, fork this project.
+![Fork](/assets/fork.png)
 
 ### Creating Your Own Jenkins Job
 1. Login to [Multi-Arch QE Jenkins](https://multiarch-qe-aos-jenkins.rhev-ci-vms.eng.rdu2.redhat.com).
