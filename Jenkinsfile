@@ -16,7 +16,7 @@ properties(
       [
         string(
           defaultValue: 'x86_64,ppc64le',
-          description: 'Architectures to run the test on.',
+          description: 'A comma separated list of architectures to run the test on. Valid valids include [x86_64, ppc64le, aarch64, s390x].',
           name: 'ARCHES'
         ),
         string(
