@@ -51,11 +51,18 @@ The only current Jenkins [instance](https://multiarch-qe-jenkins.rhev-ci-vms.eng
 
 ### Running the Test
 1. To run a the test manually, start by logging in to [Multi-Arch QE Jenkins](https://multiarch-qe-jenkins.rhev-ci-vms.eng.rdu2.redhat.com).
+![Logging in to Jenkins](assets/login.png)
 2. Navigate to the test you want to run.
-3. In the left panel, select build with parameters.
+![Navigating to Team's Directory](assets/teamdir.png)
+![Selecting Your Job](assets/job.png)
+![Selecting Your Branch](assets/branch.png)
+3. In the left panel, select `Build with Parameters`.
+![Build With Parameters](assets/params.png)
 4. Specify the `ARCHES` you want to build on. This parameter takes a list of arches delimited by `,`. The supported arches are `x86_64`, `ppc64le`, `aarch64`, and `s390x`.
+![Specifying Arches](assets/arches.png)
 5. Specify the node to run the test from. This defaults to `master`, but could be a static slave.
-6. Click build.
+![Specifying Slave Target](assets/node.png)
+6. Click `Build`.
 
 ## License
 This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
