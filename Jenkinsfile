@@ -51,7 +51,7 @@ ansiColor('xterm') {
           }
 
           stage ('Archive Test Output') {
-            archiveArtifacts 'tests/playbooks/**/report.d/*'
+            archiveArtifacts 'tests/playbooks/**/artifacts/*'
           }
 
           /*****************************************************************/
