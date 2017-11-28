@@ -63,6 +63,12 @@ ansiColor('xterm') {
           /* END TEST BODY                                                 */
           /* Do not edit beyond this point                                 */
           /*****************************************************************/
+        },
+        { exception, arch ->
+          println("Exception ${exception} occured on ${arch}")
+          if (arch.equals("x86_64") || arch.equals("ppc64le")) {
+            currentBuild.result = 'FAILURE'
+          }
         }
       )
     }
