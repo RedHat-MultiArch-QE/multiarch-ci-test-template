@@ -51,7 +51,7 @@ ansiColor('xterm') {
           }
 
           stage ('Archive Test Output') {
-            archiveArtifacts artifacts: 'tests/playbooks/**/artifacts/*' fingerprint: true
+            archiveArtifacts artifacts: 'tests/playbooks/**/artifacts/*', fingerprint: true
             junit 'tests/playbooks/**/reports/*.xml'
           }
 
