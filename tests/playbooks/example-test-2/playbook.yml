@@ -1,0 +1,17 @@
+---
+- name:  Example Test
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+   - debug: msg="{{ playbook_dir }}"
+
+   - name: Create output directory
+     file: path="{{ playbook_dir }}/artifacts" state=directory mode=0755
+
+   - template:
+       src: "{{ playbook_dir }}/templates/example-test.j2"
+       dest: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test.txt"
+       mode: 0644
+
+
