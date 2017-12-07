@@ -1,1 +1,1 @@
-tests/playbooks/**/report.d
+tests/ansible-playbooks/**/report.d
