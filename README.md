@@ -18,7 +18,7 @@ The only current Jenkins [instance](https://multiarch-qe-jenkins.rhev-ci-vms.eng
 ![Forking on Github](assets/fork.png)
 
 ### Creating Your Own Jenkins Job
-1. Login to [Multi-Arch QE Jenkins](https://multiarch-qe-aos-jenkins.rhev-ci-vms.eng.rdu2.redhat.com).
+1. Log in to [Multi-Arch QE Jenkins](https://multiarch-qe-aos-jenkins.rhev-ci-vms.eng.rdu2.redhat.com).
 ![Logging in to Jenkins](assets/login.png)
 
 2. Navigate to your teams directory. You may need a create a directory for your team if one does not already exist.
@@ -59,9 +59,7 @@ The only current Jenkins [instance](https://multiarch-qe-jenkins.rhev-ci-vms.eng
 3. In the left panel, select `Build with Parameters`.
 ![Build With Parameters](assets/params.png)
 4. Specify the `ARCHES` you want to build on. This parameter takes a list of arches delimited by `,`. The supported arches are `x86_64`, `ppc64le`, `aarch64`, and `s390x`.
-![Specifying Arches](assets/arches.png)
 5. Specify the node to run the test from. This defaults to `master`, but could be a static slave.
-![Specifying Slave Target](assets/node.png)
 6. Click `Build`.
 
 ## License

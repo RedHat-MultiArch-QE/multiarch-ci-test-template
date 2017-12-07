@@ -51,13 +51,24 @@ ansiColor('xterm') {
           }
 
           stage ('Archive Test Output') {
-            archiveArtifacts 'tests/ansible-playbooks/**/report.d/*'
+            archiveArtifacts artifacts: 'tests/ansible-playbooks/**/artifacts/*', fingerprint: true
+            try {
+              junit 'tests/ansible-playbooks/**/reports/*.xml'
+            } catch (e) {
+              // We don't care if this step fails
+            }
           }
 
           /*****************************************************************/
           /* END TEST BODY                                                 */
           /* Do not edit beyond this point                                 */
           /*****************************************************************/
+        },
+        { exception, arch ->
+          println("Exception ${exception} occured on ${arch}")
+          if (arch.equals("x86_64") || arch.equals("ppc64le")) {
+            currentBuild.result = 'FAILURE'
+          }
         }
       )
     }
