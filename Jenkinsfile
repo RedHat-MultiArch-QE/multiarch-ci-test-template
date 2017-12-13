@@ -18,59 +18,55 @@ properties(
           defaultValue: 'x86_64,ppc64le',
           description: 'A comma separated list of architectures to run the test on. Valid values include [x86_64, ppc64le, aarch64, s390x].',
           name: 'ARCHES'
-        ),
-        string(
-          defaultValue: 'master',
-          description: 'Slave node to run the test on.',
-          name: 'TARGET_NODE'
         )
       ]
     )
   ]
 )
 
-@Library('multiarch-ci-libraries') _
+@Library('multiarch-ci-libraries@dev') _
 
-ansiColor('xterm') {
-  timestamps {
-    node(params.TARGET_NODE) {
-      archSlave(
-        { provisionedSlave, arch ->
-          /******************************************************************/
-          /* TEST BODY                                                      */
-          /* @param provisionedSlave    Name of the provisioned host.       */
-          /* @param arch                Architeture of the provisioned host */
-          /******************************************************************/
-          stage ('Download Test Files') {
-            checkout scm
-          }
+def arches = params.ARCHES.tokenize(',')
+def runOnProvisionedHosts = true;
+def installAnsible = true;
 
-          // TODO insert test body here
-          stage ('Run Test') {
-            sh 'ansible-playbook tests/ansible-playbooks/*/playbook.yml'
-          }
+singleHostParallelMultiArchTest(
+  arches,
+  runOnProvisionedHosts,
+  installAnsible,
+  { provisionedSlave, arch ->
+    /******************************************************************/
+    /* TEST BODY                                                      */
+    /* @param provisionedSlave    Name of the provisioned host.       */
+    /* @param arch                Architeture of the provisioned host */
+    /******************************************************************/
+    stage ('Download Test Files') {
+      checkout scm
+    }
 
-          stage ('Archive Test Output') {
-            archiveArtifacts artifacts: 'tests/ansible-playbooks/**/artifacts/*', fingerprint: true
-            try {
-              junit 'tests/ansible-playbooks/**/reports/*.xml'
-            } catch (e) {
-              // We don't care if this step fails
-            }
-          }
+    // TODO insert test body here
+    stage ('Run Test') {
+      sh 'ansible-playbook tests/ansible-playbooks/*/playbook.yml'
+    }
 
-          /*****************************************************************/
-          /* END TEST BODY                                                 */
-          /* Do not edit beyond this point                                 */
-          /*****************************************************************/
-        },
-        { exception, arch ->
-          println("Exception ${exception} occured on ${arch}")
-          if (arch.equals("x86_64") || arch.equals("ppc64le")) {
-            currentBuild.result = 'FAILURE'
-          }
-        }
-      )
+    stage ('Archive Test Output') {
+      archiveArtifacts artifacts: 'tests/ansible-playbooks/**/artifacts/*', fingerprint: true
+      try {
+        junit 'tests/ansible-playbooks/**/reports/*.xml'
+      } catch (e) {
+        // We don't care if this step fails
+      }
+    }
+
+    /*****************************************************************/
+    /* END TEST BODY                                                 */
+    /* Do not edit beyond this point                                 */
+    /*****************************************************************/
+  },
+  { exception, arch ->
+    println("Exception ${exception} occured on ${arch}")
+    if (arch.equals("x86_64") || arch.equals("ppc64le")) {
+      currentBuild.result = 'FAILURE'
     }
   }
-}
+)
