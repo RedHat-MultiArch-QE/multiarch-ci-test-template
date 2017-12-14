@@ -26,6 +26,8 @@ properties(
 
 @Library('multiarch-ci-libraries@dev') _
 
+import com.redhat.multiarch.ci.Slave
+
 def arches = params.ARCHES.tokenize(',')
 def runOnProvisionedHosts = true;
 def installAnsible = true;
@@ -34,7 +36,7 @@ parallelMultiArchTest(
   arches,
   runOnProvisionedHosts,
   installAnsible,
-  { provisionedSlave, arch ->
+  { Slave slave ->
     /******************************************************************/
     /* TEST BODY                                                      */
     /* @param provisionedSlave    Name of the provisioned host.       */
