@@ -30,7 +30,7 @@ def arches = params.ARCHES.tokenize(',')
 def runOnProvisionedHosts = true;
 def installAnsible = true;
 
-singleHostParallelMultiArchTest(
+parallelMultiArchTest(
   arches,
   runOnProvisionedHosts,
   installAnsible,
