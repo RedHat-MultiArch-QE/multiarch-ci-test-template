@@ -28,9 +28,9 @@ properties(
 
 import com.redhat.multiarch.ci.Slave
 
-def arches = params.ARCHES.tokenize(',')
-def runOnProvisionedHosts = true;
-def installAnsible = true;
+def List arches = params.ARCHES.tokenize(',')
+def Boolean runOnProvisionedHosts = true;
+def Boolean installAnsible = true;
 
 parallelMultiArchTest(
   arches,
