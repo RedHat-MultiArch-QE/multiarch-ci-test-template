@@ -1,17 +1,5 @@
 properties(
   [
-    //pipelineTriggers(
-    //  [
-    //    // TODO Fill out pkg-name and relevant-tag
-    //    [
-    //      $class: 'CIBuildTrigger',
-    //      checks: [],
-    //      overrides: [topic: "Consumer.rh-jenkins-ci-plugin.${UUID.randomUUID().toString()}.VirtualTopic.qe.ci.>"],
-    //      providerName: 'Red Hat UMB',
-    //      selector: 'name = \'pkg-name\' AND CI_TYPE = \'brew-tag\' AND (tag LIKE \'relevant-tag\')'
-    //    ]
-    //  ]
-    //),
     parameters(
       [
         string(
