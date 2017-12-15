@@ -32,8 +32,6 @@ def List arches = params.ARCHES.tokenize(',')
 def Boolean runOnProvisionedHosts = true;
 def Boolean installAnsible = true;
 
-println arches
-
 parallelMultiArchTest(
   arches,
   runOnProvisionedHosts,
