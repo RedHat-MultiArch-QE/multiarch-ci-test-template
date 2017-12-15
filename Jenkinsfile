@@ -24,7 +24,7 @@ properties(
   ]
 )
 
-@Library('multiarch-ci-libraries@dev') _
+@Library('multiarch-ci-libraries@test') _
 
 import com.redhat.multiarch.ci.Slave
 
