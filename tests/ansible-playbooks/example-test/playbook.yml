@@ -1,6 +1,6 @@
 ---
 - name:  Example Test
-  hosts: localhost
+  hosts: all
   gather_facts: true
 
   tasks:
