@@ -1,47 +1,56 @@
 properties(
-  [
-    parameters(
-      [
-        string(
-          defaultValue: 'x86_64',
-          description: 'A comma separated list of architectures to run the test on. Valid values include [x86_64, ppc64le, aarch64, s390x].',
-          name: 'ARCHES'
-        ),
-        string(
-            defaultValue: 'SSHPRIVKEY',
-            description: 'SSH private key Jenkins credential ID for Beaker/SSH operations',
-            name: 'SSHPRIVKEYCREDENTIALID'
-        ),
-        string(
-            defaultValue: 'SSHPUBKEY',
-            description: 'SSH public key Jenkins credential ID for Beaker/SSH operations',
-            name: 'SSHPUBKEYCREDENTIALID'
-        ),
-      ]
-    )
-  ]
+        [
+                parameters(
+                        [
+                                string(
+                                        defaultValue: 'x86_64,ppc64le',
+                                        description: 'A comma separated list of architectures to run the test on. Valid values include [x86_64, ppc64le, aarch64, s390x].',
+                                        name: 'ARCHES'
+                                ),
+                                string(
+                                        defaultValue: 'SSHPRIVKEY',
+                                        description: 'SSH private key Jenkins credential ID for Beaker/SSH operations',
+                                        name: 'SSHPRIVKEYCREDENTIALID'
+                                ),
+                                string(
+                                        defaultValue: 'SSHPUBKEY',
+                                        description: 'SSH public key Jenkins credential ID for Beaker/SSH operations',
+                                        name: 'SSHPUBKEYCREDENTIALID'
+                                ),
+                                string(
+                                        defaultValue: 'KEYTAB',
+                                        description: 'Kerberos keytab file Jenkins credential ID for Beaker/SSH operations',
+                                        name: 'KEYTABID'
+                                ),
+                                string(
+                                        defaultValue: 'dev',
+                                        description: 'Branch of shared libraries to use',
+                                        name: 'LIBRARIES_BRANCH'
+                                ),
+                                string(
+                                        defaultValue: 'https://github.com/RedHat-MultiArch-QE/multiarch-ci-libraries',
+                                        description: 'Repo for shared libraries',
+                                        name: 'LIBRARIES_REPO'
+                                ),
+                        ]
+                )
+        ]
 )
 
 List arches = params.ARCHES.tokenize(',')
 
-library changelog: false, identifier: 'multiarch-ci-libraries@dev', retriever: legacySCM([$class: 'GitSCM', branches: [[name: '*/dev']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/scoheb/multiarch-ci-libraries']]])
+library changelog: false,
+        identifier: "multiarch-ci-libraries@${params.LIBRARIES_BRANCH}",
+        retriever: legacySCM([$class: 'GitSCM', branches: [[name: "*/${params.LIBRARIES_BRANCH}"]],
+                      doGenerateSubmoduleConfigurations: false,
+                      extensions: [], submoduleCfg: [],
+                      userRemoteConfigs:
+                              [[url: "${params.LIBRARIES_REPO}"]]])
 
-// Populate the Provisioning Config
-def config = provisioningConfig.create()
-config.jobgroup = "ci-ops-central"
-config.tenant = "continuous-infra"
-config.dockerUrl = "172.30.1.1:5000"
-config.provisioningImage = "jenkins-provisioning-slave"
-config.provisioningRepoUrl = "https://github.com/scoheb/multiarch-ci-provisioner"
-config.provisioningRepoRef = "dev"
-config.krbPrincipal = "jenkins/ci-ops-jenkins.rhev-ci-vms.eng.rdu2.redhat.com@REDHAT.COM"
-config.KEYTABCREDENTIALID = "KEYTAB"
-config.runOnSlave = false
-config.installAnsible= false
 
 parallelMultiArchTest(
         arches,
-        config,
+        provisioningConfig.create(),
   { Slave slave ->
     /*******************************************************************/
     /* TEST BODY                                                       */
@@ -55,25 +64,10 @@ parallelMultiArchTest(
 
           // TODO insert test body here
           stage ('Run Test') {
-              withCredentials([file(credentialsId: params.SSHPRIVKEYCREDENTIALID,
-                                       variable: 'SSHPRIVKEY'),
-                               file(credentialsId: params.SSHPUBKEYCREDENTIALID,
-                                       variable: 'SSHPUBKEY')])
-                  {
-
-
-                    env.HOME = "/home/jenkins"
-
-                    sh """
-                            mkdir -p ~/.ssh
-                            cp ${SSHPRIVKEY} ~/.ssh/id_rsa
-                            cp ${SSHPUBKEY} ~/.ssh/id_rsa.pub
-                            chmod 600 ~/.ssh/id_rsa
-                            chmod 644 ~/.ssh/id_rsa.pub
-                        """
-
-                    sh "pwd"
-                    sh "ansible-playbook -i \'../${slave.inventory}\' tests/ansible-playbooks/*/playbook.yml"
+              if (config.runOnSlave) {
+                  sh 'ansible-playbook tests/ansible-playbooks/*/playbook.yml'
+              } else {
+                  sh "ansible-playbook -i \'../${slave.inventory}\' tests/ansible-playbooks/*/playbook.yml"
               }
           }
 
@@ -94,7 +88,6 @@ parallelMultiArchTest(
   },
   { exception, slave ->
     println("Exception ${exception} occured on ${slave.arch}")
-    sleep 200
     if (slave.arch.equals("x86_64") || slave.arch.equals("ppc64le")) {
       currentBuild.result = 'FAILURE'
     }

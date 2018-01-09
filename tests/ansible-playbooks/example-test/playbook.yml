@@ -14,4 +14,9 @@
        dest: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test.txt"
        mode: 0644
 
+   - fetch:
+       src: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test.txt"
+       dest: "{{ inventory_hostname }}.txt"
+       flat: yes
+
 
