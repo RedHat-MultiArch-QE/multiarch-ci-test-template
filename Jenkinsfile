@@ -111,7 +111,7 @@ parallelMultiArchTest(
     /* Do not edit beyond this point                                 */
     /*****************************************************************/
   },
-  { exception, slave ->
+  { Exception exception, Slave slave ->
     echo "Exception ${exception} occured on ${slave.arch}"
     if (slave.arch.equals("x86_64") || slave.arch.equals("ppc64le")) {
       currentBuild.result = 'FAILURE'
