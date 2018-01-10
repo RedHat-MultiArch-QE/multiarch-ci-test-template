@@ -47,10 +47,9 @@ library changelog: false,
                       userRemoteConfigs:
                               [[url: "${params.LIBRARIES_REPO}"]]])
 
-
 parallelMultiArchTest(
         arches,
-        provisioningConfig.create(),
+        provisioningConfig.create(params),
   { Slave slave ->
     /*******************************************************************/
     /* TEST BODY                                                       */
@@ -67,7 +66,7 @@ parallelMultiArchTest(
               if (config.runOnSlave) {
                   sh 'ansible-playbook tests/ansible-playbooks/*/playbook.yml'
               } else {
-                  sh "ansible-playbook -i \'../${slave.inventory}\' tests/ansible-playbooks/*/playbook.yml"
+                  sh "ansible-playbook -i \'${slave.inventory}\' tests/ansible-playbooks/*/playbook.yml"
               }
           }
 
