@@ -60,7 +60,7 @@ retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"]
 
 parallelMultiArchTest(
   arches,
-  provisioningConfig.create(),
+  provisioningConfig.create(params),
   { Slave slave ->
     /*********************************************************/
     /* TEST BODY                                             */
@@ -83,7 +83,7 @@ parallelMultiArchTest(
           // TODO insert logic for calling script(s) here
         }
         else {
-          sh "ansible-playbook -i \'../${slave.inventory}\' ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
+          sh "ansible-playbook -i '${slave.inventory}' ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
           // TODO insert logic for all script(s) remotely here
         }
       }
