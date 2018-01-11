@@ -38,7 +38,7 @@ properties(
           name: 'TEST_VERSION'
         ),
         string(
-          defaultValue: null
+          defaultValue: null,
           description: 'Repo for tests to run. If left blank, the current repo is assumed (*note* this default will only work for multibranch pipelines).',
           name: 'TEST_REPO'
         ),
