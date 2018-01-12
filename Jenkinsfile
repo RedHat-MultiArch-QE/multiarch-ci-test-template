@@ -23,24 +23,24 @@ properties(
           name: 'KEYTABID'
         ),
         string(
-          defaultValue: 'v0.2',
-          description: 'Version of shared libraries to use',
-          name: 'LIBRARIES_VERSION'
-        ),
-        string(
           defaultValue: 'https://github.com/RedHat-MultiArch-QE/multiarch-ci-libraries',
           description: 'Repo for shared libraries',
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: '',
-          description: 'Version of repo for tests to run.',
-          name: 'TEST_VERSION'
+          defaultValue: 'v0.2',
+          description: 'Version of shared libraries to use',
+          name: 'LIBRARIES_VERSION'
         ),
         string(
           defaultValue: null,
           description: 'Repo for tests to run. If left blank, the current repo is assumed (*note* this default will only work for multibranch pipelines).',
           name: 'TEST_REPO'
+        ),
+        string(
+          defaultValue: '',
+          description: 'Version of repo for tests to run.',
+          name: 'TEST_VERSION'
         ),
         string(
           defaultValue: 'tests',
