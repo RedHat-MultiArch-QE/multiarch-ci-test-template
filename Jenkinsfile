@@ -28,7 +28,7 @@ properties(
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v0.2',
+          defaultValue: 'v0.2-beta',
           description: 'Version of shared libraries to use',
           name: 'LIBRARIES_VERSION'
         ),
@@ -46,6 +46,11 @@ properties(
           defaultValue: 'tests',
           description: 'Directory containing tests to run. Should at least one of the follow: an ansible-playbooks directory containing one or more test directories each of which having a playbook.yml, a scripts directory containing one or more test directories each of which having a run-test.sh',
           name: 'TEST_DIR'
+        ),
+        string(
+          defaultValue: null,
+          description: 'Contains the CI_MESSAGE for a message bus triggered build.',
+          name: 'CI_MESSAGE'
         )
       ]
     )
