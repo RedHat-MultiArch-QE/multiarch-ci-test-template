@@ -33,7 +33,7 @@ properties(
           name: 'LIBRARIES_REF'
         ),
         string(
-          defaultValue: null,
+          defaultValue: '',
           description: 'Repo for tests to run. If left blank, the current repo is assumed (*note* this default will only work for multibranch pipelines).',
           name: 'TEST_REPO'
         ),
@@ -48,7 +48,7 @@ properties(
           name: 'TEST_DIR'
         ),
         string(
-          defaultValue: null,
+          defaultValue: '',
           description: 'Contains the CI_MESSAGE for a message bus triggered build.',
           name: 'CI_MESSAGE'
         )
