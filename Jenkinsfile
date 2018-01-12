@@ -63,9 +63,13 @@ library changelog: false,
 identifier: "multiarch-ci-libraries@${params.LIBRARIES_REF}",
 retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"])
 
+def config = provisioningConfig.create(params)
+config.installAnsible = false
+config.runOnSlave = false
+
 parallelMultiArchTest(
   arches,
-  provisioningConfig.create(params),
+  config,
   { Slave slave ->
     /*********************************************************/
     /* TEST BODY                                             */
