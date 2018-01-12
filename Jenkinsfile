@@ -57,15 +57,12 @@ properties(
   ]
 )
 
-List arches = params.ARCHES.tokenize(',')
-
 library changelog: false,
 identifier: "multiarch-ci-libraries@${params.LIBRARIES_REF}",
 retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"])
 
-def config = provisioningConfig.create(params)
-config.installAnsible = false
-config.runOnSlave = false
+List arches = params.ARCHES.tokenize(',')
+ProvisioningConfig config = provisioningConfig.create(params)
 
 parallelMultiArchTest(
   arches,
