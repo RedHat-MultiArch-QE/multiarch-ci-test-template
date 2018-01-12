@@ -9,28 +9,28 @@ properties(
         ),
         string(
           defaultValue: 'SSHPRIVKEY',
-          description: 'SSH private key Jenkins credential ID for Beaker/SSH operations',
+          description: 'SSH private key Jenkins credential ID for Beaker/SSH operations.',
           name: 'SSHPRIVKEYCREDENTIALID'
         ),
         string(
           defaultValue: 'SSHPUBKEY',
-          description: 'SSH public key Jenkins credential ID for Beaker/SSH operations',
+          description: 'SSH public key Jenkins credential ID for Beaker/SSH operations.',
           name: 'SSHPUBKEYCREDENTIALID'
         ),
         string(
           defaultValue: 'KEYTAB',
-          description: 'Kerberos keytab file Jenkins credential ID for Beaker/SSH operations',
+          description: 'Kerberos keytab file Jenkins credential ID for Beaker/SSH operations.',
           name: 'KEYTABID'
         ),
         string(
           defaultValue: 'https://github.com/RedHat-MultiArch-QE/multiarch-ci-libraries',
-          description: 'Repo for shared libraries',
+          description: 'Repo for shared libraries.',
           name: 'LIBRARIES_REPO'
         ),
         string(
           defaultValue: 'v0.2-beta',
-          description: 'Version of shared libraries to use',
-          name: 'LIBRARIES_VERSION'
+          description: 'Git reference to the branch or tag of shared libraries.',
+          name: 'LIBRARIES_REF'
         ),
         string(
           defaultValue: null,
@@ -39,8 +39,8 @@ properties(
         ),
         string(
           defaultValue: '',
-          description: 'Version of repo for tests to run.',
-          name: 'TEST_VERSION'
+          description: 'Git reference to the branch or tag of the tests repo.',
+          name: 'TEST_REF'
         ),
         string(
           defaultValue: 'tests',
@@ -60,7 +60,7 @@ properties(
 List arches = params.ARCHES.tokenize(',')
 
 library changelog: false,
-identifier: "multiarch-ci-libraries@${params.LIBRARIES_VERSION}",
+identifier: "multiarch-ci-libraries@${params.LIBRARIES_REF}",
 retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"])
 
 parallelMultiArchTest(
@@ -74,7 +74,7 @@ parallelMultiArchTest(
     dir('test') {
       stage ('Download Test Files') {
         if (params.TEST_REPO) {
-          git url: params.TEST_REPO, branch: params.TEST_VERSION, changelog: false
+          git url: params.TEST_REPO, branch: params.TEST_REF, changelog: false
         }
         else {
           checkout scm
