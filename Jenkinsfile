@@ -63,6 +63,8 @@ retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"]
 
 List arches = params.ARCHES.tokenize(',')
 def config = provisioningConfig.create(params)
+config.installAnsible = false
+config.runOnSlave = false
 
 parallelMultiArchTest(
   arches,
