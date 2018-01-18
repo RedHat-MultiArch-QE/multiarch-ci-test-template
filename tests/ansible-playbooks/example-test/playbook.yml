@@ -1,6 +1,6 @@
 ---
 - name:  Example Test
-  hosts: localhost
+  hosts: all
   gather_facts: true
 
   tasks:
@@ -13,5 +13,10 @@
        src: "{{ playbook_dir }}/templates/example-test.j2"
        dest: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test.txt"
        mode: 0644
+
+   - fetch:
+       src: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test.txt"
+       dest: "{{ inventory_hostname }}.txt"
+       flat: yes
 
 
