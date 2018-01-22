@@ -23,6 +23,11 @@ properties(
           name: 'KEYTABID'
         ),
         string(
+          defaultValue: 'JENKINS_SLAVE_CREDENTIALS',
+          description: 'Jenkins slave credential ID for connecting slaves using cinch via JSwarm.',
+          name: 'JENKINSSLAVECREDENTIALID'
+        ),
+        string(
           defaultValue: 'https://github.com/RedHat-MultiArch-QE/multiarch-ci-libraries',
           description: 'Repo for shared libraries.',
           name: 'LIBRARIES_REPO'
