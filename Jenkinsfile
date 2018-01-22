@@ -67,9 +67,7 @@ identifier: "multiarch-ci-libraries@${params.LIBRARIES_REF}",
 retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"])
 
 List arches = params.ARCHES.tokenize(',')
-def config = provisioningConfig.create(params)
-config.JENKINS_MASTER_URL = env.JENKINS_MASTER_URL
-config.JSWARM_EXTRA_VARS = env.JSWARM_EXTRA_VARS
+def config = provisioningConfig.create(params, env)
 
 parallelMultiArchTest(
   arches,
