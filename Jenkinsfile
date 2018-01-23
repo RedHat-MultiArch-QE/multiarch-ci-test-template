@@ -62,17 +62,17 @@ properties(
   ]
 )
 
-def lib = library changelog: false,
+library changelog: false,
 identifier: "multiarch-ci-libraries@${params.LIBRARIES_REF}",
 retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"])
 
 List arches = params.ARCHES.tokenize(',')
-def config = lib.com.redhat.multiarch.ci.Utilities.createProvisioningConfig(params, env)
+def config = TestUtils.createProvisioningConfig(this)
 
-parallelMultiArchTest(
+TestUtils.runParallelMultiArchTest(
   arches,
   config,
-  { Slave slave ->
+  { Host host ->
     /*********************************************************/
     /* TEST BODY                                             */
     /* @param slave               Provisioned slave details. */
