@@ -61,9 +61,7 @@ properties(
     )
   ]
 )
-node {
-  echo env.JENKINS_MASTER_URL
-}
+
 library(
   changelog: false,
   identifier: "multiarch-ci-libraries@${params.LIBRARIES_REF}",
