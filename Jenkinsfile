@@ -74,7 +74,7 @@ def config = TestUtils.createProvisioningConfig(this)
 TestUtils.runParallelMultiArchTest(
   arches,
   config,
-  { lib.com.redhat.multiarch.ci.provisioner.Host host ->
+  { host ->
     /*********************************************************/
     /* TEST BODY                                             */
     /* @param slave               Provisioned slave details. */
