@@ -69,9 +69,10 @@ library(
 )
 
 List arches = params.ARCHES.tokenize(',')
-def config = TestUtils.createProvisioningConfig(this)
+def config = TestUtils.getProvisioningConfig(this)
 
 TestUtils.runParallelMultiArchTest(
+  this,
   arches,
   config,
   { host ->
