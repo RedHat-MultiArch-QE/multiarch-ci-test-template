@@ -62,7 +62,7 @@ properties(
   ]
 )
 node {
-  sh 'env | sort'
+  echo env.JENKINS_MASTER_URL
 }
 library(
   changelog: false,
