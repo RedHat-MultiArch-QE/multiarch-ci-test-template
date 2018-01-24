@@ -61,8 +61,10 @@ properties(
     )
   ]
 )
-
-def lib = library(
+node {
+  sh 'env | sort'
+}
+library(
   changelog: false,
   identifier: "multiarch-ci-libraries@${params.LIBRARIES_REF}",
   retriever: modernSCM([$class: 'GitSCMSource',remote: "${params.LIBRARIES_REPO}"])
