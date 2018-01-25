@@ -12,3 +12,11 @@ resource_groups:
       arch: {{ arch }}
       variant: Server
       count: 1
+      {% if hostrequires %}
+      hostrequires:
+        {% for req in hostrequires %}
+        - tag: req.tag
+          op: req.op
+          value: req.value
+        {% endfor %}
+      {% endif %}
