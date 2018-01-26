@@ -128,9 +128,9 @@ TestUtils.runParallelMultiArchTest(
     /* Do not edit beyond this point                                 */
     /*****************************************************************/
   },
-  { Exception exception, Slave slave ->
-    echo "Exception ${exception} occured on ${slave.arch}"
-    if (slave.arch.equals("x86_64") || slave.arch.equals("ppc64le")) {
+  { Exception exception, def host ->
+    echo "Exception ${exception} occured on ${host.arch}"
+    if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
       currentBuild.result = 'FAILURE'
     }
   }
