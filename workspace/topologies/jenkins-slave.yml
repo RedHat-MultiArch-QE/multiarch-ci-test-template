@@ -15,8 +15,8 @@ resource_groups:
       {% if hostrequires %}
       hostrequires:
         {% for req in hostrequires %}
-        - tag: req.tag
-          op: req.op
-          value: req.value
+        - tag: {{ req.tag }}
+          op: {{ req.op }}
+          value: {{ req.value }}
         {% endfor %}
       {% endif %}
