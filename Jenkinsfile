@@ -95,7 +95,7 @@ TestUtils.runParallelMultiArchTest(
       // TODO insert test body here
       stage ('Run Test') {
         if (config.runOnSlave) {
-          sh "ansible-playbook -i \"localhost,\" -c local ${TEST_DIR}/ansible-playbooks/*/playbook.yml --verbose"
+          sh "ansible-playbook -i \"localhost,\" -c local ${TEST_DIR}/ansible-playbooks/*/playbook.yml --become --become-user jenkins"
           // TODO insert logic for calling script(s) here
         }
         else {
