@@ -72,8 +72,6 @@ List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
 config.hostrequires = [[ tag: "pool", op: "=", value: "multiarch-qe" ]]
 config.cloudName = 'kubernetes'
-//config.runOnSlave = false
-//config.installAnsible = false
 
 TestUtils.runParallelMultiArchTest(
   this,
@@ -97,7 +95,7 @@ TestUtils.runParallelMultiArchTest(
       // TODO insert test body here
       stage ('Run Test') {
         if (config.runOnSlave) {
-          sh "ansible-playbook ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
+          sh "ansible-playbook -i \"localhost,\" -c local ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
           // TODO insert logic for calling script(s) here
         }
         else {
