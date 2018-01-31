@@ -95,7 +95,7 @@ TestUtils.runParallelMultiArchTest(
       // TODO insert test body here
       stage ('Run Test') {
         if (config.runOnSlave) {
-          sh "export $HOME=/root; ansible-playbook -i \"localhost,\" -c local ${TEST_DIR}/ansible-playbooks/*/playbook.yml --extra-vars '{\"remote_tmp\": \"/tmp\", \"local_tmp\": \"/tmp\"}'"
+          sh "export HOME=/root; ansible-playbook -i \"localhost,\" -c local ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
           // TODO insert logic for calling script(s) here
         }
         else {
