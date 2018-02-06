@@ -33,7 +33,7 @@ properties(
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v0.2-beta',
+          defaultValue: 'v0.2',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
@@ -71,9 +71,6 @@ library(
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
 config.hostrequires = [[ tag: "pool", op: "=", value: "multiarch-qe" ]]
-config.cloudName = 'kubernetes'
-//config.runOnSlave = false
-//config.installAnsible = false
 
 TestUtils.runParallelMultiArchTest(
   this,
