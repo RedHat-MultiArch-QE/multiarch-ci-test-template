@@ -1,17 +1,20 @@
 ---
 - name:  Example Test
-  hosts: localhost
+  hosts: all
   gather_facts: true
 
   tasks:
    - debug: msg="{{ playbook_dir }}"
 
    - name: Create output directory
-     file: path="{{ playbook_dir }}/artifacts" state=directory mode=0755
+     file: path="{{ playbook_dir}}/artifacts" state=directory mode=0755
 
    - template:
        src: "{{ playbook_dir }}/templates/example-test.j2"
-       dest: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test.txt"
+       dest: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test_{{ inventory_hostname }}.txt"
        mode: 0644
 
-
+   - fetch:
+       src: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test_{{ inventory_hostname }}.txt"
+       dest: "{{ playbook_dir }}/artifacts/{{ ansible_architecture }}-test_{{ inventory_hostname }}.txt"
+       flat: yes
