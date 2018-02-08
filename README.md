@@ -7,8 +7,6 @@ This project serves as a template for multi-arch tests for RedHat's downstream C
 - [Authors](#authors)
 
 ## Getting Started
-The only current Jenkins [instance](https://multiarch-qe-jenkins.rhev-ci-vms.eng.rdu2.redhat.com) equipped with the tools and configuration capable of running this test template is internal to RedHat. This guide assumes that you have admin access to this enviroment, or have been able to set up an equivalent enviroment with the [Multi-Arch CI Provisioner](https://github.com/RedHat-MultiArch-QE/multiarch-ci-provisioner) installed.
-
 For directions on how to add your own tests more details on the pipeline, please visit our [wiki](https://github.com/RedHat-MultiArch-QE/multiarch-ci-test-template/wiki).
 
 ## License
