@@ -93,26 +93,26 @@ TestUtils.runParallelMultiArchTest(
       // TODO insert test body here
       stage ('Run Test') {
         if (config.runOnSlave) {
-          sh "ansible-playbook -i 'localhost,' -c local ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
+          sh "ansible-playbook -i 'localhost,' -c local ${params.TEST_DIR}/ansible-playbooks/*/playbook.yml"
           // TODO insert logic for calling script(s) here
         }
         else {
-          sh "ansible-playbook -i '${host.inventory}' ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
+          sh "ansible-playbook -i '${host.inventory}' ${params.TEST_DIR}/ansible-playbooks/*/playbook.yml"
           // TODO insert logic for all script(s) remotely here
         }
       }
 
       stage ('Archive Test Output') {
         try {
-          archiveArtifacts allowEmptyArchive: true, artifacts: "${TEST_DIR}/ansible-playbooks/**/artifacts/*", fingerprint: true
-          junit "${TEST_DIR}/ansible-playbooks/**/reports/*.xml"
+          archiveArtifacts allowEmptyArchive: true, artifacts: "${params.TEST_DIR}/ansible-playbooks/**/artifacts/*", fingerprint: true
+          junit "${params.TEST_DIR}/ansible-playbooks/**/reports/*.xml"
         }
         catch (e) {
           // We don't care if this step fails
         }
         try {
-          archiveArtifacts allowEmptyArchive: true, artifacts: "${TEST_DIR}/scripts/**/artifacts/*", fingerprint: true
-          junit "${TEST_DIR}/scripts/**/reports/*.xml"
+          archiveArtifacts allowEmptyArchive: true, artifacts: "${params.TEST_DIR}/scripts/**/artifacts/*", fingerprint: true
+          junit "${params.TEST_DIR}/scripts/**/reports/*.xml"
         }
         catch (e) {
           // We don't care if this step fails
