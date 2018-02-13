@@ -7,7 +7,6 @@ resource_groups:
   - role: bkr_server
     job_group: {{ job_group }}
     whiteboard: "{{ arch }} slave for multiarch testing"
-    max_attempts: 1
     recipesets:
     - distro: "RHEL-7.4"
       arch: {{ arch }}
