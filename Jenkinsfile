@@ -70,8 +70,6 @@ library(
 
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
-config.installAnsible = false
-config.runOnSlave = false
 
 TestUtils.runParallelMultiArchTest(
   this,
