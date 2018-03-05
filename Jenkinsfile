@@ -120,7 +120,7 @@ TestUtils.runParallelMultiArchTest(
       }
     }
 
-    #sleep 3600
+    //sleep 3600
 
     /*****************************************************************/
     /* END TEST BODY                                                 */
