@@ -9,7 +9,7 @@ jenkins-slave:
       - name: install-epel
         type: ansible
         actions:
-          - playbook: 'install-epel.yml'
+          - playbook: install-epel.yml
         context: true
       {% endif %}  
     {% endif %}
