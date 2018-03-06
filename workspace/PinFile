@@ -4,12 +4,12 @@ jenkins-slave:
   {% if hooks %}
   hooks:
     {% if hooks.postUp %}
-    post-up:
+    postup:
       {% if hooks.postUp.connectToMaster %}
-      name: cinch
+      name: install-epel
         type: shell
         actions:
-        - cinch inventories/jenkins-slave.inventory
+        - sudo yum install epel-release
       {% endif %}  
     {% endif %}
   {% endif %}
