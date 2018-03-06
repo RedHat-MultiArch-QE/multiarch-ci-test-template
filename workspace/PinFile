@@ -6,10 +6,10 @@ jenkins-slave:
     {% if hooks.postUp %}
     postup:
       {% if hooks.postUp.connectToMaster %}
-      name: install-epel
+      - name: install-epel
         type: shell
         actions:
-        - sudo yum install epel-release
+          - sudo yum install epel-release
       {% endif %}  
     {% endif %}
   {% endif %}
