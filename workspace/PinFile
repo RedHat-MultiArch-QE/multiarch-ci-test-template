@@ -7,9 +7,10 @@ jenkins-slave:
     postup:
       {% if hooks.postUp.connectToMaster %}
       - name: install-epel
-        type: shell
+        type: ansible
         actions:
-          - sudo yum install epel-release
+          - playbook: 'install-epel.yml'
+        context: true
       {% endif %}  
     {% endif %}
   {% endif %}
