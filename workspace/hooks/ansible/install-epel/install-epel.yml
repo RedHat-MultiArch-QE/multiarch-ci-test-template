@@ -1,9 +1,0 @@
----
-- name: Install Epel
-  hosts: all
-  
-  tasks:
-    - name: install epel
-      yum:
-        name: epel-release
-        state: latest
