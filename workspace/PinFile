@@ -3,14 +3,10 @@ jenkins-slave:
   layout: jenkins-slave.yml
   {% if hooks %}
   hooks:
-    {% if hooks.postUp %}
     postup:
-      {% if hooks.postUp.connectToMaster %}
-      - name: install-epel
-        type: ansible
+      - type: ansible
+        name: cinch
+        path: /usr/lib/python2.7/site-packages/cinch/
+        context: True
         actions:
-          - playbook: install-epel.yml
-        context: true
-      {% endif %}  
-    {% endif %}
-  {% endif %}
+          - playbook: site.yml
