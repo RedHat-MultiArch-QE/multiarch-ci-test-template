@@ -9,4 +9,4 @@ jenkins-slave:
         context: True
         actions:
           - playbook: site.yml
-            extra_vars: {% raw -%}{{ lookup(env, EXTRA_VARS) }}{%- endraw %}
+            extra_vars: {% raw -%}"{{ lookup(env, EXTRA_VARS) }}"{%- endraw %}
