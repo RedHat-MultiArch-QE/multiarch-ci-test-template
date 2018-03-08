@@ -8,5 +8,5 @@ jenkins-slave:
         path: /usr/lib/python2.7/site-packages/cinch/
         context: True
         actions:
-          - playbook: site.yml
+          - playbook: /usr/lib/python2.7/site-packages/cinch/site.yml
             extra_vars: {% raw -%}"{{ lookup(env, EXTRA_VARS) }}"{%- endraw %}
