@@ -1,0 +1,41 @@
+properties(
+  [
+    parameters(
+      [
+        string(
+          defaultValue: 'SSHPRIVKEY',
+          description: 'SSH private key Jenkins credential ID for Beaker/SSH operations.',
+          name: 'SSHPRIVKEYCREDENTIALID'
+        ),
+        string(
+          defaultValue: 'root',
+          description: 'Username for ssh connection.',
+          name: 'SSH_USERNAME'
+        ),
+        string(
+          defaultValue: 'test-host-name.bsn.redhat.com',
+          description: 'Hostname for ssh connection.',
+          name: 'SSH_HOSTNAME'
+        )
+      ]
+    )
+  ]
+)
+
+node("provisioner") {
+  // Install ssh keys
+  withCredentials([file(credentialsId: params.SSHPRIVKEYCREDENTIALID, variable: 'SSHPRIVKEY')]) {
+    env.HOME = "/home/jenkins"
+    sh """
+      mkdir -p ~/.ssh
+      cp ${SSHPRIVKEY} ~/.ssh/id_rsa
+      chmod 600 ~/.ssh/id_rsa
+    """
+  }
+
+  // Test starts here
+  sh """
+    ssh -i ~/.ssh/id_rsa ${params.USERNAME}@${params.HOSTNAME};
+    echo Hello World
+  """
+}

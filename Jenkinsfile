@@ -8,17 +8,17 @@ properties(
           name: 'ARCHES'
         ),
         string(
-          defaultValue: 'SSHPRIVKEY',
+          defaultValue: 'redhat-multiarch-qe-sshprivkey',
           description: 'SSH private key Jenkins credential ID for Beaker/SSH operations.',
           name: 'SSHPRIVKEYCREDENTIALID'
         ),
         string(
-          defaultValue: 'SSHPUBKEY',
+          defaultValue: 'redhat-multiarch-qe-sshpubkey',
           description: 'SSH public key Jenkins credential ID for Beaker/SSH operations.',
           name: 'SSHPUBKEYCREDENTIALID'
         ),
         string(
-          defaultValue: 'KEYTAB',
+          defaultValue: 'redhat-multiarch-qe-keytab',
           description: 'Kerberos keytab file Jenkins credential ID for Beaker/SSH operations.',
           name: 'KEYTABID'
         ),
