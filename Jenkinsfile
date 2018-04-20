@@ -23,7 +23,7 @@ properties(
           name: 'KEYTABID'
         ),
         string(
-          defaultValue: 'JENKINS_SLAVE_CREDENTIALS',
+          defaultValue: 'jenkins-slave-credentials',
           description: 'Jenkins slave credential ID for connecting slaves using cinch via JSwarm.',
           name: 'JENKINSSLAVECREDENTIALID'
         ),
