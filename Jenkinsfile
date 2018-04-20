@@ -8,26 +8,6 @@ properties(
           name: 'ARCHES'
         ),
         string(
-          defaultValue: 'redhat-multiarch-qe-sshprivkey',
-          description: 'SSH private key Jenkins credential ID for Beaker/SSH operations.',
-          name: 'SSHPRIVKEYCREDENTIALID'
-        ),
-        string(
-          defaultValue: 'redhat-multiarch-qe-sshpubkey',
-          description: 'SSH public key Jenkins credential ID for Beaker/SSH operations.',
-          name: 'SSHPUBKEYCREDENTIALID'
-        ),
-        string(
-          defaultValue: 'redhat-multiarch-qe-keytab',
-          description: 'Kerberos keytab file Jenkins credential ID for Beaker/SSH operations.',
-          name: 'KEYTABID'
-        ),
-        string(
-          defaultValue: 'jenkins-slave-credentials',
-          description: 'Jenkins slave credential ID for connecting slaves using cinch via JSwarm.',
-          name: 'JENKINSSLAVECREDENTIALID'
-        ),
-        string(
           defaultValue: 'https://github.com/RedHat-MultiArch-QE/multiarch-ci-libraries',
           description: 'Repo for shared libraries.',
           name: 'LIBRARIES_REPO'
