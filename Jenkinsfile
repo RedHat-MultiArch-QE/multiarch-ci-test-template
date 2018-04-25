@@ -50,7 +50,7 @@ library(
 
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
-config.hostrequires = [[ tag: "pool", op: "=", value: "multiarch-qe" ]]
+config.runOnSlave = false
 
 TestUtils.runParallelMultiArchTest(
   this,

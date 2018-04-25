@@ -1,8 +1,11 @@
 jenkins-slave:
   topology: jenkins-slave.yml
   layout: jenkins-slave.yml
+  {% if hooks %}
   hooks:
-    postup:
+    {% if hooks.postUp %}
+    post-up:
+      {% if hooks.postUp.connectToMaster %}
       - type: ansible
         name: cinch
         path: /usr/lib/python2.7/site-packages/cinch/
@@ -10,3 +13,6 @@ jenkins-slave:
         actions:
           - playbook: site.yml
             extra_vars: {{ extra_vars }} 
+      {% endif %}  
+    {% endif %}
+  {% endif %}
