@@ -10,6 +10,6 @@ jenkins-slave:
         type: shell
         actions:
         - cinch inventories/jenkins-slave.inventory
-      {% endif %}  
+      {% endif %}
     {% endif %}
   {% endif %}
