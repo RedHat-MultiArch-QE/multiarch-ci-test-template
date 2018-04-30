@@ -78,7 +78,7 @@ TestUtils.runParallelMultiArchTest(
         }
         else {
           sh "ansible-playbook -i '${host.inventory}' ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
-          sh "for i in ${TEST_DIR}/scripts/*/run-test.sh; do ssh root@${host.inventory} < \$i; done"
+          sh "for i in ${TEST_DIR}/scripts/*/run-test.sh; do ssh root@${host.hostName} < \$i; done"
         }
       }
 
