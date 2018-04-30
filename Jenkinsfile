@@ -50,7 +50,6 @@ library(
 
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
-config.runOnSlave = false
 
 TestUtils.runParallelMultiArchTest(
   this,
@@ -74,11 +73,11 @@ TestUtils.runParallelMultiArchTest(
       stage ('Run Test') {
         if (config.runOnSlave) {
           sh "ansible-playbook -i 'localhost,' -c local ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
-          sh "for i in ${TEST_DIR}/scripts/*/run-test.sh; do bash \$i; done"
+          sh "for i in ${TEST_DIR}/scripts/*/test.sh; do bash \$i; done"
         }
         else {
           sh "ansible-playbook -i '${host.inventory}' ${TEST_DIR}/ansible-playbooks/*/playbook.yml"
-          sh "for i in ${TEST_DIR}/scripts/*/run-test.sh; do ssh root@${host.hostName} < \$i; done"
+          sh "for i in ${TEST_DIR}/scripts/*/test.sh; do ssh root@${host.hostName} < \$i; done"
         }
       }
 
