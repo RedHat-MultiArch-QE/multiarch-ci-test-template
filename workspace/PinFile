@@ -4,7 +4,7 @@ jenkins-slave:
   {% if hooks %}
   hooks:
     {% if hooks.postUp %}
-    post-up:
+    postup:
       {% if hooks.postUp.connectToMaster %}
       - type: ansible
         name: cinch
