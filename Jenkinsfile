@@ -50,7 +50,6 @@ library(
 
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
-config.runOnSlave = false
 
 TestUtils.runParallelMultiArchTest(
   this,
