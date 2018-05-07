@@ -8,7 +8,7 @@ jenkins-slave:
       {% if hooks.postUp.connectToMaster %}
       - type: ansible
         name: cinch
-        path: /usr/lib/python2.7/site-packages/cinch/
+        path: /home/jenkins/envs/provisioner/lib/python2.7/site-packages/cinch/
         context: True
         actions:
           - playbook: site.yml
