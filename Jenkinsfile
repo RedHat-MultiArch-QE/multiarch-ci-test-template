@@ -51,7 +51,7 @@ library(
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
 
-TestUtils.runParallelMultiArchTest(
+TestUtils.parallelMultiArchTest(
   this,
   arches,
   config,
@@ -62,15 +62,15 @@ TestUtils.runParallelMultiArchTest(
     /*********************************************************/
     dir('test') {
       stage ('Download Test Files') {
-        TestUtils.downloadTests() 
+        TestUtils.downloadTests(params) 
       }
 
       stage ('Run Test') {
-        TestUtils.runTests(host)
+        TestUtils.runTests(params, host)
       }
 
       stage ('Archive Test Output') {
-        TestUtils.archiveOutput()
+        TestUtils.archiveOutput(params)
       }
     }
 
