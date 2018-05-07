@@ -62,7 +62,7 @@ TestUtils.parallelMultiArchTest(
     /*********************************************************/
     dir('test') {
       stage ('Download Test Files') {
-        TestUtils.downloadTests(params) 
+        TestUtils.downloadTests(params, scm) 
       }
 
       stage ('Run Test') {
