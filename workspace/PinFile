@@ -21,6 +21,7 @@ jenkins-slave:
           arch: {{ arch }}
           variant: Server
           count: 1
+          name: "Jenkins Slave"
           {% if hostrequires %}
           hostrequires:
             {% for req in hostrequires %}
