@@ -66,7 +66,7 @@ TestUtils.runParallelMultiArchTest(
       }
 
       stage ('Run Test') {
-        runTests(config)
+        runTests(config, host)
       }
 
       stage ('Archive Test Output') {
