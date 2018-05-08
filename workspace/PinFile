@@ -17,7 +17,7 @@ jenkins-slave:
         # option to set cancellation message if linchpin cancels provisioning
         cancel_message: Job cancelled due to beaker request timeout
         recipesets:
-        - distro: "RHEL-7.5"
+        - distro: "RHEL-7.4"
           arch: {{ arch }}
           variant: Server
           count: 1
