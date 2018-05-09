@@ -62,40 +62,15 @@ TestUtils.runParallelMultiArchTest(
     /*********************************************************/
     dir('test') {
       stage ('Download Test Files') {
-        if (params.TEST_REPO) {
-          git url: params.TEST_REPO, branch: params.TEST_REF, changelog: false
-        }
-        else {
-          checkout scm
-        }
+        downloadTests() 
       }
 
       stage ('Run Test') {
-        if (config.runOnSlave) {
-          sh "ansible-playbook -i 'localhost,' -c local ${params.TEST_DIR}/ansible-playbooks/*/playbook.yml"
-          sh "for i in ${params.TEST_DIR}/scripts/*/test.sh; do bash \$i; done"
-        }
-        else {
-          sh "ansible-playbook -i '${host.inventory}' ${params.TEST_DIR}/ansible-playbooks/*/playbook.yml"
-          sh "for i in ${params.TEST_DIR}/scripts/*/test.sh; do ssh root@${host.hostName} < \$i; done"
-        }
+        runTests(config, host)
       }
 
       stage ('Archive Test Output') {
-        try {
-          archiveArtifacts allowEmptyArchive: true, artifacts: "${params.TEST_DIR}/ansible-playbooks/**/artifacts/*", fingerprint: true
-          junit "${params.TEST_DIR}/ansible-playbooks/**/reports/*.xml"
-        }
-        catch (e) {
-          // We don't care if this step fails
-        }
-        try {
-          archiveArtifacts allowEmptyArchive: true, artifacts: "${params.TEST_DIR}/scripts/**/artifacts/*", fingerprint: true
-          junit "${params.TEST_DIR}/scripts/**/reports/*.xml"
-        }
-        catch (e) {
-          // We don't care if this step fails
-        }
+        archiveOutput()
       }
     }
 
