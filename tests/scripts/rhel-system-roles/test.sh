@@ -8,12 +8,12 @@ echo "pkgs.devel.redhat.com,10.19.208.80 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAplq
 
 echo "Host pkgs.devel.redhat.com\n  IdentityFile /home/jenkins/.ssh/id_rsa\n" | sudo tee -a /etc/ssh/ssh_config
 
-sudo yum install -y yum-utils
+sudo yum install -y yum-utils git
 curl -L -O http://download.devel.redhat.com/rel-eng/internal/rcm-tools-rhel-7-server.repo
 sudo yum-config-manager --add-repo rcm-tools-rhel-7-server.repo
 sudo yum install -y rhpkg
-
-rhpkg clone tests/rhel-system-roles
+git config --global user.name "jenkins"
+rhpkg --verbose --user=jenkins clone tests/rhel-system-roles
 cd rhel-system-roles/Sanity/Upstream-testsuite
 mkdir -p $workdir/artifacts
 make &> $workdir/artifacts/output.txt run
