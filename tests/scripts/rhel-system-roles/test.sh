@@ -16,5 +16,5 @@ sudo yum install -y rhpkg
 git config --global user.name "jenkins"
 rhpkg --verbose --user=jenkins clone tests/rhel-system-roles
 cd rhel-system-roles/Sanity/Upstream-testsuite-multiarch-ci
-mkdir -p "$workdir/artifacts/rhel-system-roles/$(arch)/output.txt"
+mkdir -p "$workdir/artifacts/rhel-system-roles/$(arch)"
 sudo make &> "$workdir/artifacts/rhel-system-roles/$(arch)/output.txt" run
