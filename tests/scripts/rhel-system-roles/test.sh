@@ -17,4 +17,4 @@ git config --global user.name "jenkins"
 rhpkg --verbose --user=jenkins clone tests/rhel-system-roles
 cd rhel-system-roles/Sanity/Upstream-testsuite
 mkdir -p $workdir/artifacts
-make &> $workdir/artifacts/output.txt run
+sudo make &> $workdir/artifacts/output.txt run
