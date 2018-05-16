@@ -67,23 +67,15 @@ library(
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
 
-node ('provisioner-v1.0') {
+TestUtils.runParallelMultiArchTest(
+  this,
+  arches,
+  config,
+  { host ->
     /*********************************************************/
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
-    def host = [ 
-      arch: 'x86_64',
-      hostName: 'localhost',
-      name: 'provisioner-v1.0',
-      target: null,
-      inventory: null,
-      initialized: true,
-      provisioned: true,
-      connectedToMaster: true,
-      ansibledInstalled: true
-    ]
-
     def taskRepoCreated = false
     if (params.CI_MESSAGE != '') {
       tid = getTaskId(params.CI_MESSAGE)
@@ -96,7 +88,6 @@ node ('provisioner-v1.0') {
 
     if (taskRepoCreated == true) {
       sh """
-        cat task-repo.properties
         URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g')
         sudo yum-config-manager --add-repo \${URL}
         sudo yum --nogpgcheck install -y ansible
@@ -121,4 +112,11 @@ node ('provisioner-v1.0') {
     /* END TEST BODY                                                 */
     /* Do not edit beyond this point                                 */
     /*****************************************************************/
-}
+  },
+  { Exception exception, def host ->
+    echo "Exception ${exception} occured on ${host.arch}"
+    if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
+      currentBuild.result = 'FAILURE'
+    }
+  }
+)
