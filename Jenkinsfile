@@ -96,9 +96,8 @@ node ('provisioner-v1.0') {
 
     if (taskRepoCreated == true) {
       sh """
-        ls
         cat task-repo.properties
-        URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g' | grep ${host.arch})
+        URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g')
         sudo yum-config-manager --add-repo \${URL}
         sudo yum --nogpgcheck install -y ansible
       """
