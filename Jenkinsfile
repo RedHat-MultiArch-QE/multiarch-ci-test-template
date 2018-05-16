@@ -92,6 +92,7 @@ TestUtils.runParallelMultiArchTest(
         URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g')
         sudo yum-config-manager --add-repo \${URL}
         sudo yum --nogpgcheck install -y ansible
+        sudo yum-config-manager --disable=\${URL}
       """
     }
 
