@@ -67,15 +67,22 @@ library(
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
 
-TestUtils.runParallelMultiArchTest(
-  this,
-  arches,
-  config,
-  { host ->
+node ('provisioner-v1.0') {
     /*********************************************************/
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
+    def host = []
+    host.arch = 'x86_64'
+    host.hostName = 'localhost'
+    host.name = 'provisioner-v1.0'
+    host.target = null
+    host.inventory = null
+    host.initialized = true
+    host.provisioned = true
+    host.connectedToMaster = true
+    host.ansibledInstalled = true
+
     def taskRepoCreated = false
     if (params.CI_MESSAGE != '') {
       tid = getTaskId(params.CI_MESSAGE)
@@ -112,11 +119,4 @@ TestUtils.runParallelMultiArchTest(
     /* END TEST BODY                                                 */
     /* Do not edit beyond this point                                 */
     /*****************************************************************/
-  },
-  { Exception exception, def host ->
-    echo "Exception ${exception} occured on ${host.arch}"
-    if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
-      currentBuild.result = 'FAILURE'
-    }
-  }
-)
+}
