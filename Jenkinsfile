@@ -1,5 +1,16 @@
 properties(
   [
+    pipelineTriggers(
+      [
+        [
+          $class: 'CIBuildTrigger',
+          checks: [],
+          overrides: [topic: "Consumer.rh-jenkins-ci-plugin.afe3c710-9a13-4039-98d4-0f7c2c74a60b.VirtualTopic.qe.ci.>"],
+          providerName: 'Red Hat UMB',
+          selector: 'name = \'ansible\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'ansible-%-rhel-%-candidate\''
+        ]
+      ]
+    ),
     parameters(
       [
         string(
@@ -36,6 +47,11 @@ properties(
           defaultValue: '',
           description: 'Contains the CI_MESSAGE for a message bus triggered build.',
           name: 'CI_MESSAGE'
+        ),
+        string(
+          defaultValue: '',
+          description: 'Build task ID for which to run the pipeline',
+          name: 'TASK_ID'
         )
       ]
     )
@@ -60,6 +76,22 @@ TestUtils.runParallelMultiArchTest(
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
+    def createTaskRepo = false;
+    if (params.CI_MESSAGE != '') {
+      tid = getTaskId(params.CI_MESSAGE)
+      createTaskRepo(taskIds: tid)
+    } else if (params.TASK_ID != '') {
+      createTaskRepo(taskIds: params.TASK_ID)
+    }
+
+    if (taskRepoCreated) {
+      sh """
+        URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g' | grep ${host.arch})
+        sudo yum-config-manager --add-repo \${URL}
+        sudo yum --nogpgcheck install -y ansible
+      """
+    }
+
     dir('test') {
       stage ('Download Test Files') {
         downloadTests() 
