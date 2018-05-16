@@ -88,6 +88,7 @@ TestUtils.runParallelMultiArchTest(
 
     if (taskRepoCreated == true) {
       sh """
+        sudo yum install -y yum-utils
         URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g')
         sudo yum-config-manager --add-repo \${URL}
         sudo yum --nogpgcheck install -y ansible
