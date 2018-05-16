@@ -76,7 +76,7 @@ TestUtils.runParallelMultiArchTest(
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
-    def createTaskRepo = false
+    def taskRepoCreated = false
     if (params.CI_MESSAGE != '') {
       tid = getTaskId(params.CI_MESSAGE)
       createTaskRepo(taskIds: tid)
