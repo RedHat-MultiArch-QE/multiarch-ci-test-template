@@ -49,7 +49,7 @@ properties(
           name: 'CI_MESSAGE'
         ),
         string(
-          defaultValue: '',
+          defaultValue: '15911696',
           description: 'Build task ID for which to run the pipeline',
           name: 'TASK_ID'
         )
