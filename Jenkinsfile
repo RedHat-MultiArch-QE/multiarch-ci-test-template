@@ -76,15 +76,17 @@ TestUtils.runParallelMultiArchTest(
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
-    def createTaskRepo = false;
+    def createTaskRepo = false
     if (params.CI_MESSAGE != '') {
       tid = getTaskId(params.CI_MESSAGE)
       createTaskRepo(taskIds: tid)
+      taskRepoCreated = true
     } else if (params.TASK_ID != '') {
       createTaskRepo(taskIds: params.TASK_ID)
+      taskRepoCreated = true
     }
 
-    if (taskRepoCreated) {
+    if (taskRepoCreated == true) {
       sh """
         URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g' | grep ${host.arch})
         sudo yum-config-manager --add-repo \${URL}
