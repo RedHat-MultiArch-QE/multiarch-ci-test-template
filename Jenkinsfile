@@ -72,16 +72,17 @@ node ('provisioner-v1.0') {
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
-    def host = []
-    host.arch = 'x86_64'
-    host.hostName = 'localhost'
-    host.name = 'provisioner-v1.0'
-    host.target = null
-    host.inventory = null
-    host.initialized = true
-    host.provisioned = true
-    host.connectedToMaster = true
-    host.ansibledInstalled = true
+    def host = [ 
+      arch: 'x86_64',
+      hostName: 'localhost',
+      name: 'provisioner-v1.0',
+      target: null,
+      inventory: null,
+      initialized: true,
+      provisioned: true,
+      connectedToMaster: true,
+      ansibledInstalled: true
+    ]
 
     def taskRepoCreated = false
     if (params.CI_MESSAGE != '') {
@@ -95,6 +96,8 @@ node ('provisioner-v1.0') {
 
     if (taskRepoCreated == true) {
       sh """
+        ls
+        cat task-repo.properties
         URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g' | grep ${host.arch})
         sudo yum-config-manager --add-repo \${URL}
         sudo yum --nogpgcheck install -y ansible
