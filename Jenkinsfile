@@ -91,8 +91,11 @@ TestUtils.runParallelMultiArchTest(
         sudo yum install -y yum-utils
         URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g')
         sudo yum-config-manager --add-repo \${URL}
+        sudo cat /etc/yum.repos.d/*download.eng.bos.redhat.com*
         sudo sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/*download.eng.bos.redhat.com*
-        sudo yum --nogpgcheck install -y ansible
+        echo "gpgcheck=0" | sudo tee -a /etc/yum.repos.d/*download.eng.bos.redhat.com*
+        sudo yum clean all
+        sudo yum install -y ansible
       """
     }
 
