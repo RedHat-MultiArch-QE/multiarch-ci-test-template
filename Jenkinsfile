@@ -1,5 +1,5 @@
 properties(
-  [
+		[
     pipelineTriggers(
       [
         [
@@ -79,18 +79,16 @@ TestUtils.runParallelMultiArchTest(
     /*********************************************************/
     installBrewPkgs(params)
 
-    dir('test') {
-      stage ('Download Test Files') {
-        downloadTests() 
-      }
+    stage ('Download Test Files') {
+      downloadTests() 
+    }
 
-      stage ('Run Test') {
-        runTests(config, host)
-      }
+    stage ('Run Test') {
+      runTests(config, host)
+    }
 
-      stage ('Archive Test Output') {
-        archiveOutput()
-      }
+    stage ('Archive Test Output') {
+      archiveOutput()
     }
 
     /*****************************************************************/
@@ -103,13 +101,16 @@ TestUtils.runParallelMultiArchTest(
     if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
       currentBuild.result = 'FAILURE'
     }
+  },
+  {
+    emailext(
+      subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
+      body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
+      from: 'multiarch-qe-jenkins', 
+      replyTo: 'multiarch-qe',
+      to: 'jpoulin',
+      attachmentsPattern: '${params.TEST_DIR}/**/**/artifacts/**/*.*'
+    )
   }
 )
 
-emailext(
-    subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
-    body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
-    from: 'multiarch-qe-jenkins', 
-    replyTo: 'multiarch-qe',
-    to: 'jpoulin'
-    ) 
