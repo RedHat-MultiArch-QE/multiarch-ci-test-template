@@ -104,4 +104,12 @@ TestUtils.runParallelMultiArchTest(
       currentBuild.result = 'FAILURE'
     }
   }
+
+  emailext(
+    subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
+    body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
+    from: 'multiarch-qe-jenkins', 
+    replyTo: 'multiarch-qe',
+    to: 'jpoulin'
+    )_ 
 )
