@@ -24,7 +24,7 @@ properties(
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'dev-v1.0',
+          defaultValue: 'dev-v1.0-ae-test',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
@@ -66,6 +66,7 @@ library(
 
 List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
+config.installRhpkg = true
 
 TestUtils.runParallelMultiArchTest(
   this,
@@ -76,28 +77,7 @@ TestUtils.runParallelMultiArchTest(
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
-    def taskRepoCreated = false
-    if (params.CI_MESSAGE != '') {
-      tid = getTaskId(params.CI_MESSAGE)
-      createTaskRepo(taskIds: tid)
-      taskRepoCreated = true
-    } else if (params.TASK_ID != '') {
-      createTaskRepo(taskIds: params.TASK_ID)
-      taskRepoCreated = true
-    }
-
-    if (taskRepoCreated == true) {
-      sh """
-        sudo yum install -y yum-utils
-        URL=\$(cat task-repo.properties | grep TASK_REPO_URLS= | sed 's/TASK_REPO_URLS=//' | sed 's/;/\\n/g')
-        sudo yum-config-manager --add-repo \${URL}
-        sudo cat /etc/yum.repos.d/*download.eng.bos.redhat.com*
-        sudo sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/*download.eng.bos.redhat.com*
-        echo "gpgcheck=0" | sudo tee -a /etc/yum.repos.d/*download.eng.bos.redhat.com*
-        sudo yum clean all
-        sudo yum install -y ansible
-      """
-    }
+    installBrewPkgs(params)
 
     dir('test') {
       stage ('Download Test Files') {
