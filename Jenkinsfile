@@ -110,7 +110,8 @@ TestUtils.runParallelMultiArchTest(
 )
 
 try {
-  unarchive(mapping: ['rhel-system-roles/' : '.'])
+  sh "mkdir -p artifacts"
+  unarchive(mapping: ['**/*.*' : 'artifacts/.'])
 } catch (e) {
 }
 
@@ -120,6 +121,6 @@ emailext(
   from: 'multiarch-qe-jenkins', 
   replyTo: 'multiarch-qe',
   to: 'jpoulin',
-  attachmentsPattern: 'rhel-system-roles/**/*.*'
+  attachmentsPattern: 'artifacts/**/*.*'
 )
 
