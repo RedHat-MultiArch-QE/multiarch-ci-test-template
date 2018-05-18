@@ -1,5 +1,5 @@
 properties(
-		[
+  [
     pipelineTriggers(
       [
         [
@@ -82,7 +82,7 @@ TestUtils.runParallelMultiArchTest(
     installBrewPkgs(params)
 
     stage ('Download Test Files') {
-      downloadTests() 
+      downloadTests()
     }
 
     stage ('Run Test') {
@@ -106,21 +106,19 @@ TestUtils.runParallelMultiArchTest(
     }
   },
   {
+    try {
+      sh "mkdir -p artifacts"
+      unarchive(mapping: ['**/*.*' : 'artifacts/.'])
+    } catch (e) {
+    }
+
+    emailext(
+      subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}",
+      body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}\n\n" + errorMessages,
+      from: 'multiarch-qe-jenkins',
+      replyTo: 'multiarch-qe',
+      to: 'jpoulin',
+      attachmentsPattern: 'artifacts/**/*.*'
+    )
   }
 )
-
-try {
-  sh "mkdir -p artifacts"
-  unarchive(mapping: ['**/*.*' : 'artifacts/.'])
-} catch (e) {
-}
-
-emailext(
-  subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
-  body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}\n\n" + errorMessages, 
-  from: 'multiarch-qe-jenkins', 
-  replyTo: 'multiarch-qe',
-  to: 'jpoulin',
-  attachmentsPattern: 'artifacts/**/*.*'
-)
-
