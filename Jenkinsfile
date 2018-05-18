@@ -68,7 +68,7 @@ List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
 config.installRhpkg = true
 
-def errorMessage = ''
+def errorMessages = ''
 
 TestUtils.runParallelMultiArchTest(
   this,
@@ -107,14 +107,16 @@ TestUtils.runParallelMultiArchTest(
     }
   },
   {
-    emailext(
-      subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
-      body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}\n\n", 
-      from: 'multiarch-qe-jenkins', 
-      replyTo: 'multiarch-qe',
-      to: 'jpoulin',
-      attachmentsPattern: '${params.TEST_DIR}/**/**/artifacts/**/*.*'
-    )
   }
+)
+
+unarchive mapping: ['rhel-system-roles/' : '.']
+emailext(
+  subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
+  body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}\n\n" + errorMessages, 
+  from: 'multiarch-qe-jenkins', 
+  replyTo: 'multiarch-qe',
+  to: 'jpoulin',
+  attachmentsPattern: 'rhel-system-roles/**/*.*'
 )
 
