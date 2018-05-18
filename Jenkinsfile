@@ -5,7 +5,7 @@ properties(
         [
           $class: 'CIBuildTrigger',
           checks: [],
-          overrides: [topic: "Consumer.rh-jenkins-ci-plugin.afe3c710-9a13-4039-98d4-0f7c2c74a60b.VirtualTopic.qe.ci.>"],
+          overrides: [topic: "Consumer.rh-jenkins-ci-plugin.4ed73c82-6707-4f06-9ad5-b4af7d5116d8.VirtualTopic.qe.ci.>"],
           providerName: 'Red Hat UMB',
           selector: 'name = \'ansible\' AND CI_TYPE = \'brew-tag\' AND tag LIKE \'ansible-%-rhel-%-candidate\''
         ]
@@ -49,7 +49,7 @@ properties(
           name: 'CI_MESSAGE'
         ),
         string(
-          defaultValue: '15911696',
+          defaultValue: '16364269',
           description: 'Build task ID for which to run the pipeline',
           name: 'TASK_ID'
         )
