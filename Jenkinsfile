@@ -110,7 +110,11 @@ TestUtils.runParallelMultiArchTest(
   }
 )
 
-unarchive mapping: ['rhel-system-roles/' : '.']
+try {
+  unarchive(mapping: ['rhel-system-roles/' : '.'])
+} catch (e) {
+}
+
 emailext(
   subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
   body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}\n\n" + errorMessages, 
