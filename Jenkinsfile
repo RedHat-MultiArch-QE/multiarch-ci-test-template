@@ -68,6 +68,8 @@ List arches = params.ARCHES.tokenize(',')
 def config = TestUtils.getProvisioningConfig(this)
 config.installRhpkg = true
 
+def errorMessage = ''
+
 TestUtils.runParallelMultiArchTest(
   this,
   arches,
@@ -97,7 +99,9 @@ TestUtils.runParallelMultiArchTest(
     /*****************************************************************/
   },
   { Exception exception, def host ->
-    echo "Exception ${exception} occured on ${host.arch}"
+    def error = "Exception ${exception} occured on ${host.arch}\n"
+    echo error
+    errorMessages += error
     if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
       currentBuild.result = 'FAILURE'
     }
@@ -105,7 +109,7 @@ TestUtils.runParallelMultiArchTest(
   {
     emailext(
       subject: "${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
-      body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}", 
+      body:"${env.JOB_NAME} - Build #${currentBuild.number} - ${currentBuild.currentResult}\n\n", 
       from: 'multiarch-qe-jenkins', 
       replyTo: 'multiarch-qe',
       to: 'jpoulin',
