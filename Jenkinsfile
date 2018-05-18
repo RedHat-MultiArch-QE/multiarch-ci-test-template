@@ -100,7 +100,6 @@ TestUtils.runParallelMultiArchTest(
   },
   { Exception exception, def host ->
     def error = "Exception ${exception} occured on ${host.arch}\n"
-    echo error
     errorMessages += error
     if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
       currentBuild.result = 'FAILURE'
