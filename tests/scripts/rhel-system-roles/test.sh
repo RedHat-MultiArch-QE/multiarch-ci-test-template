@@ -10,4 +10,4 @@ cd Sanity/Upstream-testsuite-multiarch-ci
 output_dir="$workdir/artifacts/rhel-system-roles/$(arch)"
 mkdir -p $output_dir
 sudo make &> $output_dir/results.txt run
-grep "OVERALL RESULT" $output/results.txt | grep "PASS"
+grep "OVERALL RESULT" $output_dir/results.txt | grep "PASS"
