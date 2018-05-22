@@ -7,7 +7,8 @@ rhpkg --verbose --user=jenkins clone tests/rhel-system-roles
 cd rhel-system-roles
 git checkout CoreOS-rhel-system-roles-Sanity-Upstream-testsuite-multiarch-ci-1_1-1
 cd Sanity/Upstream-testsuite-multiarch-ci
-output_dir="$workdir/artifacts/rhel-system-roles/$(arch)"
+output_dir="$workdir/artifacts/rhel-system-roles"
+output_file="$output_dir/$(arch).txt"
 mkdir -p $output_dir
-sudo make &> $output_dir/results.txt run
-grep "OVERALL RESULT" $output_dir/results.txt | grep "PASS"
+sudo make &> $output_file run
+grep "OVERALL RESULT" $output_file | grep "PASS"
