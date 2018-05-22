@@ -49,8 +49,8 @@ library(
 )
 
 List arches = params.ARCHES.tokenize(',')
-def config = TestUtils.getProvisioningConfig(this)
 def errorMessages = ''
+def config = TestUtils.getProvisioningConfig(this)
 
 TestUtils.runParallelMultiArchTest(
   this,
