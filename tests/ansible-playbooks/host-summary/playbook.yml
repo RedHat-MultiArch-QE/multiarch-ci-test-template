@@ -1,0 +1,20 @@
+---
+- name:  Host Summary
+  hosts: all
+  gather_facts: true
+
+  tasks:
+   - debug: msg="{{ playbook_dir }}"
+
+   - name: Create output directory
+     file: path="{{ playbook_dir}}/artifacts/host-summary" state=directory mode=0755
+
+   - template:
+       src: "{{ playbook_dir }}/templates/host-summary.j2"
+       dest: "{{ playbook_dir }}/artifacts/host-summary/{{ ansible_architecture }}.txt"
+       mode: 0644
+
+   - fetch:
+       src: "{{ playbook_dir }}/artifacts/host-summary/{{ ansible_architecture }}.txt"
+       dest: "{{ playbook_dir }}/artifacts/host-summary/{{ ansible_architecture }}.txt"
+       flat: yes
