@@ -8,12 +8,12 @@ properties(
           name: 'ARCHES'
         ),
         string(
-          defaultValue: 'https://github.com/jaypoulz/multiarch-ci-libraries',
+          defaultValue: 'https://github.com/RedHat-MultiArch-QE/multiarch-ci-libraries',
           description: 'Repo for shared libraries.',
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'dev-v1.0',
+          defaultValue: 'v1.0',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
