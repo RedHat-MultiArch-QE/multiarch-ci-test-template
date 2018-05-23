@@ -49,6 +49,7 @@ library(
 )
 
 List arches = params.ARCHES.tokenize(',')
+def errorMessages = ''
 def config = TestUtils.getProvisioningConfig(this)
 
 TestUtils.runParallelMultiArchTest(
@@ -60,18 +61,16 @@ TestUtils.runParallelMultiArchTest(
     /* TEST BODY                                             */
     /* @param host               Provisioned host details.   */
     /*********************************************************/
-    dir('test') {
-      stage ('Download Test Files') {
-        downloadTests() 
-      }
+    stage ('Download Test Files') {
+      downloadTests()
+    }
 
-      stage ('Run Test') {
-        runTests(config, host)
-      }
+    stage ('Run Test') {
+      runTests(config, host)
+    }
 
-      stage ('Archive Test Output') {
-        archiveOutput()
-      }
+    stage ('Archive Test Output') {
+      archiveOutput()
     }
 
     /*****************************************************************/
@@ -80,7 +79,8 @@ TestUtils.runParallelMultiArchTest(
     /*****************************************************************/
   },
   { Exception exception, def host ->
-    echo "Exception ${exception} occured on ${host.arch}"
+    def error = "Exception ${exception} occured on ${host.arch}\n"
+    errorMessages += error
     if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
       currentBuild.result = 'FAILURE'
     }
