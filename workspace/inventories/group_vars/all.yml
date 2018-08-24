@@ -11,3 +11,5 @@ rhel_base_urls:
   s390x: "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/system-z/7/7Server"
   aarch64: "http://pulp.dist.prod.ext.phx2.redhat.com/content/dist/rhel/arm/7/7Server"
 rhel_base: "{{ rhel_base_urls[arch] }}"
+# Set pre_upload_files to empty array so it isn't undefined
+pre_upload_files: []
