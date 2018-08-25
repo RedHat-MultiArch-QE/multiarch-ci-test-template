@@ -13,3 +13,5 @@ rhel_base_urls:
 rhel_base: "{{ rhel_base_urls[arch] }}"
 # Set pre_upload_files to empty array so it isn't undefined
 pre_upload_files: []
+# Override python_pip_package since it seems to be breaking
+python_pip_package: python-pip
