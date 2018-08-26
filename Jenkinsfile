@@ -13,7 +13,7 @@ properties(
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v1.1',
+          defaultValue: 'master',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
@@ -51,6 +51,7 @@ library(
 List arches = params.ARCHES.tokenize(',')
 def errorMessages = ''
 def config = TestUtils.getProvisioningConfig(this)
+config.jobgroup = 'multiarch-qe'
 
 TestUtils.runParallelMultiArchTest(
   this,
