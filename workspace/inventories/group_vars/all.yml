@@ -13,6 +13,3 @@ rhel_base_urls:
 rhel_base: "{{ rhel_base_urls[arch] }}"
 # Set pre_upload_files to empty array so it isn't undefined
 pre_upload_files: []
-
-jenkins_slave_repositories:
-  - "{{ all_repositories.epel }}"
