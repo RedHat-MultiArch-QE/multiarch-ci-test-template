@@ -7,7 +7,9 @@ jenkins-slave:
       resource_group_type: beaker
       resource_definitions:
       - role: bkr_server
+        {% if job_group %}
         job_group: {{ job_group }}
+        {% endif %}
         whiteboard: "{{ arch }} slave for multiarch testing"
         # options to configure amount of time spent polling beaker:
         # 180 attempts with 60 seconds wait time between them,
@@ -41,18 +43,3 @@ jenkins-slave:
             - repositories
             - jenkins_slave
             - master_node
-  {% if hooks %}
-  hooks:
-    {% if hooks.postUp %}
-    postup:
-      {% if hooks.postUp.connectToMaster %}
-      - type: ansible
-        name: cinch
-        path: /home/jenkins/envs/provisioner/lib/python2.7/site-packages/cinch/
-        context: True
-        actions:
-          - playbook: site.yml
-            extra_vars: {{ extra_vars }}
-      {% endif %}
-    {% endif %}
-  {% endif %}
