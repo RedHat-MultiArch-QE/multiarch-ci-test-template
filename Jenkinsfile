@@ -8,12 +8,12 @@ properties(
           name: 'ARCHES'
         ),
         string(
-          defaultValue: 'https://github.com/RedHat-MultiArch-QE/multiarch-ci-libraries',
+          defaultValue: 'https://github.com/redhat-multiarch-qe/multiarch-ci-libraries',
           description: 'Repo for shared libraries.',
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v1.1',
+          defaultValue: 'v1.2.0',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
@@ -50,9 +50,9 @@ library(
 
 List arches = params.ARCHES.tokenize(',')
 def errorMessages = ''
-def config = TestUtils.getProvisioningConfig(this)
+def config = API.v1.getProvisioningConfig(this)
 
-TestUtils.runParallelMultiArchTest(
+API.v1.runParallelMultiArchTest(
   this,
   arches,
   config,
