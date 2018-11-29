@@ -2,18 +2,20 @@ properties(
   [
     parameters(
       [
-        string(
-          defaultValue: 'x86_64,ppc64le',
-          description: 'A comma separated list of architectures to run the test on. Valid values include [x86_64, ppc64le, aarch64, s390x].',
-          name: 'ARCHES'
-        ),
+        [$class: 'ValidatingStringParameterDefinition',
+         defaultValue: 'x86_64,ppc64le',
+         description: 'A comma separated list of architectures to run the test on. Valid values include [x86_64, ppc64le, aarch64, s390x].',
+         failedValidationMessage: 'Invalid architecture. Valid values are [x86_64, ppc64le, aarch64, s390x].',
+         name: 'ARCHES',
+         regex: '^(?:x86_64|ppc64le|aarch64|s390x)(?:,\\s*(?:x86_64|ppc64le|aarch64|s390x))*$'
+        ],
         string(
           defaultValue: 'https://github.com/redhat-multiarch-qe/multiarch-ci-libraries',
           description: 'Repo for shared libraries.',
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v1.2.0',
+          defaultValue: 'v1.2.1',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
