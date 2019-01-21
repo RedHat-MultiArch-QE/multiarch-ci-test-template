@@ -71,10 +71,6 @@ MAQEAPI.v1.runParallelMultiArchTest(
       runTests(config, host)
     }
 
-    stage ('Archive Test Output') {
-      archiveOutput()
-    }
-
     /*****************************************************************/
     /* END TEST BODY                                                 */
     /* Do not edit beyond this point                                 */
