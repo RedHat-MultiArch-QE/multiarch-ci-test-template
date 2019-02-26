@@ -15,7 +15,7 @@ properties(
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v1.2.1',
+          defaultValue: 'v1.2.2',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
@@ -69,10 +69,6 @@ MAQEAPI.v1.runParallelMultiArchTest(
 
     stage ('Run Test') {
       runTests(config, host)
-    }
-
-    stage ('Archive Test Output') {
-      archiveOutput()
     }
 
     /*****************************************************************/
