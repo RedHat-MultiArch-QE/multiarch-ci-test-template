@@ -15,7 +15,7 @@ properties(
           name: 'LIBRARIES_REPO'
         ),
         string(
-          defaultValue: 'v1.2.2',
+          defaultValue: 'v1.3.0',
           description: 'Git reference to the branch or tag of shared libraries.',
           name: 'LIBRARIES_REF'
         ),
@@ -79,8 +79,6 @@ MAQEAPI.v1.runParallelMultiArchTest(
   { Exception exception, def host ->
     def error = "Exception ${exception} occured on ${host.arch}\n"
     errorMessages += error
-    if (host.arch.equals("x86_64") || host.arch.equals("ppc64le")) {
-      currentBuild.result = 'FAILURE'
-    }
+    currentBuild.result = 'FAILURE'
   }
 )
